@@ -18,6 +18,23 @@ class Auth extends CI_Controller
     $this->data['btn_add']    = 'Tambah Data';
   }
 
+  function book_searching()
+  {
+    $this->data['page_title'] = 'Perpustakaan';
+    $this->data['action']     = 'book/cari_book';
+
+    $this->data['searching'] = [
+      'name'              => 'searching',
+      'id'                => 'searching',
+      'class'             => 'form-control',
+      'placeholder'       => 'searching',
+      'required'          => '',
+      'value'             => $this->form_validation->set_value('searching'),
+    ];
+
+    $this->load->view('front/page/book_searching', $this->data);
+  }
+
   function login()
   {
     $this->data['page_title'] = 'Login';
@@ -94,7 +111,7 @@ class Auth extends CI_Controller
 
         $this->Auth_model->update($this->session->id_users, array('last_login' => date('Y-m-d H:i:s')));
 
-        redirect('home');
+        redirect('admin/dashboard');
       }
     } else {
       $this->data['username'] = [

@@ -5,19 +5,9 @@
 <body class="hold-transition skin-blue layout-top-nav">
   <div class="wrapper">
 
-    <?php $this->load->view('front/template/navbar'); ?>
-
-    <div class="content-wrapper">
+    <div class="content-wrapper bg">
       <div class="container">
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-          <h1>Hasil Pencarian</h1>
-          <ol class="breadcrumb">
-            <li><a href="<?php echo base_url() ?>"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li><a href="#"> Hasil Pencarian</a></li>
-          </ol>
-        </section>
-
+        
         <!-- Main content -->
         <section class="content">
           <?php $this->load->view('front/template/form_pencarian'); ?>
@@ -34,180 +24,27 @@
 
               // jika datanya TIDAK ADA
               if ($hasil_pencarian == NULL) {
-                // jika grandadmin
-                if (is_grandadmin()) {
-                  // jika instansi DIISI dan form cari DIISI
-                  if ($this->input->get('instansi_id') != NULL && $this->input->get('search_form') != NULL) {
-                    echo "Tidak ada data yang ditemukan dari pencarian arsip dengan keywords: '<b>" . $this->input->get('search_form') . "</b>' pada perguruan tinggi: <b>" . $instansi->instansi_name . "</b>";
-                  }
-                  // jika instansi DIISI dan form cari KOSONG
-                  elseif ($this->input->get('instansi_id') != NULL && $this->input->get('search_form') == NULL) {
-                    echo "
-                  <b>Tidak ada data</b> ditemukan dari pencarian arsip pada perguruan tinggi: <b>" . $instansi->instansi_name . "</b>
-                  ";
-                  }
-                  // jika instansi KOSONG dan form cari DIISI
-                  elseif ($this->input->get('instansi_id') == NULL && $this->input->get('search_form') != NULL) {
-                    echo "<b>Tidak ada data</b> ditemukan dari pencarian arsip pada <b>semua perguruan tinggi</b>";
-                  }
-                  // jika instansi KOSONG dan form cari KOSONG
-                  elseif ($this->input->get('instansi_id') == NULL && $this->input->get('search_form') == NULL) {
-                    echo "<b>Tidak ada data</b> ditemukan dari pencarian arsip pada <b>semua perguruan tinggi</b>";
-                  }
+                //Form cari diisi
+                if ($this->input->get('search_form') != NULL) {
+                  echo "Tidak ada data yang ditemukan dari pencarian buku dengan keywords: '<b>" . $this->input->get('search_form') . "</b>'";
                 }
-                // jika masteradmin
-                elseif (is_masteradmin()) {
-                  // jika cabang DIISI dan form cari DIISI
-                  if ($this->input->get('cabang_id') != NULL && $this->input->get('search_form') != NULL) {
-                    echo "<b>Tidak ada data</b> yang ditemukan dari pencarian arsip dengan keywords: '<b>" . $this->input->get('search_form') . "</b>' pada fakultas: <b>" . $cabang->cabang_name . "</b>";
-                  }
-                  // jika cabang DIISI dan form cari KOSONG
-                  elseif ($this->input->get('cabang_id') != NULL && $this->input->get('search_form') == NULL) {
-                    echo "
-                  <b>Tidak ada data</b> yang ditemukan dari pencarian arsip dengan keywords: '<b>" . $this->input->get('search_form') . "</b>' pada fakultas: <b>" . $cabang->cabang_name . "</b>
-                  ";
-                  }
-                  // jika cabang KOSONG dan form cari DIISI
-                  elseif ($this->input->get('cabang_id') == NULL && $this->input->get('search_form') != NULL) {
-                    echo "<b>Tidak ada data</b> yang ditemukan dari pencarian arsip dengan keywords: '<b>" . $this->input->get('search_form') . "</b>' pada <b>semua fakultas</b>";
-                  }
-                  // jika cabang KOSONG dan form cari KOSONG
-                  elseif ($this->input->get('cabang_id') == NULL && $this->input->get('search_form') == NULL) {
-                    echo "<b>Tidak ada data</b> yang ditemukan dari pencarian arsip dengan keywords: '<b>" . $this->input->get('search_form') . "</b>' pada <b>semua fakultas</b>";
-                  }
+                //Form cari null 
+                elseif ($this->input->get('search_form') == NULL) {
+                  echo "Tidak ada data yang ditemukan dari pencarian semua buku";
                 }
-                // jika superadmin
-                elseif (is_superadmin()) {
-                  // jika divisi DIISI dan form cari DIISI
-                  if ($this->input->get('divisi_id') != NULL && $this->input->get('search_form') != NULL) {
-                    echo "<b>Tidak ada data</b> yang ditemukan dari pencarian arsip dengan keywords: '<b>" . $this->input->get('search_form') . "</b>' pada program studi: <b>" . $divisi->divisi_name . "</b>";
-                  }
-                  // jika divisi DIISI dan form cari KOSONG
-                  elseif ($this->input->get('divisi_id') != NULL && $this->input->get('search_form') == NULL) {
-                    echo "
-                    <b>Tidak ada data</b> yang ditemukan dari pencarian arsip dengan keywords: '<b>" . $this->input->get('search_form') . "</b>' pada program studi: <b>" . $divisi->divisi_name . "</b>
-                    ";
-                  }
-                  // jika divisi KOSONG dan form cari DIISI
-                  elseif ($this->input->get('divisi_id') == NULL && $this->input->get('search_form') != NULL) {
-                    echo "<b>Tidak ada data</b> yang ditemukan dari pencarian arsip dengan keywords: '<b>" . $this->input->get('search_form') . "</b>' pada <b>semua program studi</b>";
-                  }
-                  // jika divisi KOSONG dan form cari KOSONG
-                  elseif ($this->input->get('divisi_id') == NULL && $this->input->get('search_form') == NULL) {
-                    echo "<b>Tidak ada data</b> yang ditemukan dari pencarian arsip dengan keywords: '<b>" . $this->input->get('search_form') . "</b>' pada <b>semua program studi</b>";
-                  }
-                }
-                // jika admin, pegawai dan user
-                else {
-                  // jika bagian DIISI dan form cari DIISI
-                  if ($this->input->get('bagian_id') != NULL && $this->input->get('search_form') != NULL) {
-                    echo "<b>Tidak ada data</b> yang ditemukan dari pencarian arsip dengan keywords: '<b>" . $this->input->get('search_form') . "</b>' pada divisi: <b>" . $bagian->bagian_name . "</b>";
-                  }
-                  // jika bagian DIISI dan form cari KOSONG
-                  elseif ($this->input->get('bagian_id') != NULL && $this->input->get('search_form') == NULL) {
-                    echo "
-                    <b>Tidak ada data</b> yang ditemukan dari pencarian arsip dengan keywords: '<b>" . $this->input->get('search_form') . "</b>' pada divisi: <b>" . $bagian->bagian_name . "</b>
-                    ";
-                  }
-                  // jika bagian KOSONG dan form cari DIISI
-                  elseif ($this->input->get('bagian_id') == NULL && $this->input->get('search_form') != NULL) {
-                    echo "<b>Tidak ada data</b> yang ditemukan dari pencarian arsip dengan keywords: '<b>" . $this->input->get('search_form') . "</b>' pada <b>semua divisi</b>";
-                  }
-                  // jika bagian KOSONG dan form cari KOSONG
-                  elseif ($this->input->get('bagian_id') == NULL && $this->input->get('search_form') == NULL) {
-                    echo "<b>Tidak ada data</b> yang ditemukan dari pencarian arsip dengan keywords: '<b>" . $this->input->get('search_form') . "</b>' pada <b>semua divisi</b>";
-                  }
-                }
+                 
               }
               // jika datanya ADA
               else {
-                // jika grandadmin
-                if (is_grandadmin()) {
-                  // jika instansi DIISI dan form cari DIISI
-                  if ($this->input->get('instansi_id') != NULL && $this->input->get('search_form') != NULL) {
-                    echo "
-                    Ada <b>" . $total_data . " data </b> ditemukan dari pencarian arsip dengan keywords: '<b>" . $this->input->get('search_form') . "</b>' pada perguruan tinggi: <b>" . $instansi->instansi_name . "</b>
-                    ";
-                  }
-                  // jika instansi DIISI dan form cari KOSONG
-                  elseif ($this->input->get('instansi_id') != NULL && $this->input->get('search_form') == NULL) {
-                    echo "
-                    Ada <b>" . $total_data . " data </b> ditemukan dari pencarian arsip pada perguruan tinggi: <b>" . $instansi->instansi_name . "</b>
-                    ";
-                  }
-                  // jika instansi KOSONG dan form cari DIISI
-                  elseif ($this->input->get('instansi_id') == NULL && $this->input->get('search_form') != NULL) {
-                    echo "Ada <b>" . $total_data . " data </b> ditemukan dari pencarian arsip dengan keywords: '<b>" . $this->input->get('search_form') . "</b>' pada <b>semua perguruan tinggi</b>";
-                  }
-                  // jika instansi KOSONG dan form cari KOSONG
-                  elseif ($this->input->get('instansi_id') == NULL && $this->input->get('search_form') == NULL) {
-                    echo "Ada <b>" . $total_data . " data </b> ditemukan dari pencarian arsip pada <b>semua perguruan tinggi</b>";
-                  }
+                 //Form cari diisi
+                 if ($this->input->get('search_form') != NULL) {
+                  echo "
+                    Ada <b>" . $total_data . " data </b> ditemukan dari pencarian buku dengan keywords: '<b>" . $this->input->get('search_form') . "</b>'";
                 }
-                // jika masteradmin
-                elseif (is_masteradmin()) {
-                  // jika cabang DIISI dan form cari DIISI
-                  if ($this->input->get('cabang_id') != NULL && $this->input->get('search_form') != NULL) {
-                    echo "
-                    Ada <b>" . $total_data . " data </b> ditemukan dari pencarian arsip dengan keywords: '<b>" . $this->input->get('search_form') . "</b>' pada fakultas: <b>" . $cabang->cabang_name . "</b>
-                    ";
-                  }
-                  // jika cabang DIISI dan form cari KOSONG
-                  elseif ($this->input->get('cabang_id') != NULL && $this->input->get('search_form') == NULL) {
-                    echo "
-                    Ada <b>" . $total_data . " data </b> ditemukan dari pencarian arsip pada fakultas: <b>" . $cabang->cabang_name . "</b>
-                    ";
-                  }
-                  // jika cabang KOSONG dan form cari DIISI
-                  elseif ($this->input->get('cabang_id') == NULL && $this->input->get('search_form') != NULL) {
-                    echo "Ada <b>" . $total_data . " data </b> ditemukan dari pencarian arsip dengan keywords: '<b>" . $this->input->get('search_form') . "</b>' pada <b>semua fakultas</b>";
-                  }
-                  // jika cabang KOSONG dan form cari KOSONG
-                  elseif ($this->input->get('cabang_id') == NULL && $this->input->get('search_form') == NULL) {
-                    echo "Ada <b>" . $total_data . " data </b> ditemukan dari pencarian arsip pada <b>semua fakultas</b>";
-                  }
-                } elseif (is_superadmin()) {
-                  // jika divisi DIISI dan form cari DIISI
-                  if ($this->input->get('divisi_id') != NULL && $this->input->get('search_form') != NULL) {
-                    echo "
-                    Ada <b>" . $total_data . " data </b> ditemukan dari pencarian arsip dengan keywords: '<b>" . $this->input->get('search_form') . "</b>' pada program studi: <b>" . $divisi->divisi_name . "</b>
-                    ";
-                  }
-                  // jika divisi DIISI dan form cari KOSONG
-                  elseif ($this->input->get('divisi_id') != NULL && $this->input->get('search_form') == NULL) {
-                    echo "
-                    Ada <b>" . $total_data . " data </b> ditemukan dari pencarian arsip pada program studi: <b>" . $divisi->divisi_name . "</b>
-                    ";
-                  }
-                  // jika divisi KOSONG dan form cari DIISI
-                  elseif ($this->input->get('divisi_id') == NULL && $this->input->get('search_form') != NULL) {
-                    echo "Ada <b>" . $total_data . " data </b> ditemukan dari pencarian arsip dengan keywords: '<b>" . $this->input->get('search_form') . "</b>' pada <b>semua program studi</b>";
-                  }
-                  // jika divisi KOSONG dan form cari KOSONG
-                  elseif ($this->input->get('divisi_id') == NULL && $this->input->get('search_form') == NULL) {
-                    echo "Ada <b>" . $total_data . " data </b> ditemukan dari pencarian arsip pada <b>semua program studi</b>";
-                  }
-                } else {
-                  // jika bagian DIISI dan form cari DIISI
-                  if ($this->input->get('bagian_id') != NULL && $this->input->get('search_form') != NULL) {
-                    echo "
-                    Ada <b>" . $total_data . " data </b> ditemukan dari pencarian arsip dengan keywords: '<b>" . $this->input->get('search_form') . "</b>' pada divisi: <b>" . $bagian->bagian_name . "</b>
-                    ";
-                  }
-                  // jika bagian DIISI dan form cari KOSONG
-                  elseif ($this->input->get('bagian_id') != NULL && $this->input->get('search_form') == NULL) {
-                    echo "
-                    Ada <b>" . $total_data . " data </b> ditemukan dari pencarian arsip pada divisi: <b>" . $bagian->bagian_name . "</b>
-                    ";
-                  }
-                  // jika bagian KOSONG dan form cari DIISI
-                  elseif ($this->input->get('bagian_id') == NULL && $this->input->get('search_form') != NULL) {
-                    echo "Ada <b>" . $total_data . " data </b> ditemukan dari pencarian arsip dengan keywords: '<b>" . $this->input->get('search_form') . "</b>' pada <b>semua divisi</b>";
-                  }
-                  // jika bagian KOSONG dan form cari KOSONG
-                  elseif ($this->input->get('bagian_id') == NULL && $this->input->get('search_form') == NULL) {
-                    echo "Ada <b>" . $total_data . " data </b> ditemukan dari pencarian arsip pada <b>semua divisi</b>";
-                  }
+                //Form cari null 
+                elseif ($this->input->get('search_form') == NULL) {
+                  echo "
+                    Ada <b>" . $total_data . " data </b> ditemukan dari pencarian semua buku";
                 }
               }
               ?>

@@ -12,16 +12,10 @@
   <link rel="stylesheet" href="<?php echo base_url('assets/plugins/') ?>font-awesome/css/font-awesome.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="<?php echo base_url('assets/template/back/') ?>dist/css/AdminLTE.min.css">
-  <link rel="stylesheet" href="<?php echo base_url('assets/template/front/') ?>css/custom.css">
-  <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
-  <link rel="stylesheet" href="<?php echo base_url('assets/template/back/') ?>dist/css/skins/_all-skins.min.css">
-  <!-- Pretty Checkbox -->
-  <link rel="stylesheet" href="<?php echo base_url('assets/plugins/') ?>pretty-checkbox/dist/pretty-checkbox.min.css">
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
   <!-- Favicon -->
   <link rel="shortcut icon" href="<?php echo base_url('assets/images/company/'.$company_data->company_photo_thumb) ?>" />
-
   <style>
     .bg {
       /* The image used */
@@ -34,3 +28,29 @@
     }
   </style>
 </head>
+<body class="hold-transition login-page bg">
+  <div class="login-box" style="width: 50%">
+    <div class="login-logo">
+      <img src="<?php echo base_url('assets/images/company/'). $company_data->company_photo ?>" width="200px" class="img-circle" alt="company-logo">      
+    </div>
+    <div class="login-box-body" style="border-radius: 15px">
+    <!-- <p class="login-box-msg" style="font-weight: bold; font-size:20px">Silahkan cari buku sekarang</p> -->
+      <?php if($this->session->flashdata('message')){echo $this->session->flashdata('message');} ?>
+      <?php echo validation_errors() ?>
+      <?php echo form_open($action, array("method" => "get")) ?>
+        <div class="input-group input-group-lg">
+          <input type="text" name="search_form" placeholder="Isikan Keywords ..." class="form-control">
+          <span class="input-group-btn">
+            <button type="submit" class="btn btn-primary btn-flat"><i class="fa fa-search"></i> Cari Buku</button>
+          </span>
+        </div>
+        
+      </form>
+
+    </div>
+    <!-- /.login-box-body -->
+  </div>
+  <!-- /.login-box -->
+
+</body>
+</html>

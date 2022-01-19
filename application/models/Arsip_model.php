@@ -1690,6 +1690,47 @@ class Arsip_model extends CI_Model
     return $query->result();
   }
 
+  function cari_all_book_by_instansi_with_searchFormNotNull($search_form)
+  {
+    $this->db->select('
+      arsip.id_arsip, arsip.user_id, arsip.arsip_name, arsip.deskripsi_arsip, arsip.no_arsip, arsip.lokasi_id,
+      baris.baris_name,
+      rak.rak_name,
+      box.box_name,
+      map.map_name,
+      jenis_arsip.jenis_name,
+      instansi.instansi_name,
+      cabang.cabang_name,
+      divisi.divisi_name,
+      lokasi.lokasi_name, arsip.is_available
+    ');
+
+    $this->db->join('instansi', 'arsip.instansi_id = instansi.id_instansi', 'LEFT');
+    $this->db->join('cabang', 'arsip.cabang_id = cabang.id_cabang', 'LEFT');
+    $this->db->join('divisi', 'arsip.divisi_id = divisi.id_divisi', 'LEFT');
+    $this->db->join('lokasi', 'arsip.lokasi_id = lokasi.id_lokasi', 'LEFT');
+    $this->db->join('users', 'arsip.user_id = users.id_users', 'LEFT');
+    $this->db->join('baris', 'arsip.baris_id = baris.id_baris', 'LEFT');
+    $this->db->join('box', 'arsip.box_id = box.id_box', 'LEFT');
+    $this->db->join('map', 'arsip.map_id = map.id_map', 'LEFT');
+    $this->db->join('rak', 'arsip.rak_id = rak.id_rak', 'LEFT');
+    $this->db->join('arsip_jenis', 'arsip.id_arsip = arsip_jenis.arsip_id', 'LEFT');
+    $this->db->join('jenis_arsip', 'arsip_jenis.jenis_arsip_id = jenis_arsip.id_jenis', 'LEFT');
+
+    $this->db->like('arsip_name', $search_form);
+    $this->db->or_like('deskripsi_arsip', $search_form);
+
+    $this->db->where('arsip.is_delete', '0');
+
+    $this->db->group_by('arsip.arsip_name');
+
+    $this->db->order_by($this->id, 'DESC');
+
+    $query = $this->db->get($this->table);
+
+    return $query->result();
+  }
+
   function cari_all_arsip_by_instansi_with_searchFormNotNull_and_instansiIdNull($search_form)
   {
     $this->db->select('
