@@ -33,34 +33,6 @@
                   <?php echo form_dropdown('', $get_all_combobox_instansi, $baris->instansi_id, $instansi_id) ?>
                 </div>
               </div>
-              <div class="col-sm-4">
-                <div class="form-group"><label>Fakultas (*)</label>
-                  <?php echo form_dropdown('', $get_all_combobox_cabang, $baris->cabang_id, $cabang_id) ?>
-                </div>
-              </div>
-              <div class="col-sm-4">
-                <div class="form-group"><label>Program Studi (*)</label>
-                  <?php echo form_dropdown('', $get_all_combobox_divisi, $baris->divisi_id, $divisi_id) ?>
-                </div>
-              </div>
-            </div>
-          <?php } elseif (is_masteradmin()) { ?>
-            <div class="row">
-              <div class="col-sm-6">
-                <div class="form-group"><label>Fakultas (*)</label>
-                  <?php echo form_dropdown('', $get_all_combobox_cabang, $baris->cabang_id, $cabang_id) ?>
-                </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="form-group"><label>Program Studi (*)</label>
-                  <?php echo form_dropdown('', $get_all_combobox_divisi, $baris->divisi_id, $divisi_id) ?>
-                </div>
-              </div>
-            </div>
-            
-          <?php } elseif (is_superadmin()) { ?>
-            <div class="form-group"><label>Program Studi (*)</label>
-              <?php echo form_dropdown('', $get_all_combobox_divisi, $baris->divisi_id, $divisi_id) ?>
             </div>
           <?php } ?>
 
