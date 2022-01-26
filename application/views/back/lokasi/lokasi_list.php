@@ -33,8 +33,6 @@
                 <tr>
                   <th style="text-align: center">No</th>
                   <th style="text-align: center">Nama Lokasi</th>
-                  <th style="text-align: center">Program Studi</th>
-                  <th style="text-align: center">Fakultas</th>
                   <th style="text-align: center">Perguruan Tinggi</th>
                   <th style="text-align: center">Created By</th>
                   <th style="text-align: center">Aksi</th>
@@ -50,8 +48,6 @@
                   <tr>
                     <td style="text-align: center"><?php echo $no++ ?></td>
                     <td style="text-align: center"><?php echo $data->lokasi_name ?></td>
-                    <td style="text-align: center"><?php echo $data->divisi_name ?></td>
-                    <td style="text-align: center"><?php echo $data->cabang_name ?></td>
                     <td style="text-align: center"><?php echo $data->instansi_name ?></td>
                     <td style="text-align: center"><?php echo $data->created_by_lokasi ?></td>
                     <td style="text-align: center"><?php echo $edit ?> <?php echo $delete ?></td>
@@ -62,8 +58,6 @@
                 <tr>
                   <th style="text-align: center">No</th>
                   <th style="text-align: center">Nama Lokasi</th>
-                  <th style="text-align: center">Program Studi</th>
-                  <th style="text-align: center">Fakultas</th>
                   <th style="text-align: center">Perguruan Tinggi</th>
                   <th style="text-align: center">Created By</th>
                   <th style="text-align: center">Aksi</th>
