@@ -113,22 +113,22 @@ class Rak extends CI_Controller
       $instansi_id  = $this->input->post('instansi_id');
       $cabang_id    = $this->input->post('cabang_id');
       $divisi_id    = $this->input->post('divisi_id');
-      $check_by_name  = $this->Rak_model->check_by_name_and_instansi_and_cabang_and_divisi($this->input->post('rak_name'), $instansi_id, $cabang_id, $divisi_id);
+      $check_by_name  = $this->Rak_model->check_by_name_and_instansi($this->input->post('rak_name'), $instansi_id);
     } elseif (is_masteradmin()) {
       $instansi_id  = $this->session->instansi_id;
       $cabang_id    = $this->input->post('cabang_id');
       $divisi_id    = $this->input->post('divisi_id');
-      $check_by_name  = $this->Rak_model->check_by_name_and_instansi_and_cabang_and_divisi($this->input->post('rak_name'), $instansi_id, $cabang_id, $divisi_id);
+      $check_by_name  = $this->Rak_model->check_by_name_and_instansi($this->input->post('rak_name'), $instansi_id);
     } elseif (is_superadmin()) {
       $instansi_id  = $this->session->instansi_id;
       $cabang_id    = $this->session->cabang_id;
       $divisi_id    = $this->input->post('divisi_id');
-      $check_by_name  = $this->Rak_model->check_by_name_and_instansi_and_cabang_and_divisi($this->input->post('rak_name'), $instansi_id, $cabang_id, $divisi_id);
+      $check_by_name  = $this->Rak_model->check_by_name_and_instansi($this->input->post('rak_name'), $instansi_id);
     } elseif (is_admin()) {
       $instansi_id  = $this->session->instansi_id;
       $cabang_id    = $this->session->cabang_id;
       $divisi_id    = $this->session->divisi_id;
-      $check_by_name  = $this->Rak_model->check_by_name_and_instansi_and_cabang_and_divisi($this->input->post('rak_name'), $instansi_id, $cabang_id, $divisi_id);
+      $check_by_name  = $this->Rak_model->check_by_name_and_instansi($this->input->post('rak_name'), $instansi_id);
     }
 
     // var_dump($check_by_name);

@@ -30,7 +30,6 @@
                 <tr>
                   <th style="text-align: center">No</th>
                   <th style="text-align: center">Nama Rak</th>
-                  <th style="text-align: center">Fakultas</th>
                   <th style="text-align: center">Perguruan Tinggi</th>
                   <th style="text-align: center">Aksi</th>
                 </tr>
@@ -44,7 +43,6 @@
                   <tr>
                     <td style="text-align: center"><?php echo $no++ ?></td>
                     <td style="text-align: center"><?php echo $data->rak_name ?></td>
-                    <td style="text-align: center"><?php echo $data->cabang_name ?></td>
                     <td style="text-align: center"><?php echo $data->instansi_name ?></td>
                     <td style="text-align: center"><?php echo $restore ?> <?php echo $delete ?></td>
                   </tr>
@@ -54,7 +52,6 @@
                 <tr>
                   <th style="text-align: center">No</th>
                   <th style="text-align: center">Nama Rak</th>
-                  <th style="text-align: center">Fakultas</th>
                   <th style="text-align: center">Perguruan Tinggi</th>
                   <th style="text-align: center">Aksi</th>
                 </tr>
