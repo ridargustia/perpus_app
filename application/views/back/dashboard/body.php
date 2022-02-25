@@ -26,9 +26,9 @@
         <h4><i class="fa fa-bullhorn"></i> Halo, <?php echo $this->session->name ?>!</h4>
 
         <p>
-          Selamat Datang di Halaman Dashboard Sistem <b><?php echo $company_data->company_name ?></b>!
+          Selamat Datang di Halaman Dashboard Sistem Perpustakaan <b><?php echo $company_data->company_name ?></b>!
           <br>
-          Saat ini Anda sedang login dan dapat mengelola data yang ada pada <b><?php echo $this->session->instansi_name ?></b>.
+          Saat ini Anda sedang login dan dapat mengelola data yang ada pada perpustakaan <b><?php echo $this->session->instansi_name ?></b>.
           <hr>
           <b><?php echo strtoupper('Harap menggunakan aplikasi ini sebijak mungkin karena setiap tindakan yang Anda lakukan akan tercatat oleh sistem.') ?></b>
         </p>

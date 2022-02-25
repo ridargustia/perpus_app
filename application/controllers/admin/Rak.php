@@ -46,11 +46,7 @@ class Rak extends CI_Controller
       $this->data['get_all'] = $this->Rak_model->get_all();
     } elseif (is_masteradmin()) {
       $this->data['get_all'] = $this->Rak_model->get_all_by_instansi();
-    } elseif (is_superadmin()) {
-      $this->data['get_all'] = $this->Rak_model->get_all_by_cabang();
-    } elseif (is_admin()) {
-      $this->data['get_all'] = $this->Rak_model->get_all_by_divisi();
-    }
+    } 
 
     $this->load->view('back/rak/rak_list', $this->data);
   }
@@ -65,10 +61,10 @@ class Rak extends CI_Controller
     if (is_grandadmin()) {
       $this->data['get_all_combobox_instansi']     = $this->Instansi_model->get_all_combobox();
       $this->data['get_all_combobox_cabang']       = $this->Cabang_model->get_all_combobox();
+      $this->data['get_all_combobox_lokasi']       = $this->Lokasi_model->get_all_combobox();
     } elseif (is_masteradmin()) {
       $this->data['get_all_combobox_cabang']       = $this->Cabang_model->get_all_combobox_by_instansi($this->session->instansi_id);
-    } elseif (is_superadmin()) {
-      $this->data['get_all_combobox_divisi']       = $this->Divisi_model->get_all_combobox_by_cabang($this->session->cabang_id);
+      $this->data['get_all_combobox_lokasi']       = $this->Lokasi_model->get_all_combobox_by_instansi($this->session->instansi_id);
     }   
 
     $this->data['rak_name'] = [
@@ -83,7 +79,7 @@ class Rak extends CI_Controller
       'name'          => 'instansi_id',
       'id'            => 'instansi_id',
       'class'         => 'form-control',
-      'onChange'      => 'tampilCabang()',
+      'onChange'      => 'tampilLokasi()',
       'required'      => '',
     ];
     $this->data['cabang_id'] = [
@@ -96,6 +92,12 @@ class Rak extends CI_Controller
     $this->data['divisi_id'] = [
       'name'          => 'divisi_id',
       'id'            => 'divisi_id',
+      'class'         => 'form-control',
+      'required'      => '',
+    ];
+    $this->data['lokasi_id'] = [
+      'name'          => 'lokasi_id',
+      'id'            => 'lokasi_id',
       'class'         => 'form-control',
       'required'      => '',
     ];
@@ -113,23 +115,13 @@ class Rak extends CI_Controller
       $instansi_id  = $this->input->post('instansi_id');
       $cabang_id    = $this->input->post('cabang_id');
       $divisi_id    = $this->input->post('divisi_id');
-      $check_by_name  = $this->Rak_model->check_by_name_and_instansi($this->input->post('rak_name'), $instansi_id);
+      $check_by_name  = $this->Rak_model->check_by_name_and_lokasi_and_instansi($this->input->post('rak_name'), $instansi_id, $this->input->post('lokasi_id'));
     } elseif (is_masteradmin()) {
       $instansi_id  = $this->session->instansi_id;
       $cabang_id    = $this->input->post('cabang_id');
       $divisi_id    = $this->input->post('divisi_id');
-      $check_by_name  = $this->Rak_model->check_by_name_and_instansi($this->input->post('rak_name'), $instansi_id);
-    } elseif (is_superadmin()) {
-      $instansi_id  = $this->session->instansi_id;
-      $cabang_id    = $this->session->cabang_id;
-      $divisi_id    = $this->input->post('divisi_id');
-      $check_by_name  = $this->Rak_model->check_by_name_and_instansi($this->input->post('rak_name'), $instansi_id);
-    } elseif (is_admin()) {
-      $instansi_id  = $this->session->instansi_id;
-      $cabang_id    = $this->session->cabang_id;
-      $divisi_id    = $this->session->divisi_id;
-      $check_by_name  = $this->Rak_model->check_by_name_and_instansi($this->input->post('rak_name'), $instansi_id);
-    }
+      $check_by_name  = $this->Rak_model->check_by_name_and_lokasi_and_instansi($this->input->post('rak_name'), $instansi_id, $this->input->post('lokasi_id'));
+    } 
 
     // var_dump($check_by_name);
 
@@ -141,6 +133,7 @@ class Rak extends CI_Controller
     } else {
       $data = array(
         'rak_name'          => $this->input->post('rak_name'),
+        'lokasi_id'         => $this->input->post('lokasi_id'),
         'instansi_id'       => $instansi_id,
         'cabang_id'         => $cabang_id,
         'divisi_id'         => $divisi_id,
@@ -170,12 +163,12 @@ class Rak extends CI_Controller
         $this->data['get_all_combobox_instansi']     = $this->Instansi_model->get_all_combobox();
         $this->data['get_all_combobox_cabang']       = $this->Cabang_model->get_all_combobox_update($this->data['rak']->instansi_id);
         $this->data['get_all_combobox_divisi']       = $this->Divisi_model->get_all_combobox_update($this->data['rak']->cabang_id);
+        $this->data['get_all_combobox_lokasi']       = $this->Lokasi_model->get_all_combobox_update($this->data['rak']->instansi_id);
       } elseif (is_masteradmin()) {
         $this->data['get_all_combobox_cabang']       = $this->Cabang_model->get_all_combobox_update($this->data['rak']->instansi_id);
         $this->data['get_all_combobox_divisi']       = $this->Divisi_model->get_all_combobox_update($this->data['rak']->cabang_id);
-      } elseif (is_superadmin()) {
-        $this->data['get_all_combobox_divisi']       = $this->Divisi_model->get_all_combobox_update($this->data['rak']->cabang_id);
-      }
+        $this->data['get_all_combobox_lokasi']       = $this->Lokasi_model->get_all_combobox_by_instansi($this->session->instansi_id);
+      } 
 
       $this->data['id_rak'] = [
         'name'          => 'id_rak',
@@ -192,7 +185,7 @@ class Rak extends CI_Controller
         'name'          => 'instansi_id',
         'id'            => 'instansi_id',
         'class'         => 'form-control',
-        'onChange'      => 'tampilCabang()',
+        'onChange'      => 'tampilLokasi()',
         'required'      => '',
       ];
       $this->data['cabang_id'] = [
@@ -205,6 +198,12 @@ class Rak extends CI_Controller
       $this->data['divisi_id'] = [
         'name'          => 'divisi_id',
         'id'            => 'divisi_id',
+        'class'         => 'form-control',
+        'required'      => '',
+      ];
+      $this->data['lokasi_id'] = [
+        'name'          => 'lokasi_id',
+        'id'            => 'lokasi_id',
         'class'         => 'form-control',
         'required'      => '',
       ];
@@ -230,23 +229,16 @@ class Rak extends CI_Controller
       $instansi_id  = $this->session->instansi_id;
       $cabang_id    = $this->input->post('cabang_id');
       $divisi_id    = $this->input->post('divisi_id');
-    } elseif (is_superadmin()) {
-      $instansi_id  = $this->session->instansi_id;
-      $cabang_id    = $this->session->cabang_id;
-      $divisi_id    = $this->input->post('divisi_id');
-    } elseif (is_admin()) {
-      $instansi_id  = $this->session->instansi_id;
-      $cabang_id    = $this->session->cabang_id;
-      $divisi_id    = $this->session->divisi_id;
-    }
+    } 
 
-    $check_by_name  = $this->Rak_model->check_by_name_and_instansi_and_cabang_and_divisi($this->input->post('rak_name'), $instansi_id, $cabang_id, $divisi_id);
+    // $check_by_name  = $this->Rak_model->check_by_name_and_instansi_and_cabang_and_divisi($this->input->post('rak_name'), $instansi_id, $cabang_id, $divisi_id);
     // var_dump($check_by_name->is_delete_rak); die;
     if ($this->form_validation->run() === FALSE) {
       $this->update($this->input->post('id_rak'));
     } else {
       $data = array(
         'rak_name'            => $this->input->post('rak_name'),
+        'lokasi_id'            => $this->input->post('lokasi_id'),
         'instansi_id'         => $instansi_id,
         'cabang_id'           => $cabang_id,
         'divisi_id'           => $divisi_id,
@@ -316,11 +308,7 @@ class Rak extends CI_Controller
       $this->data['get_all_deleted'] = $this->Rak_model->get_all_deleted();
     } elseif (is_masteradmin()) {
       $this->data['get_all_deleted'] = $this->Rak_model->get_all_deleted_by_instansi();
-    } elseif (is_superadmin()) {
-      $this->data['get_all_deleted'] = $this->Rak_model->get_all_deleted_by_cabang();
-    } elseif (is_admin()) {
-      $this->data['get_all_deleted'] = $this->Rak_model->get_all_deleted_by_divisi();
-    }
+    } 
 
     $this->load->view('back/rak/rak_deleted_list', $this->data);
   }
@@ -352,7 +340,8 @@ class Rak extends CI_Controller
 
   function pilih_rak()
   {
-    $this->data['rak'] = $this->Rak_model->get_rak_by_divisi_combobox($this->uri->segment(4));
+    // $this->data['rak'] = $this->Rak_model->get_rak_by_divisi_combobox($this->uri->segment(4));
+    $this->data['rak'] = $this->Rak_model->get_rak_by_lokasi_combobox($this->uri->segment(4));
     $this->load->view('back/rak/v_rak', $this->data);
   }
 }

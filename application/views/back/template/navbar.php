@@ -22,18 +22,26 @@
       <ul class="nav navbar-nav">
         <li class="dropdown user user-menu">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-            <img src="<?php echo base_url('assets/images/user/'.$this->session->photo_thumb) ?>" class="user-image" alt="User Image">
+            <?php if ($this->session->photo_thumb != NULL) { ?>
+              <img src="<?php echo base_url('assets/images/user/'.$this->session->photo_thumb) ?>" class="user-image" alt="User Image">
+            <?php } else { ?>
+              <img src="<?php echo base_url('assets/images/noimage.jpg') ?>" class="user-image" alt="User Image">
+            <?php } ?>
             <span class="hidden-xs"><?php echo $this->session->name ?></span>
           </a>
           <ul class="dropdown-menu">
             <!-- User image -->
             <li class="user-header">
-              <img src="<?php echo base_url('assets/images/user/'.$this->session->photo_thumb) ?>" class="img-circle" alt="User Image">
+              <?php if ($this->session->photo_thumb != NULL) { ?>
+                <img src="<?php echo base_url('assets/images/user/'.$this->session->photo_thumb) ?>" class="img-circle" alt="User Image">
+              <?php } else { ?>
+                <img src="<?php echo base_url('assets/images/noimage.jpg') ?>" class="img-circle" alt="User Image">
+              <?php } ?>
               <p>
                 <?php echo $this->session->username ?> - <?php echo $this->session->usertype_name ?>
                 <br>
                 <small><b>Bergabung:</b> <?php echo date_only($this->session->created_at) ?></small>
-                <small><b><?php echo $this->session->instansi_name ?> | <?php echo $this->session->divisi_name ?></b></small>
+                <small><b><?php echo $this->session->instansi_name ?></b></small>
               </p>
             </li>
             <!-- Menu Body -->

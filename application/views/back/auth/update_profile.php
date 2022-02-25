@@ -64,7 +64,11 @@
               <?php echo form_textarea($address, $user->address) ?>
             </div>
             <div class="form-group"><label>Current Photo</label>
-              <p><img src="<?php echo base_url('assets/images/user/'.$user->photo_thumb) ?>" width="200px" alt="current photo"></p>
+              <?php if ($user->photo_thumb != NULL) { ?>
+                <p><img src="<?php echo base_url('assets/images/user/'.$user->photo_thumb) ?>" width="200px" alt="current photo"></p>
+              <?php } else { ?>
+                <p><img src="<?php echo base_url('assets/images/noimage.jpg') ?>" width="200px" alt="current photo"></p>
+              <?php } ?>
             </div>
             <div class="form-group"><label>New Photo</label>
               <input type="file" name="photo" id="photo" onchange="photoPreview(this,'preview')"/>

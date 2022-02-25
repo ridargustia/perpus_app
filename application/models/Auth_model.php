@@ -56,7 +56,7 @@ class Auth_model extends CI_Model
     $this->db->join('bagian', 'users.bagian_id = bagian.id_bagian', 'left');
 
     $this->db->where('users.instansi_id', $this->session->instansi_id);
-    $this->db->where('users.usertype_id >', '1');
+    $this->db->where('users.usertype_id', '1');
     $this->db->where('users.usertype_id !=', '5');
     $this->db->where('is_delete', '0');
 
@@ -377,6 +377,12 @@ class Auth_model extends CI_Model
 
   function get_all_deleted()
   {
+    $this->db->select('
+      users.id_users, users.name, users.gender, users.username, users.email, users.instansi_id, users.usertype_id, users.is_active, users.is_delete,
+      usertype.usertype_name,
+      users.deleted_by as deleted_by_user
+    ');
+
     $this->db->join('usertype', 'users.usertype_id = usertype.id_usertype');
     $this->db->where('is_delete', '1');
     $this->db->order_by('name', $this->order);
@@ -386,19 +392,16 @@ class Auth_model extends CI_Model
   function get_all_deleted_by_instansi()
   {
     $this->db->select('
-      users.id_users, users.name, users.gender, users.username, users.email, users.divisi_id, users.cabang_id, users.instansi_id, users.usertype_id, users.is_active, users.is_delete,
+      users.id_users, users.name, users.gender, users.username, users.email, users.instansi_id, users.usertype_id, users.is_active, users.is_delete,
       usertype.usertype_name,
       instansi.instansi_name,
-      cabang.cabang_name,
-      divisi.divisi_name, users.deleted_by as deleted_by_user
+      users.deleted_by as deleted_by_user
     ');
     $this->db->join('usertype', 'users.usertype_id = usertype.id_usertype', 'left');
     $this->db->join('instansi', 'users.instansi_id = instansi.id_instansi', 'left');
-    $this->db->join('cabang', 'users.cabang_id = cabang.id_cabang', 'left');
-    $this->db->join('divisi', 'users.divisi_id = divisi.id_divisi', 'left');
 
     $this->db->where('users.instansi_id', $this->session->instansi_id);
-    $this->db->where('users.usertype_id >', '1');
+    $this->db->where('users.usertype_id', '1');
     $this->db->where('users.usertype_id !=', '5');
     $this->db->where('is_delete', '1');
 

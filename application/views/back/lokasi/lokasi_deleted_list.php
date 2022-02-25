@@ -30,7 +30,9 @@
                 <tr>
                   <th style="text-align: center">No</th>
                   <th style="text-align: center">Nama Lokasi</th>
-                  <th style="text-align: center">Perguruan Tinggi</th>
+                  <?php if (is_grandadmin()) { ?>
+                    <th style="text-align: center">Perguruan Tinggi</th>
+                  <?php } ?>
                   <th style="text-align: center">Aksi</th>
                 </tr>
               </thead>
@@ -43,7 +45,9 @@
                   <tr>
                     <td style="text-align: center"><?php echo $no++ ?></td>
                     <td style="text-align: center"><?php echo $data->lokasi_name ?></td>
-                    <td style="text-align: center"><?php echo $data->instansi_name ?></td>
+                    <?php if (is_grandadmin()) { ?>
+                      <td style="text-align: center"><?php echo $data->instansi_name ?></td>
+                    <?php } ?>
                     <td style="text-align: center"><?php echo $restore ?> <?php echo $delete ?></td>
                   </tr>
                 <?php } ?>
@@ -52,7 +56,9 @@
                 <tr>
                   <th style="text-align: center">No</th>
                   <th style="text-align: center">Nama Lokasi</th>
-                  <th style="text-align: center">Perguruan Tinggi</th>
+                  <?php if (is_grandadmin()) { ?>
+                    <th style="text-align: center">Perguruan Tinggi</th>
+                  <?php } ?>
                   <th style="text-align: center">Aksi</th>
                 </tr>
               </tfoot>

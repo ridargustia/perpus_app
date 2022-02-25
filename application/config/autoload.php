@@ -134,5 +134,5 @@ $autoload['language'] = array();
 */
 $autoload['model'] = array(
   'Auth_model', 'Bagian_model', 'Cabang_model', 'Company_model', 'Dataaccess_model', 'Divisi_model', 'Footer_model', 'Instansi_model', 'Lokasi_model', 'Log_model', 'Menu_model', 'Menuaccess_model', 'Submenu_model',
-  'Usertype_model', 'Template_model', 'Peminjaman_model', 'Pengembalian_model'
+  'Usertype_model', 'Template_model', 'Peminjaman_model', 'Pengembalian_model', 'Rak_model'
 );

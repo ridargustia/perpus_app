@@ -45,6 +45,7 @@
                   // status active
                   if($user->is_active == '1'){$is_active = '<a href="'.base_url('admin/auth/deactivate/'.$user->id_users).'" class="btn btn-xs btn-success">ACTIVE</a>';}
                   else{$is_active = '<a href="'.base_url('admin/auth/admin/activate/'.$user->id_users).'" class="btn btn-xs btn-danger">INACTIVE</a>';}
+                 
                   // action
                   if($user->deleted_by_user == $this->session->username || is_masteradmin()){
                     $restore = '<a href="'.base_url('admin/auth/restore/'.$user->id_users).'" class="btn btn-info" title="Restore User"><i class="fa fa-refresh"></i></a>';

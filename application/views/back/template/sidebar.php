@@ -81,8 +81,6 @@
       <li class="header">SETTINGS</li>            
 
       <?php if(is_grandadmin()){ ?>        
-        <li><a href="<?php echo base_url('admin/backups/backup_db') ?>"><i class="fa fa-database"></i> <span>Backup DB</span></a></li>
-        <li class="<?php if($this->uri->segment(2) == 'auth' && $this->uri->segment(3) == 'log_list'){echo "active";} ?>"><a href="<?php echo base_url('admin/log') ?>"><i class="fa fa-clock-o"></i> <span>Log System Process</span></a></li>
         <li class="<?php if($this->uri->segment(2) == 'company'){echo "active";} ?>" ><a href="<?php echo base_url('admin/company/update/1') ?>"><i class="fa fa-building"></i> <span>Company Profile</span></a></li>
         <li class="<?php if($this->uri->segment(2) == 'auth' && $this->uri->segment(3) != 'log_list'){echo "active";} ?> treeview">
           <a href="#">
@@ -95,36 +93,6 @@
             <li <?php if($this->uri->segment(2) == 'auth' && $this->uri->segment(3) == 'deleted_list'){echo 'class="active"';} ?>><a href="<?php echo base_url('admin/auth/deleted_list') ?>"><i class="fa fa-circle-o"></i> Recycle Bin</a></li>
           </ul>
         </li>
-        <li class="<?php if($this->uri->segment(2) == 'usertype'){echo "active";} ?> treeview">
-          <a href="#">
-            <i class="fa fa-legal"></i> <span>Usertype Management</span>
-            <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
-          </a>
-          <ul class="treeview-menu">
-            <li <?php if($this->uri->segment(2) == 'usertype' && $this->uri->segment(3) == 'create'){echo 'class="active"';} ?>><a href="<?php echo base_url('admin/usertype/create') ?>"><i class="fa fa-circle-o"></i> Add Usertype</a></li>
-            <li <?php if($this->uri->segment(2) == 'usertype' && $this->uri->segment(3) == ''){echo 'class="active"';} ?>><a href="<?php echo base_url('admin/usertype') ?>"><i class="fa fa-circle-o"></i> Usertype List</a></li>
-          </ul>
-        </li>
-        <li class="<?php if($this->uri->segment(2) == 'menu'){echo "active";} ?> treeview">
-          <a href="#">
-            <i class="fa fa-list"></i> <span>Menu Management</span>
-            <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
-          </a>
-          <ul class="treeview-menu">
-            <li <?php if($this->uri->segment(2) == 'menu' && $this->uri->segment(3) == 'create'){echo 'class="active"';} ?>><a href="<?php echo base_url('admin/menu/create') ?>"><i class="fa fa-circle-o"></i> Add Menu</a></li>
-            <li <?php if($this->uri->segment(2) == 'menu' && $this->uri->segment(3) == ''){echo 'class="active"';} ?>><a href="<?php echo base_url('admin/menu') ?>"><i class="fa fa-circle-o"></i> Menu List</a></li>
-          </ul>
-        </li>
-        <li class="<?php if($this->uri->segment(2) == 'submenu'){echo "active";} ?> treeview">
-          <a href="#">
-            <i class="fa fa-list"></i> <span>SubMenu Management</span>
-            <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
-          </a>
-          <ul class="treeview-menu">
-            <li <?php if($this->uri->segment(2) == 'submenu' && $this->uri->segment(3) == 'create'){echo 'class="active"';} ?>><a href="<?php echo base_url('admin/submenu/create') ?>"><i class="fa fa-circle-o"></i> Add SubMenu</a></li>
-            <li <?php if($this->uri->segment(2) == 'submenu' && $this->uri->segment(3) == ''){echo 'class="active"';} ?>><a href="<?php echo base_url('admin/submenu') ?>"><i class="fa fa-circle-o"></i> SubMenu List</a></li>
-          </ul>
-        </li>
         <li class="<?php if($this->uri->segment(2) == 'menuaccess'){echo "active";} ?> treeview">
           <a href="#">
             <i class="fa fa-users"></i> <span>Menu Access Management</span>
@@ -135,19 +103,8 @@
             <li <?php if($this->uri->segment(2) == 'menuaccess' && $this->uri->segment(3) == ''){echo 'class="active"';} ?>><a href="<?php echo base_url('admin/menuaccess') ?>"><i class="fa fa-circle-o"></i> Menu Access List</a></li>
           </ul>
         </li>
-        <li class="<?php if($this->uri->segment(2) == 'template' and 'footer'){echo "active";} ?> treeview">
-          <a href="#">
-            <i class="fa fa-gears"></i> <span>Template Management</span>
-            <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
-          </a>
-          <ul class="treeview-menu">
-            <li <?php if($this->uri->segment(2) == 'template' && $this->uri->segment(4) == '1'){echo 'class="active"';} ?>><a href="<?php echo base_url('admin/template/update/1') ?>"><i class="fa fa-circle-o"></i> Layout</a></li>
-            <li <?php if($this->uri->segment(2) == 'template' && $this->uri->segment(4) == '2'){echo 'class="active"';} ?>><a href="<?php echo base_url('admin/template/update/2') ?>"><i class="fa fa-circle-o"></i> Skins</a></li>
-            <li <?php if($this->uri->segment(2) == 'footer') {echo 'class="active"';} ?>><a href="<?php echo base_url('admin/footer/update/1') ?>"><i class="fa fa-circle-o"></i> Footer</a></li>
-          </ul>
-        </li>
 
-      <?php }elseif(is_masteradmin()){ ?>
+      <?php } elseif (is_masteradmin()){ ?>
         <li class="<?php if($this->uri->segment(2) == 'company'){echo "active";} ?>" ><a href="<?php echo base_url('admin/instansi/update/'.$this->session->instansi_id) ?>"><i class="fa fa-building"></i> <span>Profil Perguruan Tinggi</span></a></li>
         <li class="<?php if($this->uri->segment(2) == 'auth' && $this->uri->segment(3) != 'log_list'){echo "active";} ?> treeview">
           <a href="#">

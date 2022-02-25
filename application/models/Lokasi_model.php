@@ -11,12 +11,10 @@ class Lokasi_model extends CI_Model
   function get_all()
   {
     $this->db->select('
-      lokasi.id_lokasi, lokasi.lokasi_name, cabang.cabang_name, instansi.instansi_name, lokasi.created_by as created_by_lokasi, divisi.divisi_name
+      lokasi.id_lokasi, lokasi.lokasi_name, instansi.instansi_name, lokasi.created_by as created_by_lokasi
     ');
     
     $this->db->join('instansi', 'lokasi.instansi_id = instansi.id_instansi', 'left');
-    $this->db->join('cabang', 'lokasi.cabang_id = cabang.id_cabang', 'left');
-    $this->db->join('divisi', 'lokasi.divisi_id = divisi.id_divisi', 'left');
 
     $this->db->where('is_delete_lokasi', '0');
 
@@ -28,12 +26,10 @@ class Lokasi_model extends CI_Model
   function get_all_by_instansi()
   {
     $this->db->select('
-      lokasi.id_lokasi, lokasi.lokasi_name, cabang.cabang_name, instansi.instansi_name, lokasi.created_by as created_by_lokasi, divisi.divisi_name
+      lokasi.id_lokasi, lokasi.lokasi_name, instansi.instansi_name, lokasi.created_by as created_by_lokasi
     ');
     
     $this->db->join('instansi', 'lokasi.instansi_id = instansi.id_instansi', 'left');
-    $this->db->join('cabang', 'lokasi.cabang_id = cabang.id_cabang', 'left');
-    $this->db->join('divisi', 'lokasi.divisi_id = divisi.id_divisi', 'left');
 
     $this->db->where('lokasi.instansi_id', $this->session->instansi_id);
     $this->db->where('is_delete_lokasi', '0');
@@ -231,7 +227,6 @@ class Lokasi_model extends CI_Model
   function get_all_deleted()
   {
     $this->db->join('instansi', 'lokasi.instansi_id = instansi.id_instansi', 'left');
-    $this->db->join('cabang', 'lokasi.cabang_id = cabang.id_cabang', 'left');
 
     $this->db->where('is_delete_lokasi', '1');
 
@@ -243,7 +238,6 @@ class Lokasi_model extends CI_Model
   function get_all_deleted_by_instansi()
   {
     $this->db->join('instansi', 'lokasi.instansi_id = instansi.id_instansi', 'left');
-    $this->db->join('cabang', 'lokasi.cabang_id = cabang.id_cabang', 'left');
 
     $this->db->where('lokasi.instansi_id', $this->session->instansi_id);
     $this->db->where('is_delete_lokasi', '1');
@@ -324,7 +318,7 @@ class Lokasi_model extends CI_Model
   {
     $this->db->join('instansi', 'lokasi.instansi_id = instansi.id_instansi');
 
-    $this->db->where('instansi_id', $this->session->instansi_id);
+    $this->db->where('lokasi.instansi_id', $this->session->instansi_id);
 
     return $this->db->get($this->table)->num_rows();
   }

@@ -121,21 +121,6 @@
                 </div>
               </div>
               <div class="col-lg-4">
-                <div class="form-group"><label>Fakultas (*)</label>
-                  <?php echo form_dropdown('', array('' => '- Pilih Perguruan Tinggi Dulu -'), '', $cabang_id) ?>
-                </div>
-              </div>
-              <div class="col-lg-4">
-                <div class="form-group"><label>Program Studi (*)</label>
-                  <?php echo form_dropdown('', array('' => '- Pilih Fakultas Dulu -'), '', $divisi_id) ?>
-                </div>
-              </div>
-              <div class="col-lg-4">
-                <div class="form-group"><label>Divisi (*)</label>
-                  <?php echo form_dropdown('', array('' => '- Pilih Program Studi Dulu -'), '', $bagian_id) ?>
-                </div>
-              </div>
-              <div class="col-lg-4">
                 <div class="form-group"><label>Usertype (*)</label>
                   <?php echo form_dropdown('', $get_all_combobox_usertype, '', $usertype_id) ?>
                 </div>
@@ -158,27 +143,7 @@
             </div>
           <?php } elseif (is_masteradmin()) { ?>
             <div class="row">
-              <div class="col-lg-4">
-                <div class="form-group"><label>Fakultas (*)</label>
-                  <?php echo form_dropdown('', $get_all_combobox_cabang, '', $cabang_id) ?>
-                </div>
-              </div>
-              <div class="col-lg-4">
-                <div class="form-group"><label>Program Studi (*)</label>
-                  <?php echo form_dropdown('', array('' => '- Pilih Fakultas Dulu -'), '', $divisi_id) ?>
-                </div>
-              </div>
-              <div class="col-lg-4">
-                <div class="form-group"><label>Divisi (*)</label>
-                  <?php echo form_dropdown('', array('' => '- Pilih Program Studi Dulu -'), '', $bagian_id) ?>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="form-group"><label>Usertype (*)</label>
-                  <?php echo form_dropdown('', $get_all_combobox_usertype, '', $usertype_id) ?>
-                </div>
-              </div>
-              <div class="col-lg-6">
+              <div class="col-lg-12">
                 <div class="form-group"><label>Akses Data (*)</label>
                   <p>
                     <?php foreach ($get_all_data_access as $dataAccess) { ?>
@@ -194,68 +159,9 @@
                 </div>
               </div>
             </div>
-          <?php } elseif (is_superadmin()) { ?>
-            <div class="row">
-              <div class="col-lg-6">
-                <div class="form-group"><label>Program Studi (*)</label>
-                  <?php echo form_dropdown('', $get_all_combobox_divisi, '', $divisi_id) ?>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="form-group"><label>Divisi (*)</label>
-                  <?php echo form_dropdown('', array('' => '- Pilih Program Studi Dulu -'), '', $bagian_id) ?>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="form-group"><label>Usertype (*)</label>
-                  <?php echo form_dropdown('', $get_all_combobox_usertype, '', $usertype_id) ?>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="form-group"><label>Akses Data (*)</label>
-                  <p>
-                    <?php foreach ($get_all_data_access as $dataAccess) { ?>
-                      <div class="pretty p-icon p-smooth">
-                        <input type="checkbox" name="data_access_id[]" value="<?php echo $dataAccess->id_data_access ?>">
-                        <div class="state p-success">
-                          <i class="icon fa fa-check"></i>
-                          <label><?php echo $dataAccess->data_access_name ?></label>
-                        </div>
-                      </div>
-                    <?php } ?>
-                  </p>
-                </div>
-              </div>
-            </div>
-          <?php } elseif (is_admin()) { ?>
-            <div class="row">
-              <div class="col-lg-4">
-                <div class="form-group"><label>Divisi (*)</label>
-                  <?php echo form_dropdown('', $get_all_combobox_bagian, '', $bagian_id) ?>
-                </div>
-              </div>
-              <div class="col-lg-4">
-                <div class="form-group"><label>Usertype (*)</label>
-                  <?php echo form_dropdown('', $get_all_combobox_usertype, '', $usertype_id) ?>
-                </div>
-              </div>
-              <div class="col-lg-4">
-                <div class="form-group"><label>Akses Data (*)</label>
-                  <p>
-                    <?php foreach ($get_all_data_access as $dataAccess) { ?>
-                      <div class="pretty p-icon p-smooth">
-                        <input type="checkbox" name="data_access_id[]" value="<?php echo $dataAccess->id_data_access ?>">
-                        <div class="state p-success">
-                          <i class="icon fa fa-check"></i>
-                          <label><?php echo $dataAccess->data_access_name ?></label>
-                        </div>
-                      </div>
-                    <?php } ?>
-                  </p>
-                </div>
-              </div>
-            </div>
+            
           <?php } ?>
+            
         </div>
         <div class="box-footer">
           <button type="submit" name="button" class="btn btn-success"><i class="fa fa-save"></i> <?php echo $btn_submit ?></button>
@@ -379,7 +285,7 @@
           name: "required",
           username: {
             required: true,
-            minlength: 8
+            minlength: 3
           },
           password: {
             required: true,
@@ -397,10 +303,10 @@
             required: true,
           },
           cabang_id: {
-            required: true,
+            // required: true,
           },
           divisi_id: {
-            required: true,
+            // required: true,
           },
           usertype_id: {
             required: true,
@@ -410,7 +316,7 @@
           name: "<span style='color:red'>Wajib diisi</span>",
           username: {
             required: "<span style='color:red'>Wajib diisi</span>",
-            minlength: "<span style='color:red'>Minimal 8 huruf</span>",
+            minlength: "<span style='color:red'>Minimal 3 huruf</span>",
           },
           password: {
             required: "<span style='color:red'>Wajib diisi</span>",

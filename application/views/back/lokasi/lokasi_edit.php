@@ -28,7 +28,7 @@
         <div class="box-body">          
           <?php if (is_grandadmin()) { ?>          
             <div class="row">
-              <div class="col-sm-4">
+              <div class="col-sm-12">
                 <div class="form-group"><label>Perguruan Tinggi (*)</label>
                   <?php echo form_dropdown('', $get_all_combobox_instansi, $lokasi->instansi_id, $instansi_id) ?>
                 </div>
@@ -36,7 +36,7 @@
             </div>
           <?php } ?>
 
-          <div class="form-group"><label>Nama Lokasi</label>
+          <div class="form-group"><label>Nama Lokasi (*)</label>
             <?php echo form_input($lokasi_name, $lokasi->lokasi_name) ?>
           </div>
         </div>

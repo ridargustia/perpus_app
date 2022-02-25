@@ -46,11 +46,7 @@ class Baris extends CI_Controller
       $this->data['get_all'] = $this->Baris_model->get_all();
     } elseif (is_masteradmin()) {
       $this->data['get_all'] = $this->Baris_model->get_all_by_instansi();
-    } elseif (is_superadmin()) {
-      $this->data['get_all'] = $this->Baris_model->get_all_by_cabang();
-    } elseif (is_admin()) {
-      $this->data['get_all'] = $this->Baris_model->get_all_by_divisi();
-    }
+    } 
 
     $this->load->view('back/baris/baris_list', $this->data);
   }
@@ -65,11 +61,11 @@ class Baris extends CI_Controller
     if (is_grandadmin()) {
       $this->data['get_all_combobox_instansi']     = $this->Instansi_model->get_all_combobox();
       $this->data['get_all_combobox_cabang']       = $this->Cabang_model->get_all_combobox();
+      $this->data['get_all_combobox_lokasi']       = $this->Lokasi_model->get_all_combobox();
     } elseif (is_masteradmin()) {
       $this->data['get_all_combobox_cabang']       = $this->Cabang_model->get_all_combobox_by_instansi($this->session->instansi_id);
-    } elseif (is_superadmin()) {
-      $this->data['get_all_combobox_divisi']       = $this->Divisi_model->get_all_combobox_by_cabang($this->session->cabang_id);
-    }
+      $this->data['get_all_combobox_lokasi']       = $this->Lokasi_model->get_all_combobox_by_instansi($this->session->instansi_id);
+    } 
 
     $this->data['baris_name'] = [
       'name'          => 'baris_name',
@@ -83,7 +79,7 @@ class Baris extends CI_Controller
       'name'          => 'instansi_id',
       'id'            => 'instansi_id',
       'class'         => 'form-control',
-      'onChange'      => 'tampilCabang()',
+      'onChange'      => 'tampilLokasi()',
       'required'      => '',
     ];
     $this->data['cabang_id'] = [
@@ -99,6 +95,19 @@ class Baris extends CI_Controller
       'class'         => 'form-control',
       'required'      => '',
     ];
+    $this->data['lokasi_id'] = [
+      'name'          => 'lokasi_id',
+      'id'            => 'lokasi_id',
+      'class'         => 'form-control',
+      'onChange'      => 'tampilRak()',
+      'required'      => '',
+    ];
+    $this->data['rak_id'] = [
+      'name'          => 'rak_id',
+      'id'            => 'rak_id',
+      'class'         => 'form-control',
+      'required'      => '',
+    ];
 
     $this->load->view('back/baris/baris_add', $this->data);
   }
@@ -111,25 +120,15 @@ class Baris extends CI_Controller
 
     if (is_grandadmin()) {
       $instansi_id  = $this->input->post('instansi_id');
-      $cabang_id    = $this->input->post('cabang_id');
-      $divisi_id    = $this->input->post('divisi_id');
-      $this->data['check_by_name']  = $this->Baris_model->check_by_name_and_instansi($this->input->post('baris_name'), $instansi_id);
+      $lokasi_id  = $this->input->post('lokasi_id');
+      $rak_id  = $this->input->post('rak_id');
+      $this->data['check_by_name']  = $this->Baris_model->check_by_name_and_rak_and_lokasi_and_instansi($this->input->post('baris_name'), $instansi_id, $lokasi_id, $rak_id);
     } elseif (is_masteradmin()) {
       $instansi_id  = $this->session->instansi_id;
-      $cabang_id    = $this->input->post('cabang_id');
-      $divisi_id    = $this->input->post('divisi_id');
-      $this->data['check_by_name']  = $this->Baris_model->check_by_name_and_instansi($this->input->post('baris_name'), $instansi_id);
-    } elseif (is_superadmin()) {
-      $instansi_id  = $this->session->instansi_id;
-      $cabang_id    = $this->session->cabang_id;
-      $divisi_id    = $this->input->post('divisi_id');
-      $this->data['check_by_name']  = $this->Baris_model->check_by_name_and_instansi($this->input->post('baris_name'), $instansi_id);
-    } elseif (is_admin()) {
-      $instansi_id  = $this->session->instansi_id;
-      $cabang_id    = $this->session->cabang_id;
-      $divisi_id    = $this->session->divisi_id;
-      $this->data['check_by_name']  = $this->Baris_model->check_by_name_and_instansi($this->input->post('baris_name'), $instansi_id);
-    }
+      $lokasi_id  = $this->input->post('lokasi_id');
+      $rak_id  = $this->input->post('rak_id');
+      $this->data['check_by_name']  = $this->Baris_model->check_by_name_and_rak_and_lokasi_and_instansi($this->input->post('baris_name'), $instansi_id, $lokasi_id, $rak_id);
+    } 
 
     if ($this->form_validation->run() === FALSE) {
       $this->create();
@@ -139,6 +138,8 @@ class Baris extends CI_Controller
     } else {
       $data = array(
         'baris_name'        => $this->input->post('baris_name'),
+        'lokasi_id'         => $this->input->post('lokasi_id'),
+        'rak_id'            => $this->input->post('rak_id'),
         'instansi_id'       => $instansi_id,
         'cabang_id'         => $cabang_id,
         'divisi_id'         => $divisi_id,
@@ -168,12 +169,14 @@ class Baris extends CI_Controller
         $this->data['get_all_combobox_instansi']     = $this->Instansi_model->get_all_combobox();
         $this->data['get_all_combobox_cabang']       = $this->Cabang_model->get_all_combobox_update($this->data['baris']->instansi_id);
         $this->data['get_all_combobox_divisi']       = $this->Divisi_model->get_all_combobox_update($this->data['baris']->cabang_id);
+        $this->data['get_all_combobox_lokasi']       = $this->Lokasi_model->get_all_combobox_update($this->data['baris']->instansi_id);
+        $this->data['get_all_combobox_rak']       = $this->Rak_model->get_all_combobox_update_by_lokasi($this->data['baris']->lokasi_id);
       } elseif (is_masteradmin()) {
         $this->data['get_all_combobox_cabang']       = $this->Cabang_model->get_all_combobox_update($this->data['baris']->instansi_id);
         $this->data['get_all_combobox_divisi']       = $this->Divisi_model->get_all_combobox_update($this->data['baris']->cabang_id);
-      } elseif (is_superadmin()) {
-        $this->data['get_all_combobox_divisi']       = $this->Divisi_model->get_all_combobox_update($this->data['baris']->cabang_id);
-      }
+        $this->data['get_all_combobox_lokasi']       = $this->Lokasi_model->get_all_combobox_by_instansi($this->session->instansi_id);
+        $this->data['get_all_combobox_rak']       = $this->Rak_model->get_all_combobox_update_by_lokasi($this->data['baris']->lokasi_id);
+      } 
 
       $this->data['id_baris'] = [
         'name'          => 'id_baris',
@@ -190,7 +193,7 @@ class Baris extends CI_Controller
         'name'          => 'instansi_id',
         'id'            => 'instansi_id',
         'class'         => 'form-control',
-        'onChange'      => 'tampilCabang()',
+        'onChange'      => 'tampilLokasi()',
         'required'      => '',
       ];
       $this->data['cabang_id'] = [
@@ -203,6 +206,19 @@ class Baris extends CI_Controller
       $this->data['divisi_id'] = [
         'name'          => 'divisi_id',
         'id'            => 'divisi_id',
+        'class'         => 'form-control',
+        'required'      => '',
+      ];
+      $this->data['lokasi_id'] = [
+        'name'          => 'lokasi_id',
+        'id'            => 'lokasi_id',
+        'class'         => 'form-control',
+        'onChange'      => 'tampilRak()',
+        'required'      => '',
+      ];
+      $this->data['rak_id'] = [
+        'name'          => 'rak_id',
+        'id'            => 'rak_id',
         'class'         => 'form-control',
         'required'      => '',
       ];
@@ -228,21 +244,15 @@ class Baris extends CI_Controller
       $instansi_id  = $this->session->instansi_id;
       $cabang_id    = $this->input->post('cabang_id');
       $divisi_id    = $this->input->post('divisi_id');
-    } elseif (is_superadmin()) {
-      $instansi_id  = $this->session->instansi_id;
-      $cabang_id    = $this->session->cabang_id;
-      $divisi_id    = $this->input->post('divisi_id');
-    } elseif (is_admin()) {
-      $instansi_id  = $this->session->instansi_id;
-      $cabang_id    = $this->session->cabang_id;
-      $divisi_id    = $this->session->divisi_id;
-    }
+    } 
 
     if ($this->form_validation->run() === FALSE) {
       $this->update($this->input->post('id_baris'));
     } else {
       $data = array(
         'baris_name'            => $this->input->post('baris_name'),
+        'lokasi_id'            => $this->input->post('lokasi_id'),
+        'rak_id'              => $this->input->post('rak_id'),
         'instansi_id'         => $instansi_id,
         'cabang_id'           => $cabang_id,
         'divisi_id'           => $divisi_id,
@@ -312,11 +322,7 @@ class Baris extends CI_Controller
       $this->data['get_all_deleted'] = $this->Baris_model->get_all_deleted();
     } elseif (is_masteradmin()) {
       $this->data['get_all_deleted'] = $this->Baris_model->get_all_deleted_by_instansi();
-    } elseif (is_superadmin()) {
-      $this->data['get_all_deleted'] = $this->Baris_model->get_all_deleted_by_cabang();
-    } elseif (is_admin()) {
-      $this->data['get_all_deleted'] = $this->Baris_model->get_all_deleted_by_divisi();
-    }
+    } 
 
     $this->load->view('back/baris/baris_deleted_list', $this->data);
   }
@@ -348,7 +354,8 @@ class Baris extends CI_Controller
 
   function pilih_baris()
   {
-    $this->data['baris'] = $this->Baris_model->get_baris_by_divisi_combobox($this->uri->segment(4));
+    // $this->data['baris'] = $this->Baris_model->get_baris_by_divisi_combobox($this->uri->segment(4));
+    $this->data['baris'] = $this->Baris_model->get_baris_by_rak_combobox($this->uri->segment(4));
     $this->load->view('back/baris/v_baris', $this->data);
   }
 }

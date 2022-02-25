@@ -28,14 +28,27 @@
         <div class="box-body">        
           <?php if (is_grandadmin()) { ?>
             <div class="row">
-              <div class="col-lg-4">
+              <div class="col-lg-6">
                 <div class="form-group"><label>Perguruan Tinggi (*)</label>
                   <?php echo form_dropdown('', $get_all_combobox_instansi, '', $instansi_id) ?>
                 </div>
               </div>
+              <div class="col-lg-6">
+                <div class="form-group"><label>Nama Lokasi (*)</label>
+                  <?php echo form_dropdown('', array('' => '- Pilih Perguruan Tinggi Dulu -'), '', $lokasi_id) ?>
+                </div>
+              </div>
+            </div>
+          <?php } elseif (is_masteradmin()) { ?>
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="form-group"><label>Nama Lokasi (*)</label>
+                  <?php echo form_dropdown('', $get_all_combobox_lokasi, '', $lokasi_id) ?>
+                </div>
+              </div>
             </div>
           <?php } ?>
-
+          
           <div class="form-group"><label>Nama Rak</label>
             <?php echo form_input($rak_name) ?>
           </div>
@@ -81,6 +94,18 @@
         url: "<?php echo base_url(); ?>admin/divisi/pilih_divisi/" + cabang_id + "",
         success: function(response) {
           $("#divisi_id").html(response);
+        },
+        dataType: "html"
+      });
+      return false;
+    }
+
+    function tampilLokasi() {
+      instansi_id = document.getElementById("instansi_id").value;
+      $.ajax({
+        url: "<?php echo base_url(); ?>admin/lokasi/pilih_lokasi/" + instansi_id + "",
+        success: function(response) {
+          $("#lokasi_id").html(response);
         },
         dataType: "html"
       });

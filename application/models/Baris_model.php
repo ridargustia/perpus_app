@@ -11,12 +11,12 @@ class Baris_model extends CI_Model
   function get_all()
   {
     $this->db->select('
-      baris.id_baris, baris.baris_name, cabang.cabang_name, instansi.instansi_name, baris.created_by as created_by_baris, divisi.divisi_name
+      baris.id_baris, baris.baris_name, rak.rak_name, lokasi.lokasi_name,instansi.instansi_name, baris.created_by as created_by_baris
     ');
     
     $this->db->join('instansi', 'baris.instansi_id = instansi.id_instansi', 'left');
-    $this->db->join('cabang', 'baris.cabang_id = cabang.id_cabang', 'left');
-    $this->db->join('divisi', 'baris.divisi_id = divisi.id_divisi', 'left');
+    $this->db->join('lokasi', 'baris.lokasi_id = lokasi.id_lokasi', 'left');
+    $this->db->join('rak', 'baris.rak_id = rak.id_rak', 'left');
 
     $this->db->where('is_delete_baris', '0');
 
@@ -28,12 +28,12 @@ class Baris_model extends CI_Model
   function get_all_by_instansi()
   {
     $this->db->select('
-      baris.id_baris, baris.baris_name, cabang.cabang_name, instansi.instansi_name, baris.created_by as created_by_baris, divisi.divisi_name
+      baris.id_baris, baris.baris_name, instansi.instansi_name, lokasi.lokasi_name, rak.rak_name, baris.created_by as created_by_baris
     ');
     
     $this->db->join('instansi', 'baris.instansi_id = instansi.id_instansi', 'left');
-    $this->db->join('cabang', 'baris.cabang_id = cabang.id_cabang', 'left');
-    $this->db->join('divisi', 'baris.divisi_id = divisi.id_divisi', 'left');
+    $this->db->join('lokasi', 'baris.lokasi_id = lokasi.id_lokasi', 'left');
+    $this->db->join('rak', 'baris.rak_id = rak.id_rak', 'left');
 
     $this->db->where('baris.instansi_id', $this->session->instansi_id);
     $this->db->where('is_delete_baris', '0');
@@ -159,6 +159,26 @@ class Baris_model extends CI_Model
     return $result;
   }
 
+  function get_baris_by_rak_combobox($rak_id)
+  {
+    $this->db->where('rak_id', $rak_id);
+    $this->db->where('is_delete_baris', '0');
+
+    $this->db->order_by('baris_name');
+
+    $sql = $this->db->get('baris');
+
+    if ($sql->num_rows() > 0) {
+      foreach ($sql->result_array() as $row) {
+        $result[''] = '- Silahkan Pilih Baris -';
+        $result[$row['id_baris']] = ucwords(strtolower($row['baris_name']));
+      }
+    } else {
+      $result['-'] = '- Belum Ada Baris -';
+    }
+    return $result;
+  }
+
   function get_all_combobox_by_instansi($instansi_id)
   {
     $this->db->where('instansi_id', $instansi_id);
@@ -213,6 +233,24 @@ class Baris_model extends CI_Model
     }
   }
 
+  function get_all_combobox_by_rak($rak_id)
+  {
+    $this->db->where('rak_id', $rak_id);
+    $this->db->where('is_delete_baris', '0');
+
+    $this->db->order_by('baris_name');
+
+    $data = $this->db->get($this->table);
+
+    if ($data->num_rows() > 0) {
+      foreach ($data->result_array() as $row) {
+        $result[''] = '- Silahkan Pilih Baris -';
+        $result[$row['id_baris']] = $row['baris_name'];
+      }
+      return $result;
+    }
+  }
+
   function get_all_combobox_update($instansi_id)
   {
     $this->db->where('instansi_id', $instansi_id);
@@ -232,6 +270,8 @@ class Baris_model extends CI_Model
   {
     $this->db->join('instansi', 'baris.instansi_id = instansi.id_instansi', 'left');
     $this->db->join('cabang', 'baris.cabang_id = cabang.id_cabang', 'left');
+    $this->db->join('lokasi', 'baris.lokasi_id = lokasi.id_lokasi', 'left');
+    $this->db->join('rak', 'baris.rak_id = rak.id_rak', 'left');
 
     $this->db->where('is_delete_baris', '1');
 
@@ -244,6 +284,8 @@ class Baris_model extends CI_Model
   {
     $this->db->join('instansi', 'baris.instansi_id = instansi.id_instansi', 'left');
     $this->db->join('cabang', 'baris.cabang_id = cabang.id_cabang', 'left');
+    $this->db->join('lokasi', 'baris.lokasi_id = lokasi.id_lokasi', 'left');
+    $this->db->join('rak', 'baris.rak_id = rak.id_rak', 'left');
 
     $this->db->where('baris.instansi_id', $this->session->instansi_id);
     $this->db->where('is_delete_baris', '1');
@@ -312,6 +354,15 @@ class Baris_model extends CI_Model
     $this->db->where('divisi_id', $divisi_id);
     $this->db->where('is_delete_baris', 0);
 
+    return $this->db->get($this->table)->row();
+  }
+
+  function check_by_name_and_rak_and_lokasi_and_instansi($name, $instansi_id, $lokasi_id, $rak_id)
+  {
+    $this->db->where('baris_name', $name);
+    $this->db->where('instansi_id', $instansi_id);
+    $this->db->where('lokasi_id', $lokasi_id);
+    $this->db->where('rak_id', $rak_id);
     return $this->db->get($this->table)->row();
   }
 

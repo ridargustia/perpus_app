@@ -33,7 +33,10 @@
                 <tr>
                   <th style="text-align: center">No</th>
                   <th style="text-align: center">Nama Rak</th>
-                  <th style="text-align: center">Perguruan Tinggi</th>
+                  <th style="text-align: center">Nama Lokasi</th>
+                  <?php if (is_grandadmin()) { ?>
+                    <th style="text-align: center">Perguruan Tinggi</th>
+                  <?php } ?>
                   <th style="text-align: center">Created By</th>
                   <th style="text-align: center">Aksi</th>
                 </tr>
@@ -48,7 +51,10 @@
                   <tr>
                     <td style="text-align: center"><?php echo $no++ ?></td>
                     <td style="text-align: center"><?php echo $data->rak_name ?></td>
-                    <td style="text-align: center"><?php echo $data->instansi_name ?></td>
+                    <td style="text-align: center"><?php echo $data->lokasi_name ?></td>
+                    <?php if (is_grandadmin()) { ?>
+                      <td style="text-align: center"><?php echo $data->instansi_name ?></td>
+                    <?php } ?>
                     <td style="text-align: center"><?php echo $data->created_by_rak ?></td>
                     <td style="text-align: center"><?php echo $edit ?> <?php echo $delete ?></td>
                   </tr>
@@ -58,7 +64,10 @@
                 <tr>
                   <th style="text-align: center">No</th>
                   <th style="text-align: center">Nama Rak</th>
-                  <th style="text-align: center">Perguruan Tinggi</th>
+                  <th style="text-align: center">Nama Lokasi</th>
+                  <?php if (is_grandadmin()) { ?>
+                    <th style="text-align: center">Perguruan Tinggi</th>
+                  <?php } ?>
                   <th style="text-align: center">Created By</th>
                   <th style="text-align: center">Aksi</th>
                 </tr>

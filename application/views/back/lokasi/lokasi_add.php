@@ -28,12 +28,11 @@
         <div class="box-body">          
           <?php if (is_grandadmin()) { ?>
             <div class="row">
-              <div class="col-lg-4">
+              <div class="col-lg-12">
                 <div class="form-group"><label>Perguruan Tinggi (*)</label>
                   <?php echo form_dropdown('', $get_all_combobox_instansi, '', $instansi_id) ?>
                 </div>
               </div>
-              
             </div>
           <?php } ?>
 

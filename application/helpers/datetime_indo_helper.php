@@ -20,6 +20,16 @@ function datetime_indo2($string)
   // output FROM: 2019-02-17 09:50:36 TO 17-02-2019 09:50:36
 }
 
+function datetime_indo3($string)
+{
+  setlocale(LC_ALL, 'id_ID');
+  $string = strftime("%d %B %Y", strtotime($string));
+
+  return $string;
+
+  // output FROM: 2019-02-17 09:50:36 TO Hari Tanggal Bulan Tahun 09:50:36
+}
+
 function date_only($string)
 {
   $string = date("j F Y", strtotime($string));

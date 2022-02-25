@@ -67,7 +67,11 @@
             <?php echo form_textarea($address, $user->address) ?>
           </div>
           <div class="form-group"><label>Current Photo</label>
-            <p><img src="<?php echo base_url('assets/images/user/' . $user->photo_thumb) ?>" width="200px" alt="current photo"></p>
+            <?php if ($user->photo_thumb != NULL) { ?>
+              <p><img src="<?php echo base_url('assets/images/user/' . $user->photo_thumb) ?>" width="200px" alt="current photo"></p>
+            <?php } else { ?>
+              <p><img src="<?php echo base_url('assets/images/noimage.jpg') ?>" width="200px" alt="current photo"></p>
+            <?php } ?>
           </div>
           <div class="form-group"><label>New Photo</label>
             <input type="file" name="photo" id="photo" onchange="photoPreview(this,'preview')" />
@@ -102,32 +106,17 @@
 
           <?php if (is_grandadmin()) { ?>
             <div class="row">
-              <div class="col-sm-3">
+              <div class="col-sm-4">
                 <div class="form-group"><label>Perguruan Tinggi (*)</label>
                   <?php echo form_dropdown('', $get_all_combobox_instansi, $user->instansi_id, $instansi_id) ?>
                 </div>
               </div>
-              <div class="col-sm-3">
-                <div class="form-group"><label>Fakultas (*)</label>
-                  <?php echo form_dropdown('', $get_all_combobox_cabang, $user->cabang_id, $cabang_id) ?>
-                </div>
-              </div>
-              <div class="col-sm-3">
-                <div class="form-group"><label>Program Studi (*)</label>
-                  <?php echo form_dropdown('', $get_all_combobox_divisi, $user->divisi_id, $divisi_id) ?>
-                </div>
-              </div>
-              <div class="col-sm-3">
-                <div class="form-group"><label>Divisi (*)</label>
-                  <?php echo form_dropdown('', $get_all_combobox_bagian, $user->bagian_id, $bagian_id) ?>
-                </div>
-              </div>
-              <div class="col-sm-6">
+              <div class="col-sm-4">
                 <div class="form-group"><label>Usertype (*)</label>
                   <?php echo form_dropdown('', $get_all_combobox_usertype, $user->usertype_id, $usertype_id) ?>
                 </div>
               </div>
-              <div class="col-sm-6">
+              <div class="col-sm-4">
                 <div class="form-group"><label>Akses Data (*)</label>
                   <p>
                     <?php
@@ -156,121 +145,7 @@
 
           <?php } elseif (is_masteradmin()) { ?>
             <div class="row">
-              <div class="col-sm-4">
-                <div class="form-group"><label>Fakultas (*)</label>
-                  <?php echo form_dropdown('', $get_all_combobox_cabang, $user->cabang_id, $cabang_id) ?>
-                </div>
-              </div>
-              <div class="col-sm-4">
-                <div class="form-group"><label>Program Studi (*)</label>
-                  <?php echo form_dropdown('', $get_all_combobox_divisi, $user->divisi_id, $divisi_id) ?>
-                </div>
-              </div>
-              <div class="col-sm-4">
-                <div class="form-group"><label>Divisi (*)</label>
-                  <?php echo form_dropdown('', $get_all_combobox_bagian, $user->bagian_id, $bagian_id) ?>
-                </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="form-group"><label>Usertype (*)</label>
-                  <?php echo form_dropdown('', $get_all_combobox_usertype, $user->usertype_id, $usertype_id) ?>
-                </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="form-group"><label>Akses Data (*)</label>
-                  <p>
-                    <?php
-                    $this->db->where('user_id', $user->id_users);
-                    $user_access_result = $this->db->get('users_data_access')->result();
-                    $user_access_ids = array();
-
-                    foreach ($user_access_result as $row) {
-                      $user_access_ids[] = $row->data_access_id;
-                    }
-
-                    foreach ($get_all_data_access as $alldataAccess) {
-                    ?>
-                      <div class="pretty p-icon p-smooth">
-                        <input type="checkbox" name="data_access_id[]" value="<?php echo $alldataAccess->id_data_access ?>" <?php echo ((in_array($alldataAccess->id_data_access, $user_access_ids)) ? 'checked' : ''); ?>>
-                        <div class="state p-primary">
-                          <i class="icon fa fa-check"></i>
-                          <label><?php echo $alldataAccess->data_access_name ?></label>
-                        </div>
-                      </div>
-                    <?php } ?>
-                  </p>
-                </div>
-              </div>
-            </div>
-
-          <?php } elseif (is_superadmin()) { ?>
-            <div class="row">
-              <div class="col-lg-6">
-                <div class="form-group"><label>Program Studi (*)</label>
-                  <?php echo form_dropdown('', $get_all_combobox_divisi, $user->divisi_id, $divisi_id) ?>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="form-group"><label>Divisi (*)</label>
-                  <?php echo form_dropdown('', $get_all_combobox_bagian, $user->bagian_id, $bagian_id) ?>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="form-group"><label>Usertype (*)</label>
-                  <?php if ($this->session->id_users != $this->uri->segment(4)) { ?>
-                    <?php echo form_dropdown('', $get_all_combobox_usertype, $user->usertype_id, $usertype_id) ?>
-                  <?php } else { ?>
-                    <select class="form-control" name="usertype">
-                      <option value="<?php echo $user->usertype_id ?>"><?php echo $user->usertype_id_name ?></option>
-                    </select>
-                  <?php } ?>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="form-group"><label>Akses Data (*)</label>
-                  <p>
-                    <?php
-                    $this->db->where('user_id', $user->id_users);
-                    $user_access_result = $this->db->get('users_data_access')->result();
-                    $user_access_ids = array();
-
-                    foreach ($user_access_result as $row) {
-                      $user_access_ids[] = $row->data_access_id;
-                    }
-
-                    foreach ($get_all_data_access as $alldataAccess) {
-                    ?>
-                      <div class="pretty p-icon p-smooth">
-                        <input type="checkbox" name="data_access_id[]" value="<?php echo $alldataAccess->id_data_access ?>" <?php echo ((in_array($alldataAccess->id_data_access, $user_access_ids)) ? 'checked' : ''); ?>>
-                        <div class="state p-primary">
-                          <i class="icon fa fa-check"></i>
-                          <label><?php echo $alldataAccess->data_access_name ?></label>
-                        </div>
-                      </div>
-                    <?php } ?>
-                  </p>
-                </div>
-              </div>
-            </div>
-          <?php } elseif (is_admin()) { ?>
-            <div class="row">
-              <div class="col-lg-6">
-                <div class="form-group"><label>Divisi (*)</label>
-                  <?php echo form_dropdown('', $get_all_combobox_bagian, $user->bagian_id, $bagian_id) ?>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="form-group"><label>Usertype (*)</label>
-                  <?php if ($this->session->id_users != $this->uri->segment(4)) { ?>
-                    <?php echo form_dropdown('', $get_all_combobox_usertype, $user->usertype_id, $usertype_id) ?>
-                  <?php } else { ?>
-                    <select class="form-control" name="usertype">
-                      <option value="<?php echo $user->usertype_id ?>"><?php echo $user->usertype_id_name ?></option>
-                    </select>
-                  <?php } ?>
-                </div>
-              </div>
-              <div class="col-lg-6">
+              <div class="col-sm-12">
                 <div class="form-group"><label>Akses Data (*)</label>
                   <p>
                     <?php
@@ -297,7 +172,6 @@
               </div>
             </div>
           <?php } ?>
-
           
         </div>
         <?php echo form_input($id_users, $user->id_users) ?>

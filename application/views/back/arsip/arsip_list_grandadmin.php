@@ -31,22 +31,13 @@
               <thead>
                 <tr>
                   <th style="text-align: center">No. Urut</th>
-                  <th style="text-align: center">No. Arsip</th>
-                  <th style="text-align: center">Nama Arsip</th>
+                  <th style="text-align: center">No/Label Buku</th>
+                  <th style="text-align: center">Judul Buku</th>
                   <th style="text-align: center">Perguruan Tinggi</th>
-                  <th style="text-align: center">Fakultas</th>
-                  <th style="text-align: center">Program Studi</th>
-                  <th style="text-align: center">Divisi</th>
                   <th style="text-align: center">Lokasi</th>
                   <th style="text-align: center">Rak</th>
                   <th style="text-align: center">Baris</th>
-                  <th style="text-align: center">Box</th>
-                  <th style="text-align: center">Map</th>                  
                   <th style="text-align: center">Status Peminjaman</th>
-                  <th style="text-align: center">Status Akses</th>
-                  <th style="text-align: center">Status Retensi</th>                  
-                  <th style="text-align: center">Keterangan</th>
-                  <th style="text-align: center">Kepemilikan</th>
                   <th style="text-align: center">Created By</th>
                   <th style="text-align: center">Aksi</th>
                 </tr>
@@ -55,12 +46,6 @@
                 <?php
                 $no = 1;
                 foreach ($get_all as $data) {
-                  // status peminjaman
-                  if ($data->status_file == '0') {
-                    $status_file = "<button class='btn btn-xs bg-maroon'><i class='fa fa-remove'></i> KHUSUS</button> ";
-                  } elseif ($data->status_file == '1') {
-                    $status_file = "<button class='btn btn-xs bg-navy'><i class='fa fa-check'></i> UMUM</button>";
-                  }
 
                   // status peminjaman
                   if ($data->is_available == '0') {
@@ -68,49 +53,22 @@
                   } elseif ($data->is_available == '1') {
                     $is_available = "<button class='btn btn-xs btn-success'><i class='fa fa-check'></i> TERSEDIA</button>";
                   }
-
-                  // status retensi
-                  if ($data->status_retensi == '0') {
-                    $status_retensi = "<button class='btn btn-xs btn-primary'><i class='fa fa-remove'></i> INACTIVE</button> ";
-                  } elseif ($data->status_retensi == '1') {
-                    $status_retensi = "<button class='btn btn-xs btn-info'><i class='fa fa-check'></i> ACTIVE</button>";
-                  }
-
-                  // keterangan
-                  if ($data->keterangan == '0') {
-                    $keterangan = "Permanen";
-                  } elseif ($data->keterangan == '1') {
-                    $keterangan = "Musnah";
-                  } else{
-                    $keterangan = "-";
-                  }
                   
-                  $edit   = '<a href="' . base_url('admin/arsip/update/' . $data->id_arsip) . '" class="btn btn-sm btn-warning" title="Ubah Arsip"><i class="fa fa-pencil"></i></a>';
-                  $delete = '<a href="' . base_url('admin/arsip/delete/' . $data->id_arsip) . '" onClick="return confirm(\'Are you sure?\');" class="btn btn-sm btn-danger" title="Hapus Arsip"><i class="fa fa-trash"></i></a>';                    
-                  $detail = '<a href="' . base_url('admin/arsip/detail/' . $data->id_arsip) . '" class="btn btn-sm bg-purple" title="Tampilkan Arsip"><i class="fa fa-search-plus"></i></a>';
+                  $edit   = '<a href="' . base_url('admin/buku/update/' . $data->id_arsip) . '" class="btn btn-sm btn-warning" title="Ubah Buku"><i class="fa fa-pencil"></i></a>';
+                  $delete = '<a href="' . base_url('admin/buku/delete/' . $data->id_arsip) . '" onClick="return confirm(\'Apakah anda yakin ingin menghapus data?\');" class="btn btn-sm btn-danger" title="Hapus Buku"><i class="fa fa-trash"></i></a>';                    
+                  $detail = '<a href="' . base_url('admin/buku/detail/' . $data->id_arsip) . '" class="btn btn-sm bg-purple" title="Tampilkan Buku"><i class="fa fa-search-plus"></i></a>';
                 ?>
                   <tr>
                     <td style="text-align: center"><?php echo $no++ ?></td>
                     <td style="text-align: center"><?php echo $data->no_arsip ?></td>
                     <td style="text-align: left"><?php echo $data->arsip_name ?></td>
                     <td style="text-align: center"><?php echo $data->instansi_name ?></td>
-                    <td style="text-align: center"><?php echo $data->cabang_name ?></td>
-                    <td style="text-align: center"><?php echo $data->divisi_name ?></td>
-                    <td style="text-align: center"><?php echo $data->bagian_name ?></td>
                     <td style="text-align: center"><?php echo $data->lokasi_name ?></td>
                     <td style="text-align: center"><?php echo $data->rak_name ?></td>
                     <td style="text-align: center"><?php echo $data->baris_name ?></td>
-                    <td style="text-align: center"><?php echo $data->box_name ?></td>
-                    <td style="text-align: center"><?php echo $data->map_name ?></td>                    
                     <td style="text-align: center"><?php echo $is_available ?></td>
-                    <td style="text-align: center"><?php echo $status_file ?></td>
-                    <td style="text-align: center"><?php echo $status_retensi ?></td>
-                    <td style="text-align: center"><?php echo $keterangan ?></td>
-                    <td style="text-align: center"><?php echo $data->username ?></td>
                     <td style="text-align: center"><?php echo $data->created_by_arsip ?></td>
-                    <td style="text-align: center"><?php echo $detail . ' ';
-                                                    echo $edit . ' ';
-                                                    echo $delete; ?></td>
+                    <td style="text-align: center"><?php echo $detail . ' '; echo $edit . ' '; echo $delete; ?></td>
                   </tr>
                 <?php } ?>
                 </tbody>

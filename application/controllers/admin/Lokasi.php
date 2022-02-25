@@ -46,11 +46,7 @@ class Lokasi extends CI_Controller
       $this->data['get_all'] = $this->Lokasi_model->get_all();
     } elseif (is_masteradmin()) {
       $this->data['get_all'] = $this->Lokasi_model->get_all_by_instansi();
-    } elseif (is_superadmin()) {
-      $this->data['get_all'] = $this->Lokasi_model->get_all_by_cabang();
-    } elseif (is_admin()) {
-      $this->data['get_all'] = $this->Lokasi_model->get_all_by_divisi();
-    }
+    } 
 
     $this->load->view('back/lokasi/lokasi_list', $this->data);
   }
@@ -67,9 +63,7 @@ class Lokasi extends CI_Controller
       $this->data['get_all_combobox_cabang']       = $this->Cabang_model->get_all_combobox();
     } elseif (is_masteradmin()) {
       $this->data['get_all_combobox_cabang']       = $this->Cabang_model->get_all_combobox_by_instansi($this->session->instansi_id);
-    } elseif (is_superadmin()) {
-      $this->data['get_all_combobox_divisi']       = $this->Divisi_model->get_all_combobox_by_cabang($this->session->cabang_id);
-    }
+    } 
 
     $this->data['lokasi_name'] = [
       'name'          => 'lokasi_name',
@@ -83,7 +77,6 @@ class Lokasi extends CI_Controller
       'name'          => 'instansi_id',
       'id'            => 'instansi_id',
       'class'         => 'form-control',
-      'onChange'      => 'tampilCabang()',
       'required'      => '',
     ];
     $this->data['cabang_id'] = [
@@ -119,17 +112,7 @@ class Lokasi extends CI_Controller
       $cabang_id    = $this->input->post('cabang_id');
       $divisi_id    = $this->input->post('divisi_id');
       $this->data['check_by_name']  = $this->Lokasi_model->check_by_name_and_instansi($this->input->post('lokasi_name'), $instansi_id);
-    } elseif (is_superadmin()) {
-      $instansi_id  = $this->session->instansi_id;
-      $cabang_id    = $this->session->cabang_id;
-      $divisi_id    = $this->input->post('divisi_id');
-      $this->data['check_by_name']  = $this->Lokasi_model->check_by_name_and_instansi($this->input->post('lokasi_name'), $instansi_id);
-    } elseif (is_admin()) {
-      $instansi_id  = $this->session->instansi_id;
-      $cabang_id    = $this->session->cabang_id;
-      $divisi_id    = $this->session->divisi_id;
-      $this->data['check_by_name']  = $this->Lokasi_model->check_by_name_and_instansi($this->input->post('lokasi_name'), $instansi_id);
-    }
+    } 
 
     if ($this->form_validation->run() === FALSE) {
       $this->create();
@@ -138,7 +121,7 @@ class Lokasi extends CI_Controller
       $this->create();
     } else {
       $data = array(
-        'lokasi_name'          => $this->input->post('lokasi_name'),
+        'lokasi_name'       => $this->input->post('lokasi_name'),
         'instansi_id'       => $instansi_id,
         'cabang_id'         => $cabang_id,
         'divisi_id'         => $divisi_id,
@@ -171,9 +154,7 @@ class Lokasi extends CI_Controller
       } elseif (is_masteradmin()) {
         $this->data['get_all_combobox_cabang']       = $this->Cabang_model->get_all_combobox_update($this->data['lokasi']->instansi_id);
         $this->data['get_all_combobox_divisi']       = $this->Divisi_model->get_all_combobox_update($this->data['lokasi']->cabang_id);
-      } elseif (is_superadmin()) {
-        $this->data['get_all_combobox_divisi']       = $this->Divisi_model->get_all_combobox_update($this->data['lokasi']->cabang_id);
-      }
+      } 
 
       $this->data['id_lokasi'] = [
         'name'          => 'id_lokasi',
@@ -190,7 +171,6 @@ class Lokasi extends CI_Controller
         'name'          => 'instansi_id',
         'id'            => 'instansi_id',
         'class'         => 'form-control',
-        'onChange'      => 'tampilCabang()',
         'required'      => '',
       ];
       $this->data['cabang_id'] = [
@@ -228,15 +208,7 @@ class Lokasi extends CI_Controller
       $instansi_id  = $this->session->instansi_id;
       $cabang_id    = $this->input->post('cabang_id');
       $divisi_id    = $this->input->post('divisi_id');
-    } elseif (is_superadmin()) {
-      $instansi_id  = $this->session->instansi_id;
-      $cabang_id    = $this->session->cabang_id;
-      $divisi_id    = $this->input->post('divisi_id');
-    } elseif (is_admin()) {
-      $instansi_id  = $this->session->instansi_id;
-      $cabang_id    = $this->session->cabang_id;
-      $divisi_id    = $this->session->divisi_id;
-    }
+    } 
 
     if ($this->form_validation->run() === FALSE) {
       $this->update($this->input->post('id_lokasi'));
@@ -312,11 +284,7 @@ class Lokasi extends CI_Controller
       $this->data['get_all_deleted'] = $this->Lokasi_model->get_all_deleted();
     } elseif (is_masteradmin()) {
       $this->data['get_all_deleted'] = $this->Lokasi_model->get_all_deleted_by_instansi();
-    } elseif (is_superadmin()) {
-      $this->data['get_all_deleted'] = $this->Lokasi_model->get_all_deleted_by_cabang();
-    } elseif (is_admin()) {
-      $this->data['get_all_deleted'] = $this->Lokasi_model->get_all_deleted_by_divisi();
-    }
+    } 
 
     $this->load->view('back/lokasi/lokasi_deleted_list', $this->data);
   }
@@ -348,7 +316,8 @@ class Lokasi extends CI_Controller
 
   function pilih_lokasi()
   {
-    $this->data['lokasi'] = $this->Lokasi_model->get_lokasi_by_divisi_combobox($this->uri->segment(4));
+    // $this->data['lokasi'] = $this->Lokasi_model->get_lokasi_by_divisi_combobox($this->uri->segment(4));
+    $this->data['lokasi'] = $this->Lokasi_model->get_lokasi_by_instansi_combobox($this->uri->segment(4));
     $this->load->view('back/lokasi/v_lokasi', $this->data);
   }
 }

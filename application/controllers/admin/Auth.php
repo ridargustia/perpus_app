@@ -43,11 +43,7 @@ class Auth extends CI_Controller
       $this->data['get_all'] = $this->Auth_model->get_all();
     } elseif (is_masteradmin()) {
       $this->data['get_all'] = $this->Auth_model->get_all_by_instansi();
-    } elseif (is_superadmin()) {
-      $this->data['get_all'] = $this->Auth_model->get_all_by_cabang();
-    } elseif (is_admin()) {
-      $this->data['get_all'] = $this->Auth_model->get_all_by_divisi();
-    }
+    } 
 
     $this->load->view('back/auth/user_list', $this->data);
   }
@@ -71,15 +67,9 @@ class Auth extends CI_Controller
       $this->data['get_all_combobox_cabang']       = $this->Cabang_model->get_all_combobox_by_instansi($this->session->instansi_id);
       $this->data['get_all_combobox_divisi']       = $this->Divisi_model->get_all_combobox_by_instansi($this->session->instansi_id);
       $this->data['get_all_combobox_usertype']     = $this->Usertype_model->get_all_combobox_by_instansi($this->session->instansi_id);
-    } elseif (is_superadmin()) {
-      $this->data['get_all_combobox_divisi']       = $this->Divisi_model->get_all_combobox_by_cabang($this->session->cabang_id);
-      $this->data['get_all_combobox_usertype']     = $this->Usertype_model->get_all_combobox_by_cabang($this->session->cabang_id);
-    } elseif (is_admin()) {
-      $this->data['get_all_combobox_bagian']       = $this->Bagian_model->get_all_combobox_by_divisi($this->session->divisi_id);
-      $this->data['get_all_combobox_usertype']     = $this->Usertype_model->get_all_combobox_by_divisi($this->session->divisi_id);
     }
 
-    $this->data['get_all_combobox_instansi']      = $this->Instansi_model->get_all_combobox();
+    // $this->data['get_all_combobox_instansi']      = $this->Instansi_model->get_all_combobox();
     $this->data['get_all_combobox_data_access']   = $this->Dataaccess_model->get_all_combobox();
     $this->data['get_all_data_access']            = $this->Dataaccess_model->get_all();
 
@@ -170,7 +160,6 @@ class Auth extends CI_Controller
       'name'          => 'instansi_id',
       'id'            => 'instansi_id',
       'class'         => 'form-control',
-      'onChange'      => 'tampilCabang()',
       'required'      => '',
     ];
     $this->data['cabang_id'] = [
@@ -216,8 +205,8 @@ class Auth extends CI_Controller
     $this->form_validation->set_rules('phone', 'No. HP', 'trim|is_numeric');
     $this->form_validation->set_rules('username', 'Username', 'trim|is_unique[users.username]|required');
     $this->form_validation->set_rules('email', 'Email', 'valid_email|is_unique[users.email]|required');
-    $this->form_validation->set_rules('bagian_id', 'Divisi', 'required');
-    $this->form_validation->set_rules('usertype_id', 'Usertype', 'required');
+    // $this->form_validation->set_rules('bagian_id', 'Divisi', 'required');
+    // $this->form_validation->set_rules('usertype_id', 'Usertype', 'required');
     $this->form_validation->set_rules('data_access_id[]', 'Data Access', 'required');
     $this->form_validation->set_rules('password', 'Password', 'trim|min_length[8]|required');
     $this->form_validation->set_rules('password_confirm', 'Konfirmasi Password', 'trim|matches[password]|required');
@@ -233,25 +222,17 @@ class Auth extends CI_Controller
 
     if (is_grandadmin()) {
       $instansi_id  = $this->input->post('instansi_id');
-      $cabang_id    = $this->input->post('cabang_id');
-      $divisi_id    = $this->input->post('divisi_id');
-      $bagian_id    = $this->input->post('bagian_id');
+      $usertype_id  = $this->input->post('usertype');
+      // $cabang_id    = $this->input->post('cabang_id');
+      // $divisi_id    = $this->input->post('divisi_id');
+      // $bagian_id    = $this->input->post('bagian_id');
     } elseif (is_masteradmin()) {
       $instansi_id  = $this->session->userdata('instansi_id');
-      $cabang_id    = $this->input->post('cabang_id');
-      $divisi_id    = $this->input->post('divisi_id');
-      $bagian_id    = $this->input->post('bagian_id');
-    } elseif (is_superadmin()) {
-      $instansi_id  = $this->session->userdata('instansi_id');
-      $cabang_id    = $this->session->userdata('cabang_id');
-      $divisi_id    = $this->input->post('divisi_id');
-      $bagian_id    = $this->input->post('bagian_id');
-    } elseif (is_admin()) {
-      $instansi_id  = $this->session->userdata('instansi_id');
-      $cabang_id    = $this->session->userdata('cabang_id');
-      $divisi_id    = $this->session->userdata('divisi_id');
-      $bagian_id    = $this->input->post('bagian_id');
-    }
+      $usertype_id  = 1;
+      // $cabang_id    = $this->input->post('cabang_id');
+      // $divisi_id    = $this->input->post('divisi_id');
+      // $bagian_id    = $this->input->post('bagian_id');
+    } 
 
     if ($this->form_validation->run() === FALSE) {
       $this->create();
@@ -297,10 +278,10 @@ class Auth extends CI_Controller
             'username'          => strtolower($this->input->post('username')),
             'password'          => $password,
             'instansi_id'       => $instansi_id,
-            'cabang_id'         => $cabang_id,
-            'divisi_id'         => $divisi_id,
-            'bagian_id'         => $bagian_id,
-            'usertype_id'       => $this->input->post('usertype_id'),
+            // 'cabang_id'         => $cabang_id,
+            // 'divisi_id'         => $divisi_id,
+            // 'bagian_id'         => $bagian_id,
+            'usertype_id'       => $usertype_id,
             'created_by'        => $this->session->username,
             'ip_add_reg'        => $this->input->ip_address(),
             'photo'             => $this->upload->data('file_name'),
@@ -343,10 +324,10 @@ class Auth extends CI_Controller
           'username'          => strtolower($this->input->post('username')),
           'password'          => $password,
           'instansi_id'       => $instansi_id,
-          'cabang_id'         => $cabang_id,
-          'divisi_id'         => $divisi_id,
-          'bagian_id'         => $bagian_id,
-          'usertype_id'       => $this->input->post('usertype_id'),
+          // 'cabang_id'         => $cabang_id,
+          // 'divisi_id'         => $divisi_id,
+          // 'bagian_id'         => $bagian_id,
+          'usertype_id'       => $usertype_id,
           'created_by'        => $this->session->username,
           'ip_add_reg'        => $this->input->ip_address(),
         );
@@ -395,14 +376,6 @@ class Auth extends CI_Controller
       $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak melihat data orang lain</div>');
       redirect('admin/auth');
     }
-    if (is_superadmin() && $user->cabang_id != $this->session->cabang_id) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak melihat data orang lain</div>');
-      redirect('admin/auth');
-    }
-    if (is_admin() && $user->divisi_id != $this->session->divisi_id) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak berhak melihat data orang lain</div>');
-      redirect('admin/auth');
-    }
 
     if (is_grandadmin()) {
       $this->data['get_all_combobox_usertype']     = $this->Usertype_model->get_all_combobox();
@@ -415,16 +388,9 @@ class Auth extends CI_Controller
       $this->data['get_all_combobox_divisi']       = $this->Divisi_model->get_all_combobox_by_cabang($this->data['user']->cabang_id);
       $this->data['get_all_combobox_bagian']       = $this->Bagian_model->get_all_combobox_by_divisi($this->data['user']->divisi_id);
       $this->data['get_all_combobox_usertype']     = $this->Usertype_model->get_all_combobox_by_instansi($this->data['user']->instansi_id);
-    } elseif (is_superadmin()) {
-      $this->data['get_all_combobox_divisi']       = $this->Divisi_model->get_all_combobox_by_cabang($this->data['user']->cabang_id);
-      $this->data['get_all_combobox_bagian']       = $this->Bagian_model->get_all_combobox_by_divisi($this->data['user']->divisi_id);
-      $this->data['get_all_combobox_usertype']     = $this->Usertype_model->get_all_combobox_by_cabang($this->session->cabang_id);
-    } elseif (is_admin()) {
-      $this->data['get_all_combobox_bagian']       = $this->Bagian_model->get_all_combobox_by_divisi($this->data['user']->divisi_id);
-      $this->data['get_all_combobox_usertype']     = $this->Usertype_model->get_all_combobox_by_divisi($this->session->divisi_id);
-    }
+    } 
 
-    $this->data['get_all_combobox_instansi']      = $this->Instansi_model->get_all_combobox();
+    // $this->data['get_all_combobox_instansi']      = $this->Instansi_model->get_all_combobox();
 
     $this->data['get_all_combobox_data_access']   = $this->Dataaccess_model->get_all_combobox();
     $this->data['get_all_data_access']            = $this->Dataaccess_model->get_all();
@@ -548,8 +514,8 @@ class Auth extends CI_Controller
     $this->form_validation->set_rules('username', 'Username', 'trim|required');
     $this->form_validation->set_rules('email', 'Email', 'valid_email|required');
     // $this->form_validation->set_rules('cabang_id', 'Cabang', 'required');
-    $this->form_validation->set_rules('bagian_id', 'Divisi', 'required');
-    $this->form_validation->set_rules('usertype_id', 'Usertype', 'required');
+    // $this->form_validation->set_rules('bagian_id', 'Divisi', 'required');
+    // $this->form_validation->set_rules('usertype_id', 'Usertype', 'required');
     $this->form_validation->set_message('required', '{field} wajib diisi');
     $this->form_validation->set_message('is_numeric', '{field} harus angka');
     $this->form_validation->set_message('valid_email', '{field} format email tidak benar');
@@ -561,25 +527,17 @@ class Auth extends CI_Controller
     } else {
       if (is_grandadmin()) {
         $instansi_id  = $this->input->post('instansi_id');
-        $cabang_id    = $this->input->post('cabang_id');
-        $divisi_id    = $this->input->post('divisi_id');
-        $bagian_id    = $this->input->post('bagian_id');
+        $usertype_id  = $this->input->post('usertype_id');
+        // $cabang_id    = $this->input->post('cabang_id');
+        // $divisi_id    = $this->input->post('divisi_id');
+        // $bagian_id    = $this->input->post('bagian_id');
       } elseif (is_masteradmin()) {
         $instansi_id  = $this->session->userdata('instansi_id');
-        $cabang_id    = $this->input->post('cabang_id');
-        $divisi_id    = $this->input->post('divisi_id');
-        $bagian_id    = $this->input->post('bagian_id');
-      } elseif (is_superadmin()) {
-        $instansi_id  = $this->session->userdata('instansi_id');
-        $cabang_id    = $this->session->userdata('cabang_id');
-        $divisi_id    = $this->input->post('divisi_id');
-        $bagian_id    = $this->input->post('bagian_id');
-      } elseif (is_admin()) {
-        $instansi_id  = $this->session->userdata('instansi_id');
-        $cabang_id    = $this->session->userdata('cabang_id');
-        $divisi_id    = $this->session->userdata('divisi_id');
-        $bagian_id    = $this->input->post('bagian_id');
-      }
+        $usertype_id  = 1;
+        // $cabang_id    = $this->input->post('cabang_id');
+        // $divisi_id    = $this->input->post('divisi_id');
+        // $bagian_id    = $this->input->post('bagian_id');
+      } 
 
       if ($_FILES['photo']['error'] <> 4) {
         $nmfile = strtolower(url_title($this->input->post('username'))) . date('YmdHis');
@@ -629,10 +587,7 @@ class Auth extends CI_Controller
             'email'             => $this->input->post('email'),
             'username'          => strtolower($this->input->post('username')),
             'instansi_id'       => $instansi_id,
-            'cabang_id'         => $cabang_id,
-            'divisi_id'         => $divisi_id,
-            'bagian_id'         => $bagian_id,
-            'usertype_id'       => $this->input->post('usertype_id'),
+            'usertype_id'       => $usertype_id,
             'modified_by'       => $this->session->username,
             'photo'             => $this->upload->data('file_name'),
             'photo_thumb'       => $nmfile . '_thumb' . $this->upload->data('file_ext'),
@@ -674,10 +629,7 @@ class Auth extends CI_Controller
           'email'             => $this->input->post('email'),
           'username'          => strtolower($this->input->post('username')),
           'instansi_id'       => $instansi_id,
-          'cabang_id'         => $cabang_id,
-          'divisi_id'         => $divisi_id,
-          'bagian_id'         => $bagian_id,
-          'usertype_id'       => $this->input->post('usertype_id'),
+          'usertype_id'       => $usertype_id,
           'modified_by'       => $this->session->username,
         );
 
@@ -781,18 +733,13 @@ class Auth extends CI_Controller
       redirect('admin/dashboard');
     }
 
-    $this->data['page_title'] = 'Deleted ' . $this->data['module'] . ' List';
+    $this->data['page_title'] = 'Recycle Bin ' . $this->data['module'];
 
     if (is_grandadmin()) {
       $this->data['get_all_deleted'] = $this->Auth_model->get_all_deleted();
     } elseif (is_masteradmin()) {
       $this->data['get_all_deleted'] = $this->Auth_model->get_all_deleted_by_instansi();
-    } elseif (is_superadmin()) {
-      $this->data['get_all_deleted'] = $this->Auth_model->get_all_deleted_by_cabang();
-    } elseif (is_admin()) {
-      $this->data['get_all_deleted'] = $this->Auth_model->get_all_deleted_by_divisi();
-    }
-
+    } 
 
     $this->load->view('back/auth/user_deleted_list', $this->data);
   }
@@ -1059,11 +1006,7 @@ class Auth extends CI_Controller
       $this->data['get_all_users']      = $this->Auth_model->get_all_combobox();
     } elseif (is_masteradmin()) {
       $this->data['get_all_users']      = $this->Auth_model->get_all_combobox_by_instansi($this->session->instansi_id);
-    } elseif (is_superadmin()) {
-      $this->data['get_all_users']      = $this->Auth_model->get_all_combobox_by_cabang($this->session->cabang_id);
-    } elseif (is_admin()) {
-      $this->data['get_all_users']      = $this->Auth_model->get_all_combobox_change_password_by_divisi($this->session->divisi_id);
-    }
+    } 
 
     $this->data['user_id'] = [
       'name'          => 'user_id',

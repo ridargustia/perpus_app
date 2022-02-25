@@ -28,15 +28,40 @@
         <div class="box-body">          
           <?php if (is_grandadmin()) { ?>            
             <div class="row">
-              <div class="col-sm-4">
+              <div class="col-sm-12">
                 <div class="form-group"><label>Perguruan Tinggi (*)</label>
                   <?php echo form_dropdown('', $get_all_combobox_instansi, $baris->instansi_id, $instansi_id) ?>
                 </div>
               </div>
             </div>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group"><label>Nama Lokasi (*)</label>
+                <?php echo form_dropdown('', $get_all_combobox_lokasi, $baris->lokasi_id, $lokasi_id) ?>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group"><label>Nama Rak (*)</label>
+                  <?php echo form_dropdown('', $get_all_combobox_rak, $baris->rak_id, $rak_id) ?>
+                </div>
+              </div>
+            </div>
+          <?php } elseif (is_masteradmin()) { ?>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group"><label>Nama Lokasi (*)</label>
+                  <?php echo form_dropdown('', $get_all_combobox_lokasi, $baris->lokasi_id, $lokasi_id) ?>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group"><label>Nama Rak (*)</label>
+                  <?php echo form_dropdown('', $get_all_combobox_rak, $baris->rak_id, $rak_id) ?>
+                </div>
+              </div>
+            </div>
           <?php } ?>
 
-          <div class="form-group"><label>Nama Baris</label>
+          <div class="form-group"><label>Nama Baris (*)</label>
             <?php echo form_input($baris_name, $baris->baris_name) ?>
           </div>
         </div>
@@ -82,6 +107,30 @@
         url: "<?php echo base_url(); ?>admin/divisi/pilih_divisi/" + cabang_id + "",
         success: function(response) {
           $("#divisi_id").html(response);
+        },
+        dataType: "html"
+      });
+      return false;
+    }
+
+    function tampilLokasi() {
+      instansi_id = document.getElementById("instansi_id").value;
+      $.ajax({
+        url: "<?php echo base_url(); ?>admin/lokasi/pilih_lokasi/" + instansi_id + "",
+        success: function(response) {
+          $("#lokasi_id").html(response);
+        },
+        dataType: "html"
+      });
+      return false;
+    }
+
+    function tampilRak() {
+      lokasi_id = document.getElementById("lokasi_id").value;
+      $.ajax({
+        url: "<?php echo base_url(); ?>admin/rak/pilih_rak/" + lokasi_id + "",
+        success: function(response) {
+          $("#rak_id").html(response);
         },
         dataType: "html"
       });

@@ -39,6 +39,7 @@ class Dashboard extends CI_Controller
 			$this->data['get_total_rak']     				= $this->Rak_model->total_rows();
 			$this->data['get_total_submenu']     		= $this->Submenu_model->total_rows();
 			$this->data['get_total_usertype']     	= $this->Usertype_model->total_rows();
+			$this->data['get_total_lokasi']     	= $this->Lokasi_model->total_rows();
 		} elseif (is_masteradmin()) {
 			$this->data['get_total_user']     			= $this->Auth_model->total_rows_by_instansi();
 			$this->data['get_total_arsip']     			= $this->Arsip_model->total_rows_by_instansi();
@@ -48,28 +49,8 @@ class Dashboard extends CI_Controller
 			$this->data['get_total_peminjaman']     = $this->Peminjaman_model->total_rows_by_instansi();
 			$this->data['get_total_pengembalian']   = $this->Pengembalian_model->total_rows_by_instansi();
 			$this->data['get_total_rak']     				= $this->Rak_model->total_rows_by_instansi();
-		} elseif (is_superadmin()) {
-			$this->data['get_total_user']     			= $this->Auth_model->total_rows_by_cabang();
-			$this->data['get_total_arsip']     			= $this->Arsip_model->total_rows_by_cabang();
-			$this->data['get_total_baris']     			= $this->Baris_model->total_rows_by_cabang();
-			$this->data['get_total_box']     				= $this->Box_model->total_rows_by_cabang();
-			$this->data['get_total_map']     				= $this->Map_model->total_rows_by_cabang();
-			$this->data['get_total_peminjaman']     = $this->Peminjaman_model->total_rows_by_cabang();
-			$this->data['get_total_pengembalian']   = $this->Pengembalian_model->total_rows_by_cabang();
-			$this->data['get_total_rak']     				= $this->Rak_model->total_rows_by_cabang();
-		} elseif(is_admin()) {
-			$this->data['get_total_arsip']     			= $this->Arsip_model->total_rows_by_divisi();
-			$this->data['get_total_baris']     			= $this->Baris_model->total_rows_by_divisi();
-			$this->data['get_total_box']     				= $this->Box_model->total_rows_by_divisi();
-			$this->data['get_total_map']     				= $this->Map_model->total_rows_by_divisi();
-			$this->data['get_total_peminjaman']     = $this->Peminjaman_model->total_rows_by_divisi();
-			$this->data['get_total_pengembalian']   = $this->Pengembalian_model->total_rows_by_divisi();
-			$this->data['get_total_rak']     				= $this->Rak_model->total_rows_by_divisi();
-		} else {
-			$this->data['get_total_arsip']     			= $this->Arsip_model->total_rows_by_divisi();
-			$this->data['get_total_peminjaman']     = $this->Peminjaman_model->total_rows_by_divisi();
-			$this->data['get_total_pengembalian']   = $this->Pengembalian_model->total_rows_by_divisi();
-		}
+			$this->data['get_total_lokasi']     	= $this->Lokasi_model->total_rows_by_instansi();
+		} 
 
 		$this->load->view('back/dashboard/body', $this->data);
 	}

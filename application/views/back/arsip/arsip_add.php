@@ -34,250 +34,48 @@
               </div>
             </div>
             <div class="form-group">
-              <label class="col-lg-2 control-label">Fakultas</label>
+              <label class="col-lg-2 control-label">Lokasi Buku</label>
               <div class="col-lg-10">
-                <?php echo form_dropdown('', array('' => '- Pilih Perguruan Tinggi Dulu -'), '', $cabang_id) ?>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Program Studi</label>
-              <div class="col-lg-10">
-                <?php echo form_dropdown('', array('' => '- Pilih Fakultas Dulu -'), '', $divisi_id) ?>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Divisi</label>
-              <div class="col-lg-10">
-                <?php echo form_dropdown('', array('' => '- Pilih Program Studi Dulu -'), '', $bagian_id) ?>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Lokasi Arsip</label>
-              <div class="col-lg-10">
-                <?php echo form_dropdown('', array('' => '- Pilih Program Studi Dulu -'), '', $lokasi_id) ?>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Kepemilikan Arsip</label>
-              <div class="col-lg-10">
-                <?php echo form_dropdown('', array('' => '- Pilih Divisi Dulu -'), '', $user_id) ?>
+              <?php echo form_dropdown('', array('' => '- Pilih Perguruan Tinggi Dulu -'), '', $lokasi_id) ?>
               </div>
             </div>
             <div class="form-group">
               <label class="col-lg-2 control-label">Rak</label>
               <div class="col-lg-10">
-                <?php echo form_dropdown('', array('' => '- Pilih Program Studi Dulu -'), '', $rak_id) ?>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Box</label>
-              <div class="col-lg-10">
-                <?php echo form_dropdown('', array('' => '- Pilih Program Studi Dulu -'), '', $box_id) ?>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Map</label>
-              <div class="col-lg-10">
-                <?php echo form_dropdown('', array('' => '- Pilih Program Studi Dulu -'), '', $map_id) ?>
+                <?php echo form_dropdown('', array('' => '- Pilih Lokasi Buku Dulu -'), '', $rak_id) ?>
               </div>
             </div>
             <div class="form-group">
               <label class="col-lg-2 control-label">Baris</label>
               <div class="col-lg-10">
-                <?php echo form_dropdown('', array('' => '- Pilih Program Studi Dulu -'), '', $baris_id) ?>
+                <?php echo form_dropdown('', array('' => '- Pilih Rak Dulu -'), '', $baris_id) ?>
               </div>
             </div>
 
           <?php } elseif (is_masteradmin()) { ?>
             <div class="form-group">
-              <label class="col-lg-2 control-label">Fakultas</label>
-              <div class="col-lg-10">
-                <?php echo form_dropdown('', $get_all_combobox_cabang, '', $cabang_id) ?>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Program Studi</label>
-              <div class="col-lg-10">
-                <?php echo form_dropdown('', array('' => '- Pilih Fakultas Dulu -'), '', $divisi_id) ?>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Divisi</label>
-              <div class="col-lg-10">
-                <?php echo form_dropdown('', array('' => '- Pilih Program Studi Dulu -'), '', $bagian_id) ?>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Lokasi Arsip</label>
-              <div class="col-lg-10">
-                <?php echo form_dropdown('', array('' => '- Pilih Program Studi Dulu -'), '', $lokasi_id) ?>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Kepemilikan Arsip</label>
-              <div class="col-lg-10">
-                <?php echo form_dropdown('', array('' => '- Pilih Divisi Dulu -'), '', $user_id) ?>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Rak</label>
-              <div class="col-lg-10">
-                <?php echo form_dropdown('', array('' => '- Pilih Program Studi Dulu -'), '', $rak_id) ?>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Box</label>
-              <div class="col-lg-10">
-                <?php echo form_dropdown('', array('' => '- Pilih Program Studi Dulu -'), '', $box_id) ?>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Map</label>
-              <div class="col-lg-10">
-                <?php echo form_dropdown('', array('' => '- Pilih Program Studi Dulu -'), '', $map_id) ?>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Baris</label>
-              <div class="col-lg-10">
-                <?php echo form_dropdown('', array('' => '- Pilih Program Studi Dulu -'), '', $baris_id) ?>
-              </div>
-            </div>
-
-          <?php } elseif (is_superadmin()) { ?>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Program Studi</label>
-              <div class="col-lg-10">
-                <?php echo form_dropdown('', $get_all_combobox_divisi, '', $divisi_id) ?>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Divisi</label>
-              <div class="col-lg-10">
-                <?php echo form_dropdown('', array('' => '- Pilih Program Studi Dulu -'), '', $bagian_id) ?>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Lokasi Arsip</label>
-              <div class="col-lg-10">
-                <?php echo form_dropdown('', array('' => '- Pilih Program Studi Dulu -'), '', $lokasi_id) ?>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Kepemilikan Arsip</label>
-              <div class="col-lg-10">
-                <?php echo form_dropdown('', array('' => '- Pilih Divisi Dulu -'), '', $user_id) ?>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Rak</label>
-              <div class="col-lg-10">
-                <?php echo form_dropdown('', array('' => '- Pilih Program Studi Dulu -'), '', $rak_id) ?>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Box</label>
-              <div class="col-lg-10">
-                <?php echo form_dropdown('', array('' => '- Pilih Program Studi Dulu -'), '', $box_id) ?>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Map</label>
-              <div class="col-lg-10">
-                <?php echo form_dropdown('', array('' => '- Pilih Program Studi Dulu -'), '', $map_id) ?>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Baris</label>
-              <div class="col-lg-10">
-                <?php echo form_dropdown('', array('' => '- Pilih Program Studi Dulu -'), '', $baris_id) ?>
-              </div>
-            </div>
-
-          <?php } elseif (is_admin()) { ?>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Divisi</label>
-              <div class="col-lg-10">
-                <?php echo form_dropdown('', $get_all_combobox_bagian, '', $bagian_id) ?>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Lokasi Arsip</label>
+              <label class="col-lg-2 control-label">Lokasi Buku</label>
               <div class="col-lg-10">
                 <?php echo form_dropdown('', $get_all_combobox_lokasi, '', $lokasi_id) ?>
               </div>
             </div>
             <div class="form-group">
-              <label class="col-lg-2 control-label">Kepemilikan Arsip</label>
-              <div class="col-lg-10">
-                <?php echo form_dropdown('', array('' => '- Pilih Divisi Dulu -'), '', $user_id) ?>
-              </div>
-            </div>
-            <div class="form-group">
               <label class="col-lg-2 control-label">Rak</label>
               <div class="col-lg-10">
-                <?php echo form_dropdown('', $get_all_combobox_rak, '', $rak_id) ?>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Box</label>
-              <div class="col-lg-10">
-                <?php echo form_dropdown('', $get_all_combobox_box, '', $box_id) ?>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Map</label>
-              <div class="col-lg-10">
-                <?php echo form_dropdown('', $get_all_combobox_map, '', $map_id) ?>
+                <?php echo form_dropdown('', array('' => '- Pilih Lokasi Buku Dulu -'), '', $rak_id) ?>
               </div>
             </div>
             <div class="form-group">
               <label class="col-lg-2 control-label">Baris</label>
               <div class="col-lg-10">
-                <?php echo form_dropdown('', $get_all_combobox_baris, '', $baris_id) ?>
+                <?php echo form_dropdown('', array('' => '- Pilih Rak Dulu -'), '', $baris_id) ?>
               </div>
             </div>
-          <?php } elseif (is_pegawai()) { ?>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Lokasi Arsip</label>
-              <div class="col-lg-10">
-                <?php echo form_dropdown('', $get_all_combobox_lokasi, '', $lokasi_id) ?>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Kepemilikan Arsip</label>
-              <div class="col-lg-10">
-                <?php echo form_dropdown('', $get_all_combobox_user, '', $user_id) ?>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Rak</label>
-              <div class="col-lg-10">
-                <?php echo form_dropdown('', $get_all_combobox_rak, '', $rak_id) ?>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Box</label>
-              <div class="col-lg-10">
-                <?php echo form_dropdown('', $get_all_combobox_box, '', $box_id) ?>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Map</label>
-              <div class="col-lg-10">
-                <?php echo form_dropdown('', $get_all_combobox_map, '', $map_id) ?>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-lg-2 control-label">Baris</label>
-              <div class="col-lg-10">
-                <?php echo form_dropdown('', $get_all_combobox_baris, '', $baris_id) ?>
-              </div>
-            </div>
+
           <?php } ?>
 
           <div class="form-group">
-            <label class="col-lg-2 control-label">Nomor Arsip</label>
+            <label class="col-lg-2 control-label">Nomor / Label Buku</label>
             <div class="col-lg-10">
               <?php echo form_input($no_arsip) ?>
               <span id="no_arsip-availability-status"></span>
@@ -286,7 +84,7 @@
           </div>
 
           <div class="form-group">
-            <label class="col-lg-2 control-label">Nama Arsip</label>
+            <label class="col-lg-2 control-label">Judul Buku</label>
             <div class="col-lg-10">
               <?php echo form_input($arsip_name) ?>
               <span id="arsip_name-availability-status"></span>
@@ -294,81 +92,75 @@
             </div>
           </div>
 
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label class="col-lg-2 control-label">Deskripsi</label>
             <div class="col-lg-10">
-              <?php echo form_textarea($deskripsi_arsip) ?>
+              <?php //echo form_textarea($deskripsi_arsip) ?>
+            </div>
+          </div> -->
+
+          <div class="form-group">
+            <label class="col-lg-2 control-label">Penulis Buku</label>
+            <div class="col-lg-10">
+              <?php echo form_input($penulis_buku) ?>
             </div>
           </div>
 
           <div class="form-group">
-            <label class="col-lg-2 control-label">Jenis Arsip</label>
+            <label class="col-lg-2 control-label">Jumlah Halaman</label>
             <div class="col-lg-10">
-              <p>
-                <?php foreach ($get_all_jenis_arsip as $jenisArsipId) { ?>
-                  <div class="pretty p-icon p-smooth">
-                    <input type="checkbox" name="jenis_arsip_id[]" value="<?php echo $jenisArsipId->id_jenis ?>">
-                    <div class="state p-success">
-                      <i class="icon fa fa-check"></i>
-                      <label><?php echo $jenisArsipId->jenis_name ?></label>
-                    </div>
-                  </div>
-                <?php } ?>
-              </p>
+              <?php echo form_input($jumlah_halaman) ?>
             </div>
           </div>
 
           <div class="form-group">
-            <label class="col-lg-2 control-label">Masa Retensi</label>
+            <label class="col-lg-2 control-label">Bahasa</label>
             <div class="col-lg-10">
-              <?php echo form_input($masa_retensi) ?>
+              <?php echo form_dropdown('', $get_all_combobox_bahasa, '', $bahasa_id) ?>
             </div>
-          </div>          
+          </div>
 
           <div class="form-group">
-            <label class="col-lg-2 control-label">Upload File</label>
+            <label class="col-lg-2 control-label">Tema/Topik</label>
+            <div class="col-lg-10">
+            <?php echo form_input($tema_buku) ?>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-lg-2 control-label">Penerbit</label>
+            <div class="col-lg-10">
+            <?php echo form_input($penerbit) ?>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-lg-2 control-label">Kota Penerbit</label>
+            <div class="col-lg-10">
+            <?php echo form_input($kota_penerbit) ?>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-lg-2 control-label">Tahun Terbit</label>
+            <div class="col-lg-10">
+            <?php echo form_input($tahun_terbit) ?>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-lg-2 control-label">Upload Cover Buku</label>
+            <div class="col-lg-10">
+              <input type="file" name="cover" id="cover" onchange="coverPreview(this, 'preview')" />
+              <p class="help-block">Maximum file size is 2MB</p>
+              <img id="preview" width="150px" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-lg-2 control-label">Upload File Buku</label>
             <div class="col-lg-10">
               <input type="file" name="file_upload[]" class="multi" multiple>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="col-lg-2 control-label">Status Akses File</label>
-            <div class="col-lg-10">
-              <div class="pretty p-icon p-smooth">
-                <input type="radio" name="status_file" value="1" required />
-                <div class="state p-success">
-                  <i class="icon fa fa-check"></i>
-                  <label>Umum</label>
-                </div>
-              </div>
-              <div class="pretty p-icon p-smooth">
-                <input type="radio" name="status_file" value="0" />
-                <div class="state p-danger">
-                  <i class="icon fa fa-check"></i>
-                  <label>Khusus</label>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="col-lg-2 control-label">Keterangan</label>
-            <div class="col-lg-10">
-              <div class="pretty p-icon p-smooth">
-                <input type="radio" name="keterangan" value="0" required />
-                <div class="state p-success">
-                  <i class="icon fa fa-check"></i>
-                  <label>Permanen</label>
-                </div>
-              </div>
-              <div class="pretty p-icon p-smooth">
-                <input type="radio" name="keterangan" value="1" />
-                <div class="state p-danger">
-                  <i class="icon fa fa-check"></i>
-                  <label>Musnah</label>
-                </div>
-              </div>
             </div>
           </div>
 
@@ -378,8 +170,6 @@
           <ul>
             <li>Jenis File yang boleh diupload:
               <br><b>TEXT</b>: txt, pdf, ppt, pptx, xls, xlsx, doc, docx.
-              <br><b>AUDIO</b>: mp3, flac, wav, m4a.
-              <br><b>VIDEO</b>: mp4, flv.
               <br><b>FOTO</b>: jpg, jpeg, png.
               <br><b>COMPRESSION</b>: zip, rar.
             </li>
@@ -416,11 +206,14 @@
   <script src="<?php echo base_url('assets/plugins/') ?>bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 
   <script type="text/javascript">
-    $('#masa_retensi').datepicker({
+    $('#tahun_terbit').datepicker({
       autoclose: true,
-      format: 'yyyy-mm-dd',
-      zIndexOffset: 9999,
-      todayHighlight: true,
+      // format: 'yyyy-mm-dd',
+      // zIndexOffset: 9999,
+      // todayHighlight: true,
+      format: 'yyyy',
+      viewMode: 'years', 
+      minViewMode: 'years'
     });
 
     $("#jenis_arsip_id").select2({
@@ -447,10 +240,34 @@
       return false;
     });
 
+    function coverPreview(cover, idpreview) {
+      var gb = cover.files;
+      for (var i = 0; i < gb.length; i++) {
+        var gbPreview = gb[i];
+        var imageType = /image.*/;
+        var preview = document.getElementById(idpreview);
+        var reader = new FileReader();
+        if (gbPreview.type.match(imageType)) {
+          //jika tipe data sesuai
+          preview.file = gbPreview;
+          reader.onload = (function(element) {
+            return function(e) {
+              element.src = e.target.result;
+            };
+          })(preview);
+          //membaca data URL gambar
+          reader.readAsDataURL(gbPreview);
+        } else {
+          //jika tipe data tidak sesuai
+          alert("Tipe file tidak sesuai. Gambar harus bertipe .png, .gif atau .jpg.");
+        }
+      }
+    }
+
     function tampilLokasi() {
-      divisi_id = document.getElementById("divisi_id").value;
+      instansi_id = document.getElementById("instansi_id").value;
       $.ajax({
-        url: "<?php echo base_url(); ?>admin/lokasi/pilih_lokasi/" + divisi_id + "",
+        url: "<?php echo base_url(); ?>admin/lokasi/pilih_lokasi/" + instansi_id + "",
         success: function(response) {
           $("#lokasi_id").html(response);
         },
@@ -460,9 +277,9 @@
     }
 
     function tampilRak() {
-      divisi_id = document.getElementById("divisi_id").value;
+      lokasi_id = document.getElementById("lokasi_id").value;
       $.ajax({
-        url: "<?php echo base_url(); ?>admin/rak/pilih_rak/" + divisi_id + "",
+        url: "<?php echo base_url(); ?>admin/rak/pilih_rak/" + lokasi_id + "",
         success: function(response) {
           $("#rak_id").html(response);
         },
@@ -496,9 +313,9 @@
     }
 
     function tampilBaris() {
-      divisi_id = document.getElementById("divisi_id").value;
+      rak_id = document.getElementById("rak_id").value;
       $.ajax({
-        url: "<?php echo base_url(); ?>admin/baris/pilih_baris/" + divisi_id + "",
+        url: "<?php echo base_url(); ?>admin/baris/pilih_baris/" + rak_id + "",
         success: function(response) {
           $("#baris_id").html(response);
         },
@@ -559,27 +376,19 @@
       $("#loaderNoArsip").show();
       <?php if(is_grandadmin()){ ?>
         instansi_id = document.getElementById("instansi_id").value;
-        cabang_id = document.getElementById("cabang_id").value;
-        divisi_id = document.getElementById("divisi_id").value;
+        lokasi_id = document.getElementById("lokasi_id").value;
+        // divisi_id = document.getElementById("divisi_id").value;
       <?php } elseif(is_masteradmin()){ ?>
         instansi_id = <?php $this->session->instansi_id; ?>
-        cabang_id = document.getElementById("cabang_id").value;
-        divisi_id = document.getElementById("divisi_id").value;
-      <?php } elseif(is_superadmin()) {?>
-        instansi_id = <?php $this->session->instansi_id; ?>
-        cabang_id = <?php $this->session->cabang_id; ?>
-        divisi_id = document.getElementById("divisi_id").value;
-      <?php } elseif(is_admin() or is_pegawai()) { ?>
-        instansi_id = <?php $this->session->instansi_id; ?>
-        cabang_id = <?php $this->session->cabang_id; ?>
-        divisi_id = <?php $this->session->divisi_id; ?>
+        lokasi_id = document.getElementById("lokasi_id").value;
+        // cabang_id = document.getElementById("cabang_id").value;
+        // divisi_id = document.getElementById("divisi_id").value;
       <?php } ?>
         
-
       no_arsip = $("#no_arsip").val();
       jQuery.ajax({
-        url: "<?php echo base_url('admin/arsip/check_no_arsip') ?>",
-        data: {no_arsip: no_arsip, divisi_id: divisi_id, cabang_id: cabang_id, instansi_id: instansi_id},
+        url: "<?php echo base_url('admin/buku/check_no_arsip') ?>",
+        data: {no_arsip: no_arsip, instansi_id: instansi_id, lokasi_id: lokasi_id},
         type: "POST",
         success: function(data) {
           $("#no_arsip-availability-status").html(data);
@@ -593,27 +402,17 @@
       $("#loaderArsipName").show();
       <?php if(is_grandadmin()){ ?>
         instansi_id = document.getElementById("instansi_id").value;
-        cabang_id = document.getElementById("cabang_id").value;
-        divisi_id = document.getElementById("divisi_id").value;
+        lokasi_id = document.getElementById("lokasi_id").value;
       <?php } elseif(is_masteradmin()){ ?>
         instansi_id = <?php $this->session->instansi_id; ?>
-        cabang_id = document.getElementById("cabang_id").value;
-        divisi_id = document.getElementById("divisi_id").value;
-      <?php } elseif(is_superadmin()) {?>
-        instansi_id = <?php $this->session->instansi_id; ?>
-        cabang_id = <?php $this->session->cabang_id; ?>
-        divisi_id = document.getElementById("divisi_id").value;
-      <?php } elseif(is_admin() or is_pegawai()) { ?>
-        instansi_id = <?php $this->session->instansi_id; ?>
-        cabang_id = <?php $this->session->cabang_id; ?>
-        divisi_id = <?php $this->session->divisi_id; ?>
+        lokasi_id = document.getElementById("lokasi_id").value;
       <?php } ?>
 
       arsip_name = $("#arsip_name").val();
 
       jQuery.ajax({
-        url: "<?php echo base_url('admin/arsip/check_arsip_name') ?>",
-        data: {arsip_name: arsip_name, divisi_id: divisi_id, cabang_id: cabang_id, instansi_id: instansi_id},
+        url: "<?php echo base_url('admin/buku/check_arsip_name') ?>",
+        data: {arsip_name: arsip_name, instansi_id: instansi_id, lokasi_id: lokasi_id},
         type: "POST",
         success: function(data) {
           $("#arsip_name-availability-status").html(data);

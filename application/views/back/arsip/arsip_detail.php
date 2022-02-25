@@ -22,47 +22,31 @@
       <div class="box box-primary">
         <div class="box-body">
           <div class="row">
-            <div class="col-sm-3">
-              <div class="form-group"><label>Nomor Arsip</label>
+            <div class="col-sm-4">
+              <div class="form-group"><label>Nomor Buku</label>
                 <p><?php echo $detail_arsip->no_arsip ?></p>
               </div>
             </div>
-            <div class="col-sm-3">
-              <div class="form-group"><label>Divisi</label>
-                <p><?php echo $detail_arsip->bagian_name ?></p>
-              </div>
-            </div>
-            <div class="col-sm-3">
-              <div class="form-group"><label>Program Studi</label>
-                <p><?php echo $detail_arsip->divisi_name ?></p>
-              </div>
-            </div>
-            <div class="col-sm-3">
-              <div class="form-group"><label>Fakultas</label>
-                <p><?php echo $detail_arsip->cabang_name ?></p>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-3">
-              <div class="form-group"><label>Nama Arsip</label>
+            <div class="col-sm-4">
+              <div class="form-group"><label>Judul Buku</label>
                 <p><?php echo $detail_arsip->arsip_name ?></p>
               </div>
             </div>
-            <div class="col-sm-3">
-            </div>
-            <div class="col-sm-3">
-            </div>
-            <div class="col-sm-3">
+            <div class="col-sm-4">
               <div class="form-group"><label>Perguruan Tinggi</label>
                 <p><?php echo $detail_arsip->instansi_name ?></p>
               </div>
             </div>
           </div>
-          <div class="form-group"><label>Deskripsi Arsip</label>
+          <div class="form-group"><label>Deskripsi Buku</label>
             <p><?php echo $detail_arsip->deskripsi_arsip ?></p>
           </div>
           <div class="row">
+            <div class="col-sm-4">
+              <div class="form-group"><label>Lokasi Arsip</label>
+                <p><?php echo $detail_arsip->lokasi_name ?></p>
+              </div>
+            </div>
             <div class="col-sm-4">
               <div class="form-group"><label>Rak</label>
                 <p><?php echo $detail_arsip->rak_name ?></p>
@@ -73,157 +57,59 @@
                 <p><?php echo $detail_arsip->baris_name ?></p>
               </div>
             </div>
-            <div class="col-sm-4">
-              <div class="form-group"><label>Lokasi Arsip</label>
-                <p><?php echo $detail_arsip->lokasi_name ?></p>
-              </div>
-            </div>
           </div>
           <div class="row">
             <div class="col-sm-4">
-              <div class="form-group"><label>Box</label>
-                <p><?php echo $detail_arsip->box_name ?></p>
-              </div>
-            </div>
-            <div class="col-sm-4">
-              <div class="form-group"><label>Map</label>
-                <p><?php echo $detail_arsip->map_name ?></p>
-              </div>
-            </div>
-            <div class="col-sm-4">
-              <div class="form-group"><label>Masa Retensi</label>
-                <?php if ($detail_arsip->masa_retensi != NULL) { ?>
-                  <p><?php echo date_only($detail_arsip->masa_retensi) ?></p>
-                <?php } else {
-                  echo "<p>-</p>";
-                } ?>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-3">
               <div class="form-group"><label>Dibuat Pada</label>
                 <p><?php echo datetime_indo($detail_arsip->waktu_dibuat) ?></p>
               </div>
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-4">
               <div class="form-group"><label>Dibuat Oleh</label>
                 <p><?php echo $detail_arsip->pembuat_arsip ?></p>
               </div>
             </div>
-            <div class="col-sm-3">
-              <div class="form-group"><label>Pemilik Arsip</label>
-                <p><?php echo $detail_arsip->pemilik_arsip ?></p>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+            <?php
+            // Jika grand/masteradmin, tampilkan semua file
+            if (is_grandadmin() or is_masteradmin()) {
+            ?>
+              <div class="form-group"><label>File</label>
+                <br>
+                <?php if ($file_upload == NULL) {
+                  echo "<button class='btn btn-sm btn-danger'><i class='fa fa-remove'></i> Belum ada data</button>";
+                } ?>
+                <ol>
+                  <?php foreach ($file_upload as $files) { ?>
+                    <li>
+                      <b>FileName:</b> <?php echo $files->file_upload ?><br>
+                      <a href="<?php echo base_url('assets/file_arsip/' . $instansiName . '/') . $files->file_upload ?>" class="btn btn-sm btn-primary" target="_blank"><i class="fa fa-download"></i> Download/Lihat</a>
+                    </li><br>
+                  <?php } ?>
+                </ol>
+              </div>
+
+            <?php } ?>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group"><label>Cover Buku</label><br>
+                <?php if ($detail_arsip->cover_buku_thumb != NULL) { ?>
+                  <img src="<?php echo base_url('assets/images/cover_buku/'.$detail_arsip->cover_buku_thumb) ?>" width="100px" height="120px">
+                <?php } else { ?>
+                  <img src="<?php echo base_url('assets/images/noimage.jpg') ?>" width="100px" height="120px">
+                <?php } ?>
               </div>
             </div>
           </div>
-
-          <?php
-          // Jika grand/masteradmin, tampilkan semua file
-          if (is_grandadmin() or is_masteradmin()) {
-          ?>
-            <div class="form-group"><label>File</label>
-              <br>
-              <?php if ($file_upload == NULL) {
-                echo "<button class='btn btn-sm btn-danger'><i class='fa fa-remove'></i> Belum ada data</button>";
-              } ?>
-              <ol>
-                <?php foreach ($file_upload as $files) { ?>
-                  <li>
-                    <b>FileName:</b> <?php echo $files->file_upload ?><br>
-                    <a href="<?php echo base_url('assets/file_arsip/' . $instansiName . '/') . $files->file_upload ?>" class="btn btn-sm btn-primary" target="_blank"><i class="fa fa-download"></i> Download/Lihat</a>
-                  </li><br>
-                <?php } ?>
-              </ol>
-            </div>
-
-            <?php }
-          // Jika superadmin dan instansi dia maka tampilkan file
-          elseif (is_superadmin()) {
-            if ($detail_arsip->instansi_id == $this->session->instansi_id) {
-              // Jika status filenya KHUSUS (0) dan punya dia sendiri maka tampilkan
-              if ($detail_arsip->status_file == '0' and $detail_arsip->user_id == $this->session->id_users) {
-            ?>
-                <div class="form-group"><label>File</label>
-                  <br>
-                  <?php if ($file_upload == NULL) {
-                    echo "<button class='btn btn-sm btn-danger'><i class='fa fa-remove'></i> Belum ada data</button>";
-                  } ?>
-                  <ol>
-                    <?php foreach ($file_upload as $files) { ?>
-                      <li>
-                        <b>FileName:</b> <?php echo $files->file_upload ?><br>
-                        <a href="<?php echo base_url('assets/file_arsip/' . $instansiName . '/') . $files->file_upload ?>" class="btn btn-sm btn-primary" target="_blank"><i class="fa fa-download"></i> Download/Lihat</a>
-                      </li><br>
-                    <?php } ?>
-                  </ol>
-                </div>
-
-              <?php } elseif ($detail_arsip->status_file == '1') { ?>
-                <div class="form-group"><label>File</label>
-                  <br>
-                  <?php if ($file_upload == NULL) {
-                    echo "<button class='btn btn-sm btn-danger'><i class='fa fa-remove'></i> Belum ada data</button>";
-                  } ?>
-                  <ol>
-                    <?php foreach ($file_upload as $files) { ?>
-                      <li>
-                        <b>FileName:</b> <?php echo $files->file_upload ?><br>
-                        <a href="<?php echo base_url('assets/file_arsip/' . $instansiName . '/') . $files->file_upload ?>" class="btn btn-sm btn-primary" target="_blank"><i class="fa fa-download"></i> Download/Lihat</a>
-                      </li><br>
-                    <?php } ?>
-                  </ol>
-                </div>
-              <?php } ?>
-
-            <?php }
-          }
-          // Jika admin
-          elseif (is_admin()) {
-            // Jika status filenya KHUSUS (0) dan punya dia sendiri maka tampilkan
-            if ($detail_arsip->status_file == '0' and $detail_arsip->user_id == $this->session->id_users) {
-            ?>
-              <div class="form-group"><label>File</label>
-                <br>
-                <?php if ($file_upload == NULL) {
-                  echo "<button class='btn btn-sm btn-danger'><i class='fa fa-remove'></i> Belum ada data</button>";
-                } ?>
-                <ol>
-                  <?php foreach ($file_upload as $files) { ?>
-                    <li>
-                      <b>FileName:</b> <?php echo $files->file_upload ?><br>
-                      <a href="<?php echo base_url('assets/file_arsip/' . $instansiName . '/') . $files->file_upload ?>" class="btn btn-sm btn-primary" target="_blank"><i class="fa fa-download"></i> Download/Lihat</a>
-                    </li><br>
-                  <?php } ?>
-                </ol>
-              </div>
-
-            <?php }
-            // Jika status filenya UMUM (1) maka tampilkan filenya
-            elseif ($detail_arsip->status_file == '1') {
-            ?>
-              <div class="form-group"><label>File</label>
-                <br>
-                <?php if ($file_upload == NULL) {
-                  echo "<button class='btn btn-sm btn-danger'><i class='fa fa-remove'></i> Belum ada data</button>";
-                } ?>
-                <ol>
-                  <?php foreach ($file_upload as $files) { ?>
-                    <li>
-                      <b>FileName:</b> <?php echo $files->file_upload ?><br>
-                      <a href="<?php echo base_url('assets/file_arsip/' . $instansiName . '/') . $files->file_upload ?>" class="btn btn-sm btn-primary" target="_blank"><i class="fa fa-download"></i> Download/Lihat</a>
-                    </li><br>
-                  <?php } ?>
-                </ol>
-              </div>
-          <?php }
-          } ?>
+          
         </div>
         <!-- /.box-body -->
 
       </div>
 
-      <a href="<?php echo base_url('admin/arsip/index') ?>" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Kembali ke halaman sebelumnya</a>
+      <a href="<?php echo base_url('admin/buku/index') ?>" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Kembali ke halaman sebelumnya</a>
 
       <!-- /.box -->
     </section>
