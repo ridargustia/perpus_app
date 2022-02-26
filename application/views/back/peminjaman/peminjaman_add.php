@@ -35,131 +35,38 @@
 
           <?php if (is_grandadmin()) { ?>
             <div class="row">
-              <div class="col-lg-3">
+              <div class="col-lg-4">
                 <div class="form-group"><label>Perguruan Tinggi (*)</label>
                   <?php echo form_dropdown('', $get_all_combobox_instansi, '', $instansi_id) ?>
                 </div>
               </div>
-              <div class="col-lg-3">
-                <div class="form-group"><label>Fakultas (*)</label>
-                  <?php echo form_dropdown('', array('' => '- Pilih Perguruan Tinggi Dulu -'), '', $cabang_id) ?>
+              <div class="col-lg-4">
+                <div class="form-group"><label>Judul Buku yang Akan Dipinjam</label>
+                  <?php echo form_dropdown('', array('' => '- Pilih Perguruan Tinggi Dulu -'), '', $arsip_id) ?>
                 </div>
               </div>
-              <div class="col-lg-3">
-                <div class="form-group"><label>Program Studi (*)</label>
-                  <?php echo form_dropdown('', array('' => '- Pilih Fakultas Dulu -'), '', $divisi_id) ?>
-                </div>
-              </div>
-              <div class="col-lg-3">
-                <div class="form-group"><label>Divisi (*)</label>
-                  <?php echo form_dropdown('', array('' => '- Pilih Program Studi Dulu -'), '', $bagian_id) ?>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-lg-6">
-                <div class="form-group"><label>Nama Arsip yang Akan Dipinjam</label>
-                  <?php echo form_dropdown('', array('' => '- Pilih Divisi Dulu -'), '', $arsip_id) ?>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="form-group"><label>Nama Peminjam Arsip</label>
-                  <?php echo form_dropdown('', $get_all_combobox_user, '', $user_id) ?>
+              <div class="col-lg-4">
+                <div class="form-group"><label>Nama Peminjam Buku</label>
+                  <?php echo form_input($peminjam) ?>
                 </div>
               </div>
             </div>
 
           <?php } elseif (is_masteradmin()) { ?>
-            <div class="row">
-              <div class="col-lg-4">
-                <div class="form-group"><label>Fakultas (*)</label>
-                  <?php echo form_dropdown('', $get_all_combobox_cabang, '', $cabang_id) ?>
-                </div>
-              </div>
-              <div class="col-lg-4">
-                <div class="form-group"><label>Program Studi (*)</label>
-                  <?php echo form_dropdown('', array('' => '- Pilih Fakultas Dulu -'), '', $divisi_id) ?>
-                </div>
-              </div>
-              <div class="col-lg-4">
-                <div class="form-group"><label>Divisi (*)</label>
-                  <?php echo form_dropdown('', array('' => '- Pilih Program Studi Dulu -'), '', $bagian_id) ?>
-                </div>
-              </div>
-            </div>
 
             <div class="row">
               <div class="col-lg-6">
-                <div class="form-group"><label>Nama Arsip yang Akan Dipinjam</label>
-                  <?php echo form_dropdown('', array('' => '- Pilih Divisi Dulu -'), '', $arsip_id) ?>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="form-group"><label>Nama Peminjam Arsip</label>
-                  <?php echo form_dropdown('', $get_all_combobox_user, '', $user_id) ?>
-                </div>
-              </div>
-            </div>
-
-          <?php } elseif (is_superadmin()) { ?>
-            <div class="row">
-              <div class="col-lg-6">
-                <div class="form-group"><label>Program Studi (*)</label>
-                  <?php echo form_dropdown('', $get_all_combobox_divisi, '', $divisi_id) ?>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="form-group"><label>Divisi (*)</label>
-                  <?php echo form_dropdown('', array('' => '- Pilih Program Studi Dulu -'), '', $bagian_id) ?>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-lg-6">
-                <div class="form-group"><label>Nama Arsip yang Akan Dipinjam</label>
-                  <?php echo form_dropdown('', array('' => '- Pilih Divisi Dulu -'), '', $arsip_id) ?>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="form-group"><label>Nama Peminjam Arsip</label>
-                  <?php echo form_dropdown('', $get_all_combobox_user, '', $user_id) ?>
-                </div>
-              </div>
-            </div>
-
-          <?php } elseif (is_admin()) { ?>
-            <div class="form-group"><label>Divisi (*)</label>
-              <?php echo form_dropdown('', $get_all_combobox_bagian, '', $bagian_id) ?>
-            </div>
-
-            <div class="row">
-              <div class="col-lg-6">
-                <div class="form-group"><label>Nama Arsip yang Akan Dipinjam</label>
-                  <?php echo form_dropdown('', array('' => '- Pilih Divisi Dulu -'), '', $arsip_id) ?>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="form-group"><label>Nama Peminjam Arsip</label>
-                  <?php echo form_dropdown('', $get_all_combobox_user, '', $user_id) ?>
-                </div>
-              </div>
-            </div>
-
-          <?php } elseif (is_pegawai()) { ?>
-            <div class="row">
-              <div class="col-lg-6">
-                <div class="form-group"><label>Nama Arsip yang Akan Dipinjam</label>
+                <div class="form-group"><label>Judul Buku yang Akan Dipinjam</label>
                   <?php echo form_dropdown('', $get_all_combobox_arsip_available, '', $arsip_id) ?>
                 </div>
               </div>
               <div class="col-lg-6">
-                <div class="form-group"><label>Nama Peminjam Arsip</label>
-                  <?php echo form_dropdown('', $get_all_combobox_user, '', $user_id) ?>
+                <div class="form-group"><label>Nama Peminjam Buku</label>
+                <?php echo form_input($peminjam) ?>
                 </div>
               </div>
             </div>
+
           <?php } ?>
 
         </div>
@@ -262,9 +169,9 @@
     }
 
     function tampilArsip() {
-      bagian_id = document.getElementById("bagian_id").value;
+      instansi_id = document.getElementById("instansi_id").value;
       $.ajax({
-        url: "<?php echo base_url(); ?>admin/arsip/pilih_arsip_available/" + bagian_id + "",
+        url: "<?php echo base_url(); ?>admin/buku/pilih_arsip_available/" + instansi_id + "",
         success: function(response) {
           $("#arsip_id").html(response);
         },

@@ -990,7 +990,7 @@ class Buku extends CI_Controller
 
   function pilih_arsip_available()
   {
-    $this->data['arsip']  = $this->Arsip_model->get_all_combobox_arsip_available_by_bagian($this->uri->segment(4));
+    $this->data['arsip']  = $this->Arsip_model->get_all_combobox_arsip_available_by_instansi($this->uri->segment(4));
 
     $this->load->view('back/arsip/v_arsip', $this->data);
   }

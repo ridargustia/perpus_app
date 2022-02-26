@@ -1080,10 +1080,10 @@ class Arsip_model extends CI_Model
     }
   }
 
-  function get_all_combobox_arsip_available_by_instansi()
+  function get_all_combobox_arsip_available_by_instansi($instansi_id)
   {
     $this->db->where('is_available', '1');
-    $this->db->where('instansi_id', $this->session->userdata('instansi_id'));
+    $this->db->where('instansi_id', $instansi_id);
 
     $this->db->order_by('arsip_name');
 
