@@ -93,6 +93,26 @@
             <li <?php if($this->uri->segment(2) == 'auth' && $this->uri->segment(3) == 'deleted_list'){echo 'class="active"';} ?>><a href="<?php echo base_url('admin/auth/deleted_list') ?>"><i class="fa fa-circle-o"></i> Recycle Bin</a></li>
           </ul>
         </li>
+        <li class="<?php if($this->uri->segment(2) == 'menu'){echo "active";} ?> treeview">
+          <a href="#">
+            <i class="fa fa-list"></i> <span>Menu Management</span>
+            <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+          </a>
+          <ul class="treeview-menu">
+            <li <?php if($this->uri->segment(2) == 'menu' && $this->uri->segment(3) == 'create'){echo 'class="active"';} ?>><a href="<?php echo base_url('admin/menu/create') ?>"><i class="fa fa-circle-o"></i> Add Menu</a></li>
+            <li <?php if($this->uri->segment(2) == 'menu' && $this->uri->segment(3) == ''){echo 'class="active"';} ?>><a href="<?php echo base_url('admin/menu') ?>"><i class="fa fa-circle-o"></i> Menu List</a></li>
+          </ul>
+        </li>
+        <li class="<?php if($this->uri->segment(2) == 'submenu'){echo "active";} ?> treeview">
+          <a href="#">
+            <i class="fa fa-list"></i> <span>SubMenu Management</span>
+            <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+          </a>
+          <ul class="treeview-menu">
+            <li <?php if($this->uri->segment(2) == 'submenu' && $this->uri->segment(3) == 'create'){echo 'class="active"';} ?>><a href="<?php echo base_url('admin/submenu/create') ?>"><i class="fa fa-circle-o"></i> Add SubMenu</a></li>
+            <li <?php if($this->uri->segment(2) == 'submenu' && $this->uri->segment(3) == ''){echo 'class="active"';} ?>><a href="<?php echo base_url('admin/submenu') ?>"><i class="fa fa-circle-o"></i> SubMenu List</a></li>
+          </ul>
+        </li>
         <li class="<?php if($this->uri->segment(2) == 'menuaccess'){echo "active";} ?> treeview">
           <a href="#">
             <i class="fa fa-users"></i> <span>Menu Access Management</span>

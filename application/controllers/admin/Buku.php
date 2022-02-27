@@ -349,7 +349,7 @@ class Buku extends CI_Controller
     $this->form_validation->set_rules('rak_id', 'Rak', 'required');
     $this->form_validation->set_rules('baris_id', 'Baris', 'required');
     $this->form_validation->set_rules('penulis_buku', 'Penulis Buku', 'required');
-    // $this->form_validation->set_rules('jumlah_halaman', 'Jumlah Halaman', 'required|number');
+    $this->form_validation->set_rules('jumlah_halaman', 'Jumlah Halaman', 'required|is_numeric');
     $this->form_validation->set_rules('bahasa_id', 'Bahasa', 'required');
     $this->form_validation->set_rules('tema_buku', 'Tema/Topik Buku', 'required');
     $this->form_validation->set_rules('penerbit', 'Penerbit', 'required');
@@ -357,7 +357,7 @@ class Buku extends CI_Controller
 
     $this->form_validation->set_message('required', '{field} wajib diisi');
     $this->form_validation->set_message('is_unique', '{field} sudah ada, ganti dengan yang lain');
-    $this->form_validation->set_message('number', '{field} harus berisi angka');
+    $this->form_validation->set_message('is_numeric', '{field} harus berisi angka');
 
     $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
 
