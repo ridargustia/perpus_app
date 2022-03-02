@@ -44,6 +44,12 @@ class Anggota_model extends CI_Model
         return $this->db->get($this->table)->row();
     }
 
+    function soft_delete($id, $data)
+    {
+        $this->db->where($this->id, $id);
+        $this->db->update($this->table, $data);
+    }
+
     function update($id, $data)
     {
         $this->db->where($this->id, $id);

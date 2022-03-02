@@ -263,6 +263,31 @@ class Anggota extends CI_Controller
             redirect('admin/anggota');
         }
     }
+
+    function delete($id)
+    {
+        is_delete();
+
+        $delete = $this->Anggota_model->get_by_id($id);
+
+        if ($delete) {
+            $data = array(
+                'is_delete'         => '1',
+                'deleted_by'        => $this->session->username,
+                'deleted_at'        => date('Y-m-d H:i:a'),
+            );
+
+            $this->Anggota_model->soft_delete($id, $data);
+
+            write_log();
+
+            $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil dihapus</div>');
+            redirect('admin/anggota');
+        } else {
+            $this->session->set_flashdata('message', '<div class="alert alert-danger">Data tidak ditemukan</div>');
+            redirect('admin/anggota');
+        }
+    }
 }
 
 ?>
