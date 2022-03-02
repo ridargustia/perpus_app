@@ -288,6 +288,65 @@ class Anggota extends CI_Controller
             redirect('admin/anggota');
         }
     }
+
+    function delete_permanent($id)
+    {
+        is_delete();
+
+        $delete = $this->Anggota_model->get_by_id($id);
+
+        if ($delete) {
+            $this->Anggota_model->delete($id);
+
+            write_log();
+
+            $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil dihapus permanen</div>');
+            redirect('admin/anggota/deleted_list');
+        } else {
+            $this->session->set_flashdata('message', '<div class="alert alert-danger">Data tidak ditemukan</div>');
+            redirect('admin/anggota');
+        }
+    }
+
+    function deleted_list()
+    {
+        is_restore();
+
+        $this->data['page_title'] = 'Recycle Bin ' . $this->data['module'];
+
+        if (is_grandadmin()) {
+            $this->data['get_all_deleted'] = $this->Anggota_model->get_all_deleted();
+        } elseif (is_masteradmin()) {
+            $this->data['get_all_deleted'] = $this->Anggota_model->get_all_deleted_by_instansi();
+        } 
+
+        $this->load->view('back/anggota/anggota_deleted_list', $this->data);
+    }
+
+    function restore($id)
+    {
+        is_restore();
+
+        $row = $this->Anggota_model->get_by_id($id);
+
+        if ($row) {
+            $data = array(
+                'is_delete'         => '0',
+                'deleted_by'        => NULL,
+                'deleted_at'        => NULL,
+            );
+
+            $this->Anggota_model->update($id, $data);
+
+            write_log();
+
+            $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil dikembalikan</div>');
+            redirect('admin/anggota/deleted_list');
+        } else {
+            $this->session->set_flashdata('message', '<div class="alert alert-danger">Data tidak ditemukan</div>');
+            redirect('admin/anggota');
+        }
+    }
 }
 
 ?>
