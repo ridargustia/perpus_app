@@ -38,6 +38,26 @@ class Anggota_model extends CI_Model
         return $this->db->get($this->table)->result();
     }
 
+    function get_all_combobox_by_instansi($instansi_id)
+    {
+        $this->db->where('anggota.instansi_id', $instansi_id);
+        $this->db->where('anggota.is_delete', 0);
+
+        $this->db->order_by('no_induk');
+
+        $data = $this->db->get($this->table);
+
+        if ($data->num_rows() > 0) {
+            foreach ($data->result_array() as $row) {
+                $result[''] = '- Silahkan Pilih No Induk Anggota -';
+                $result[$row['id_anggota']] = $row['no_induk'];
+            }
+        } else {
+            $result[''] = '- No Induk Tidak Tersedia -';
+        }
+        return $result;
+    }
+
     function get_all_deleted()
     {
         $this->db->join('instansi', 'anggota.instansi_id = instansi.id_instansi', 'left');

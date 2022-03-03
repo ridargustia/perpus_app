@@ -347,6 +347,39 @@ class Anggota extends CI_Controller
             redirect('admin/anggota');
         }
     }
+
+    function pilih_anggota()
+    {
+        $this->data['anggota']  = $this->Anggota_model->get_all_combobox_by_instansi($this->uri->segment(4));
+        $this->load->view('back/anggota/v_anggota', $this->data);
+    }
+
+    function get_anggota($id_anggota = '')
+    {
+        $this->db->join('instansi', 'anggota.instansi_id = instansi.id_instansi');
+
+        $data = $this->db->get_where('anggota', array('id_anggota' => $id_anggota));
+
+        if ($data->num_rows() != 0) {
+            if ($data->row()->gender == '1') {
+                $gender = "Laki-laki";
+            } elseif ($data->row()->gender == '2') {
+                $gender = "Perempuan";
+            }
+
+            $output['success'] = 1;
+
+            $output['anggota_name']       = $data->row()->anggota_name;
+            $output['gender']           = $gender;
+            $output['angkatan']    = $data->row()->angkatan;
+            $output['address']    = $data->row()->address;
+            $output['instansi_name']  = $data->row()->instansi_name;
+        } else {
+            $output['success'] = 0;
+        }
+
+        echo json_encode($output);
+    }
 }
 
 ?>

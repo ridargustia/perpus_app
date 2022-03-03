@@ -22,9 +22,9 @@
       <?php if ($this->session->flashdata('message')) {
         echo $this->session->flashdata('message');
       } ?>
+      <?php echo form_open($action) ?>
       <?php echo validation_errors() ?>
       <div class="box box-primary">
-        <?php echo form_open($action) ?>
         <div class="box-body">
           <div class="form-group"><label>Tanggal Peminjaman</label>
             <?php echo form_input($tgl_peminjaman) ?>
@@ -46,8 +46,8 @@
                 </div>
               </div>
               <div class="col-lg-4">
-                <div class="form-group"><label>Nama Peminjam Buku</label>
-                  <?php echo form_input($peminjam) ?>
+                <div class="form-group"><label>No Induk Peminjam Buku</label>
+                  <?php echo form_dropdown('', array('' => '- Pilih Perguruan Tinggi Dulu -'), '', $no_induk) ?>
                 </div>
               </div>
             </div>
@@ -61,23 +61,53 @@
                 </div>
               </div>
               <div class="col-lg-6">
-                <div class="form-group"><label>Nama Peminjam Buku</label>
-                <?php echo form_input($peminjam) ?>
+                <div class="form-group"><label>No Induk Peminjam Buku</label>
+                <?php echo form_dropdown('', $get_all_combobox_anggota, '', $no_induk) ?>
                 </div>
               </div>
             </div>
 
           <?php } ?>
+        </div>
+        <!-- /.box-body -->
+      </div>
 
+      <!-- /.box -->
+      <div class="box box-primary">
+        <div class="box-header with-border">
+          <h3 class="box-title">DATA ANGGOTA</h3>
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+          </div>
+        </div>
+        <div class="box-body">
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="form-group"><label>Nama Anggota</label>
+                <?php echo form_input($anggota_name) ?>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group"><label>Jenis Kelamin</label>
+                <?php echo form_input($gender) ?>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group"><label>Angkatan</label>
+                <?php echo form_input($angkatan) ?>
+              </div>
+            </div>
+          </div>
+          <div class="form-group"><label>Address</label>
+            <?php echo form_textarea($address) ?>
+          </div>
         </div>
         <div class="box-footer">
           <button type="submit" name="button" class="btn btn-success"><i class="fa fa-save"></i> <?php echo $btn_submit ?></button>
           <button type="reset" name="button" class="btn btn-danger"><i class="fa fa-refresh"></i> <?php echo $btn_reset ?></button>
         </div>
-        <!-- /.box-body -->
-        <?php echo form_close() ?>
       </div>
-      <!-- /.box -->
+      <?php echo form_close() ?>
     </section>
     <!-- /.content -->
   </div>
@@ -111,6 +141,11 @@
       });
     });
     $(document).ready(function() {
+      $("#no_induk").select2({
+        // placeholder: "Silahkan Pilih Arsip",
+      });
+    });
+    $(document).ready(function() {
       $("#user_id").select2({
         // placeholder: "Silahkan Pilih Peminjam",
       });
@@ -132,41 +167,23 @@
     //   });
     // });
 
-    function tampilCabang() {
-      instansi_id = document.getElementById("instansi_id").value;
+    $('#no_induk').on('change', function() {
+      var no_induk = $(this).val();
+      // alert(no_induk);
       $.ajax({
-        url: "<?php echo base_url(); ?>admin/cabang/pilih_cabang/" + instansi_id + "",
+        url: "<?php echo base_url('admin/anggota/get_anggota/') ?>" + no_induk,
         success: function(response) {
-          $("#cabang_id").html(response);
-        },
-        dataType: "html"
-      });
-      return false;
-    }
+          var myObj = JSON.parse(response);
 
-    function tampilDivisi() {
-      cabang_id = document.getElementById("cabang_id").value;
-      $.ajax({
-        url: "<?php echo base_url(); ?>admin/divisi/pilih_divisi/" + cabang_id + "",
-        success: function(response) {
-          $("#divisi_id").html(response);
-        },
-        dataType: "html"
-      });
-      return false;
-    }
+          $('#anggota_name').val(myObj.anggota_name);
+          $('#gender').val(myObj.gender);
+          $('#angkatan').val(myObj.angkatan);
+          $('#address').val(myObj.address);
+          // $('#instansi_id').val(myObj.instansi_name);
 
-    function tampilBagian() {
-      divisi_id = document.getElementById("divisi_id").value;
-      $.ajax({
-        url: "<?php echo base_url(); ?>admin/bagian/pilih_bagian/" + divisi_id + "",
-        success: function(response) {
-          $("#bagian_id").html(response);
-        },
-        dataType: "html"
+        }
       });
-      return false;
-    }
+    });
 
     function tampilArsip() {
       instansi_id = document.getElementById("instansi_id").value;
@@ -174,6 +191,18 @@
         url: "<?php echo base_url(); ?>admin/buku/pilih_arsip_available/" + instansi_id + "",
         success: function(response) {
           $("#arsip_id").html(response);
+        },
+        dataType: "html"
+      });
+      return false;
+    }
+
+    function tampilNoInduk() {
+      instansi_id = document.getElementById("instansi_id").value;
+      $.ajax({
+        url: "<?php echo base_url(); ?>admin/anggota/pilih_anggota/" + instansi_id + "",
+        success: function(response) {
+          $("#no_induk").html(response);
         },
         dataType: "html"
       });

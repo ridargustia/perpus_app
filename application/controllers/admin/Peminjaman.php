@@ -10,7 +10,7 @@ class Peminjaman extends CI_Controller
 
     $this->data['module'] = 'Peminjaman';
 
-    $this->load->model(array('Peminjaman_model', 'Pengembalian_model', 'Arsip_model'));
+    $this->load->model(array('Peminjaman_model', 'Pengembalian_model', 'Arsip_model', 'Anggota_model'));
 
     $this->data['company_data']             = $this->Company_model->company_profile();
     $this->data['layout_template']          = $this->Template_model->layout();
@@ -65,6 +65,7 @@ class Peminjaman extends CI_Controller
     } elseif (is_masteradmin()) {
       $this->data['get_all_combobox_user']                = $this->Auth_model->get_all_combobox_by_instansi($this->session->instansi_id);
       $this->data['get_all_combobox_arsip_available']     = $this->Arsip_model->get_all_combobox_arsip_available_by_instansi($this->session->instansi_id);
+      $this->data['get_all_combobox_anggota']     = $this->Anggota_model->get_all_combobox_by_instansi($this->session->instansi_id);
     } 
 
     $this->data['tgl_peminjaman'] = [
@@ -89,9 +90,9 @@ class Peminjaman extends CI_Controller
       'class'         => 'form-control',
       'required'      => '',
     ];
-    $this->data['peminjam'] = [
-      'name'          => 'peminjam',
-      'id'            => 'peminjam',
+    $this->data['no_induk'] = [
+      'name'          => 'no_induk',
+      'id'            => 'no_induk',
       'class'         => 'form-control',
       'required'      => '',
     ];
@@ -99,29 +100,37 @@ class Peminjaman extends CI_Controller
       'name'          => 'instansi_id',
       'id'            => 'instansi_id',
       'class'         => 'form-control',
-      'onChange'      => 'tampilArsip()',
+      'onChange'      => 'tampilArsip(), tampilNoInduk()',
       'required'      => '',
     ];
-    $this->data['cabang_id'] = [
-      'name'          => 'cabang_id',
-      'id'            => 'cabang_id',
+    $this->data['anggota_name'] = [
+      'name'          => 'anggota_name',
+      'id'            => 'anggota_name',
       'class'         => 'form-control',
-      'onChange'      => 'tampilDivisi()',
       'required'      => '',
+      'readonly'      => '',
     ];
-    $this->data['divisi_id'] = [
-      'name'          => 'divisi_id',
-      'id'            => 'divisi_id',
+    $this->data['gender'] = [
+      'name'          => 'gender',
+      'id'            => 'gender',
       'class'         => 'form-control',
-      'onChange'      => 'tampilBagian()',
       'required'      => '',
+      'readonly'      => '',
     ];
-    $this->data['bagian_id'] = [
-      'name'          => 'bagian_id',
-      'id'            => 'bagian_id',
+    $this->data['angkatan'] = [
+      'name'          => 'angkatan',
+      'id'            => 'angkatan',
       'class'         => 'form-control',
-      'onChange'      => 'tampilArsip()',
       'required'      => '',
+      'readonly'      => '',
+    ];
+    $this->data['address'] = [
+      'name'          => 'address',
+      'id'            => 'address',
+      'class'         => 'form-control',
+      'rows'          => '2',
+      'required'      => '',
+      'readonly'      => '',
     ];
 
     $this->load->view('back/peminjaman/peminjaman_add', $this->data);
