@@ -149,6 +149,13 @@
           </div>
 
           <div class="form-group">
+            <label class="col-lg-2 control-label">Jumlah/Stok Buku</label>
+            <div class="col-lg-10">
+            <?php echo form_input($qty) ?>
+            </div>
+          </div>
+
+          <div class="form-group">
             <label class="col-lg-2 control-label">Upload Cover Buku</label>
             <div class="col-lg-10">
               <input type="file" name="cover" id="cover" onchange="coverPreview(this, 'preview')" />

@@ -41,12 +41,6 @@ class Peminjaman extends CI_Controller
       $this->data['get_all'] = $this->Peminjaman_model->get_all();
     } elseif (is_masteradmin()) {
       $this->data['get_all'] = $this->Peminjaman_model->get_all_by_instansi();
-    } elseif (is_superadmin()) {
-      $this->data['get_all'] = $this->Peminjaman_model->get_all_by_cabang();
-    } elseif (is_admin()) {
-      $this->data['get_all'] = $this->Peminjaman_model->get_all_by_divisi();
-    } else {
-      $this->data['get_all'] = $this->Peminjaman_model->get_all_by_bagian();
     }
 
     $this->load->view('back/peminjaman/peminjaman_list', $this->data);
@@ -140,8 +134,8 @@ class Peminjaman extends CI_Controller
   {
     $this->form_validation->set_rules('tgl_peminjaman', 'Tanggal Peminjaman', 'trim|required');
     $this->form_validation->set_rules('tgl_kembali', 'Tanggal Pengembalian', 'trim|required');
-    $this->form_validation->set_rules('arsip_id', 'Nama Arsip yang Dipinjam', 'trim|required');
-    $this->form_validation->set_rules('user_id', 'Nama Peminjam', 'trim|required');
+    $this->form_validation->set_rules('arsip_id', 'Judul Buku yang Dipinjam', 'trim|required');
+    $this->form_validation->set_rules('no_induk', 'No Induk Peminjam', 'required');
 
     $this->form_validation->set_message('required', '{field} wajib diisi');
 
@@ -151,30 +145,9 @@ class Peminjaman extends CI_Controller
 
     if (is_grandadmin()) {
       $instansi_id  = $this->input->post('instansi_id');
-      $cabang_id    = $this->input->post('cabang_id');
-      $divisi_id    = $this->input->post('divisi_id');
-      $bagian_id    = $this->input->post('bagian_id');
     } elseif (is_masteradmin()) {
       $instansi_id  = $this->session->instansi_id;
-      $cabang_id    = $this->input->post('cabang_id');
-      $divisi_id    = $this->input->post('divisi_id');
-      $bagian_id    = $this->input->post('bagian_id');
-    } elseif (is_superadmin()) {
-      $instansi_id  = $this->session->instansi_id;
-      $cabang_id    = $this->session->cabang_id;
-      $divisi_id    = $this->input->post('divisi_id');
-      $bagian_id    = $this->input->post('bagian_id');
-    } elseif (is_admin()) {
-      $instansi_id  = $this->session->instansi_id;
-      $cabang_id    = $this->session->cabang_id;
-      $divisi_id    = $this->session->divisi_id;
-      $bagian_id    = $this->input->post('bagian_id');
-    } elseif (is_pegawai()) {
-      $instansi_id  = $this->session->instansi_id;
-      $cabang_id    = $this->session->cabang_id;
-      $divisi_id    = $this->session->divisi_id;
-      $bagian_id    = $this->session->bagian_id;
-    }
+    } 
 
     if ($this->form_validation->run() === FALSE) {
       $this->create();
@@ -183,23 +156,22 @@ class Peminjaman extends CI_Controller
         'tgl_peminjaman'    => $this->input->post('tgl_peminjaman'),
         'tgl_kembali'       => $this->input->post('tgl_kembali'),
         'arsip_id'          => $this->input->post('arsip_id'),
-        'user_id'           => $this->input->post('user_id'),
+        'anggota_id'        => $this->input->post('no_induk'),
         'instansi_id'       => $instansi_id,
-        'cabang_id'         => $cabang_id,
-        'divisi_id'         => $divisi_id,
-        'bagian_id'         => $bagian_id,
-        // 'instansi_id'       => $data_user->instansi_id,
-        // 'cabang_id'         => $data_user->cabang_id,
-        // 'divisi_id'         => $data_user->divisi_id,
         'created_by'        => $this->session->username,
       );
-
+      // var_dump($this->input->post('no_induk'));
+      // die();
       $this->Peminjaman_model->insert($data);
       write_log();
 
-      // mengganti status is_available arsip menjadi sedang dipinjam
+      $data_buku = $this->Arsip_model->get_by_id($this->input->post('arsip_id'));
+
+      $stok_result = $data_buku->qty - 1;
+
+      // mengurangi qty buku karena buku sedang dipinjam
       $this->db->where('id_arsip', $this->input->post('arsip_id'));
-      $this->db->update('arsip', array('is_available' => '0'));
+      $this->db->update('arsip', array('qty' => $stok_result));
 
       write_log();
 

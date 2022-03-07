@@ -38,6 +38,7 @@
                   <th style="text-align: center">Rak</th>
                   <th style="text-align: center">Baris</th>
                   <th style="text-align: center">Status Peminjaman</th>
+                  <th style="text-align: center">Stok</th>
                   <th style="text-align: center">Created By</th>
                   <th style="text-align: center">Aksi</th>
                 </tr>
@@ -48,9 +49,9 @@
                 foreach ($get_all as $data) {
 
                   // status peminjaman
-                  if ($data->is_available == '0') {
+                  if ($data->qty <= 0) {
                     $is_available = "<button class='btn btn-xs btn-danger'><i class='fa fa-remove'></i> DIPINJAM</button> ";
-                  } elseif ($data->is_available == '1') {
+                  } elseif ($data->qty > 0) {
                     $is_available = "<button class='btn btn-xs btn-success'><i class='fa fa-check'></i> TERSEDIA</button>";
                   }
                   
@@ -67,6 +68,7 @@
                     <td style="text-align: center"><?php echo $data->rak_name ?></td>
                     <td style="text-align: center"><?php echo $data->baris_name ?></td>
                     <td style="text-align: center"><?php echo $is_available ?></td>
+                    <td style="text-align: center"><?php echo $data->qty ?></td>
                     <td style="text-align: center"><?php echo $data->created_by_arsip ?></td>
                     <td style="text-align: center"><?php echo $detail . ' '; echo $edit . ' '; echo $delete; ?></td>
                   </tr>

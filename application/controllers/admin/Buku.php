@@ -337,6 +337,12 @@ class Buku extends CI_Controller
       'class'         => 'form-control',
       'required'      => '',
     ];
+    $this->data['qty'] = [
+      'name'          => 'qty',
+      'id'            => 'qty',
+      'class'         => 'form-control',
+      'required'      => '',
+    ];
 
     $this->load->view('back/arsip/arsip_add', $this->data);
   }
@@ -354,6 +360,7 @@ class Buku extends CI_Controller
     $this->form_validation->set_rules('tema_buku', 'Tema/Topik Buku', 'required');
     $this->form_validation->set_rules('penerbit', 'Penerbit', 'required');
     $this->form_validation->set_rules('kota_penerbit', 'Kota Penerbit', 'required');
+    $this->form_validation->set_rules('qty', 'Jumlah/Stok Buku', 'required|is_numeric');
 
     $this->form_validation->set_message('required', '{field} wajib diisi');
     $this->form_validation->set_message('is_unique', '{field} sudah ada, ganti dengan yang lain');
@@ -426,6 +433,7 @@ class Buku extends CI_Controller
             'tahun_terbit'                    => $this->input->post('tahun_terbit'),
             'deskripsi_arsip'                 => $deskripsi,
             'is_available'                    => '1',
+            'qty'                             => $this->input->post('qty'),
             'created_by'                      => $this->session->userdata('username'),
             'cover_buku'                      => $this->upload->data('file_name'),
             'cover_buku_thumb'                => $nmfile . '_thumb' . $this->upload->data('file_ext'),
@@ -455,6 +463,7 @@ class Buku extends CI_Controller
           'tahun_terbit'                    => $this->input->post('tahun_terbit'),
           'deskripsi_arsip'                 => $deskripsi,
           'is_available'                    => '1',
+          'qty'                             => $this->input->post('qty'),
           'created_by'                      => $this->session->userdata('username'),
         );
 
@@ -670,6 +679,13 @@ class Buku extends CI_Controller
         'class'         => 'form-control',
         'autocomplete'  => 'off',
       ];
+      $this->data['qty'] = [
+        'name'          => 'qty',
+        'id'            => 'qty',
+        'class'         => 'form-control',
+        'autocomplete'  => 'off',
+        'required'      => '',
+      ];
 
       $this->load->view('back/arsip/arsip_edit', $this->data);
     } else {
@@ -684,8 +700,10 @@ class Buku extends CI_Controller
     $this->form_validation->set_rules('rak_id', 'Rak', 'required');
     $this->form_validation->set_rules('baris_id', 'Baris', 'required');
     $this->form_validation->set_rules('arsip_name', 'Nama Arsip', 'trim|required');
+    $this->form_validation->set_rules('qty', 'Jumlah/Stok Buku', 'required|is_numeric');
 
     $this->form_validation->set_message('required', '{field} wajib diisi');
+    $this->form_validation->set_message('is_numeric', '{field} harus berisi angka');
 
     $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
 
@@ -764,6 +782,7 @@ class Buku extends CI_Controller
             'kota_penerbit'                   => $this->input->post('kota_penerbit'),
             'tahun_terbit'                    => $this->input->post('tahun_terbit'),
             'deskripsi_arsip'                 => $deskripsi,
+            'qty'                             => $this->input->post('qty'),
             'modified_by'                     => $this->session->userdata('username'),
             'cover_buku'                      => $this->upload->data('file_name'),
             'cover_buku_thumb'                => $nmfile . '_thumb' . $this->upload->data('file_ext'),
@@ -790,6 +809,7 @@ class Buku extends CI_Controller
           'kota_penerbit'                   => $this->input->post('kota_penerbit'),
           'tahun_terbit'                    => $this->input->post('tahun_terbit'),
           'deskripsi_arsip'                 => $deskripsi,
+          'qty'                             => $this->input->post('qty'),
           'modified_by'                     => $this->session->userdata('username'),
         );
 

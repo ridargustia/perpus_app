@@ -32,13 +32,10 @@
                   <th style="text-align: center">No</th>
                   <th style="text-align: center">Tgl Peminjaman</th>
                   <th style="text-align: center">Tgl Pengembalian</th>
-                  <th style="text-align: center">Nama Arsip</th>
+                  <th style="text-align: center">No/Label Buku</th>
+                  <th style="text-align: center">Judul Buku</th>
+                  <th style="text-align: center">No Induk Peminjam</th>
                   <th style="text-align: center">Nama Peminjam</th>
-                  <th style="text-align: center">Divisi</th>
-                  <th style="text-align: center">Program Studi</th>
-                  <?php if(is_grandadmin() or is_masteradmin()) { ?>
-                  <th style="text-align: center">Fakultas</th>
-                  <?php } ?>
                   <?php if(is_grandadmin()) { ?>
                   <th style="text-align: center">Perguruan Tinggi</th>
                   <?php } ?>
@@ -52,25 +49,22 @@
                   // action
                   if($data->is_kembali == '0')
                   {
-                    $kembalikan = '<a href="'.base_url('admin/peminjaman/set_kembali/'.$data->id_peminjaman).'" class="btn btn-info" title="Kembalikan Arsip"><i class="fa fa-rotate-left"></i></a>';
+                    $kembalikan = '<a href="'.base_url('admin/peminjaman/set_kembali/'.$data->id_peminjaman).'" class="btn btn-info" title="Kembalikan Buku"><i class="fa fa-rotate-left"></i></a>';
                   }
                   else {
                     $kembalikan = '';
                   }
                   $edit = '<a href="'.base_url('admin/peminjaman/update/'.$data->id_peminjaman).'" class="btn btn-warning" title="Ubah Data"><i class="fa fa-pencil"></i></a>';
-                  $delete = '<a href="'.base_url('admin/peminjaman/delete/'.$data->id_peminjaman).'" onClick="return confirm(\'Are you sure?\');" class="btn btn-danger" title="Hapus Data"><i class="fa fa-trash"></i></a>';
+                  $delete = '<a href="'.base_url('admin/peminjaman/delete/'.$data->id_peminjaman).'" onClick="return confirm(\'Apakah anda yakin ingin menghapus data?\');" class="btn btn-danger" title="Hapus Data"><i class="fa fa-trash"></i></a>';
                 ?>
                   <tr>
                     <td style="text-align: center"><?php echo $no++ ?></td>
                     <td style="text-align: center"><?php echo date_only($data->tgl_peminjaman) ?></td>
                     <td style="text-align: center"><?php echo date_only($data->tgl_kembali) ?></td>
+                    <td style="text-align: left"><?php echo $data->no_arsip ?></td>
                     <td style="text-align: left"><?php echo $data->arsip_name ?></td>
-                    <td style="text-align: center"><?php echo $data->name ?></td>
-                    <td style="text-align: center"><?php echo $data->bagian_name ?></td>
-                    <td style="text-align: center"><?php echo $data->divisi_name ?></td>
-                    <?php if(is_grandadmin() or is_masteradmin()) { ?>
-                    <td style="text-align: center"><?php echo $data->cabang_name ?></td>
-                    <?php } ?>
+                    <td style="text-align: center"><?php echo $data->no_induk ?></td>
+                    <td style="text-align: center"><?php echo $data->anggota_name ?></td>
                     <?php if(is_grandadmin()) { ?>
                     <td style="text-align: center"><?php echo $data->instansi_name ?></td>
                     <?php } ?>
@@ -85,13 +79,10 @@
                   <th style="text-align: center">No</th>
                   <th style="text-align: center">Tgl Peminjaman</th>
                   <th style="text-align: center">Tgl Pengembalian</th>
-                  <th style="text-align: center">Nama Arsip</th>
+                  <th style="text-align: center">No/Label Buku</th>
+                  <th style="text-align: center">Judul Buku</th>
+                  <th style="text-align: center">No Induk Peminjam</th>
                   <th style="text-align: center">Nama Peminjam</th>
-                  <th style="text-align: center">Divisi</th>
-                  <th style="text-align: center">Program Studi</th>
-                  <?php if(is_grandadmin() or is_masteradmin()) { ?>
-                  <th style="text-align: center">Fakultas</th>
-                  <?php } ?>
                   <?php if(is_grandadmin()) { ?>
                   <th style="text-align: center">Perguruan Tinggi</th>
                   <?php } ?>

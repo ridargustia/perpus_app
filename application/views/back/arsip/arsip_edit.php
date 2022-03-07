@@ -136,6 +136,13 @@
           </div>
 
           <div class="form-group">
+            <label class="col-lg-2 control-label">Jumlah/Stok Buku</label>
+            <div class="col-lg-10">
+            <?php echo form_input($qty, $arsip->qty) ?>
+            </div>
+          </div>
+
+          <div class="form-group">
             <label class="col-lg-2 control-label">Current Cover</label>
             <div class="col-lg-10">
               <p>

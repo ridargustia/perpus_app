@@ -42,19 +42,24 @@
             <p><?php echo $detail_arsip->deskripsi_arsip ?></p>
           </div>
           <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-3">
               <div class="form-group"><label>Lokasi Arsip</label>
                 <p><?php echo $detail_arsip->lokasi_name ?></p>
               </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-3">
               <div class="form-group"><label>Rak</label>
                 <p><?php echo $detail_arsip->rak_name ?></p>
               </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-3">
               <div class="form-group"><label>Baris</label>
                 <p><?php echo $detail_arsip->baris_name ?></p>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="form-group"><label>Jumlah/Stok Buku</label>
+                <p><?php echo $detail_arsip->qty ?></p>
               </div>
             </div>
           </div>

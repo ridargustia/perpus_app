@@ -11,7 +11,7 @@ class Arsip_model extends CI_Model
   function get_all()
   {
     $this->db->select('
-      arsip.id_arsip, arsip.arsip_name, arsip.deskripsi_arsip, arsip.no_arsip, arsip.lokasi_id, arsip.is_available, arsip.is_delete, baris.baris_name, rak.rak_name, lokasi.lokasi_name, instansi.instansi_name, arsip.created_by as created_by_arsip
+      arsip.id_arsip, arsip.arsip_name, arsip.deskripsi_arsip, arsip.no_arsip, arsip.lokasi_id, arsip.is_available, arsip.qty, arsip.is_delete, baris.baris_name, rak.rak_name, lokasi.lokasi_name, instansi.instansi_name, arsip.created_by as created_by_arsip
     ');
 
     $this->db->join('instansi', 'arsip.instansi_id = instansi.id_instansi', 'LEFT');
@@ -110,7 +110,7 @@ class Arsip_model extends CI_Model
   function get_all_by_instansi()
   {
     $this->db->select('
-      arsip.id_arsip, arsip.arsip_name, arsip.deskripsi_arsip, arsip.no_arsip, arsip.lokasi_id, arsip.is_available, arsip.is_delete, baris.baris_name, rak.rak_name, lokasi.lokasi_name, instansi.instansi_name, arsip.created_by as created_by_arsip
+      arsip.id_arsip, arsip.arsip_name, arsip.deskripsi_arsip, arsip.no_arsip, arsip.lokasi_id, arsip.is_available, arsip.qty, arsip.is_delete, baris.baris_name, rak.rak_name, lokasi.lokasi_name, instansi.instansi_name, arsip.created_by as created_by_arsip
     ');
 
     $this->db->join('instansi', 'arsip.instansi_id = instansi.id_instansi', 'LEFT');
@@ -1561,7 +1561,7 @@ class Arsip_model extends CI_Model
   function get_detail($id)
   {
     $this->db->select('
-      arsip.id_arsip, arsip.arsip_name, arsip.no_arsip, arsip.deskripsi_arsip, arsip.lokasi_id, arsip.is_available, arsip.created_by as pembuat_arsip, arsip.created_at as waktu_dibuat, arsip.instansi_id, arsip.is_delete,
+      arsip.id_arsip, arsip.arsip_name, arsip.no_arsip, arsip.deskripsi_arsip, arsip.lokasi_id, arsip.is_available, arsip.qty, arsip.created_by as pembuat_arsip, arsip.created_at as waktu_dibuat, arsip.instansi_id, arsip.is_delete,
       baris.baris_name, instansi.instansi_name, rak.rak_name,
       lokasi.lokasi_name, arsip.cover_buku_thumb
     ');
