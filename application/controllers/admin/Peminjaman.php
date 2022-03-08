@@ -194,24 +194,10 @@ class Peminjaman extends CI_Controller
         $this->data['get_all_combobox_user']                = $this->Auth_model->get_all_combobox();
         $this->data['get_all_combobox_arsip_available']     = $this->Arsip_model->get_all_combobox_arsip_available();
         $this->data['get_all_combobox_instansi']            = $this->Instansi_model->get_all_combobox();
-        $this->data['get_all_combobox_divisi']              = $this->Divisi_model->get_all_combobox();
+        
       } elseif (is_masteradmin()) {
-        $this->data['get_all_combobox_user']                = $this->Auth_model->get_all_combobox_by_instansi($this->session->instansi_id);
+        $this->data['get_all_combobox_anggota']                = $this->Anggota_model->get_all_combobox_by_instansi($this->session->instansi_id);
         $this->data['get_all_combobox_arsip_available']     = $this->Arsip_model->get_all_combobox_arsip_available_by_instansi($this->session->instansi_id);
-        $this->data['get_all_combobox_instansi']            = $this->Instansi_model->get_all_combobox_by_instansi($this->session->instansi_id);
-        $this->data['get_all_combobox_cabang']              = $this->Cabang_model->get_all_combobox_by_instansi($this->session->instansi_id);
-        $this->data['get_all_combobox_divisi']              = $this->Divisi_model->get_all_combobox_by_instansi($this->session->instansi_id);
-      } elseif (is_superadmin()) {
-        $this->data['get_all_combobox_user']                = $this->Auth_model->get_all_combobox_by_instansi($this->session->instansi_id);
-        $this->data['get_all_combobox_arsip_available']     = $this->Arsip_model->get_all_combobox_arsip_available_by_cabang($this->session->instansi_id);
-        $this->data['get_all_combobox_divisi']              = $this->Divisi_model->get_all_combobox_by_cabang($this->session->cabang_id);
-      } elseif (is_admin()) {
-        $this->data['get_all_combobox_user']                = $this->Auth_model->get_all_combobox_by_instansi($this->session->instansi_id);
-        $this->data['get_all_combobox_bagian']              = $this->Bagian_model->get_all_combobox_by_divisi($this->session->divisi_id);
-        $this->data['get_all_combobox_arsip_available']     = $this->Arsip_model->get_all_combobox_arsip_available_by_divisi($this->session->divisi_id);
-      } elseif (is_pegawai()) {
-        $this->data['get_all_combobox_user']                = $this->Auth_model->get_all_combobox_by_instansi($this->session->instansi_id);
-        $this->data['get_all_combobox_arsip_available']     = $this->Arsip_model->get_all_combobox_arsip_available_by_bagian($this->session->bagian_id);
       }
 
       $this->data['id_peminjaman'] = [
@@ -232,9 +218,9 @@ class Peminjaman extends CI_Controller
         'autocomplete'  => 'off',
         'required'      => '',
       ];
-      $this->data['user_id'] = [
-        'name'          => 'user_id',
-        'id'            => 'user_id',
+      $this->data['no_induk'] = [
+        'name'          => 'no_induk',
+        'id'            => 'no_induk',
         'class'         => 'form-control',
       ];
       $this->data['new_arsip'] = [
@@ -246,7 +232,7 @@ class Peminjaman extends CI_Controller
         'name'          => 'instansi_id',
         'id'            => 'instansi_id',
         'class'         => 'form-control',
-        'onChange'      => 'tampilCabang()',
+        'onChange'      => 'tampilArsip(), tampilNoInduk()',
         'required'      => '',
       ];
       $this->data['cabang_id'] = [
