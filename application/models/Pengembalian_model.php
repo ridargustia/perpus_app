@@ -10,24 +10,19 @@ class Pengembalian_model extends CI_Model{
   function get_all()
   {
     $this->db->select('
-      id_pengembalian, tgl_kembali, pengembalian.divisi_id, pengembalian.user_id, pengembalian.arsip_id, pengembalian.created_at, pengembalian.created_by,
-      users.id_users, users.name,
+      id_pengembalian, tgl_kembali, pengembalian.anggota_id, pengembalian.arsip_id, pengembalian.created_at, pengembalian.created_by,
+      anggota.id_anggota, anggota.anggota_name,
       arsip.id_arsip, arsip.arsip_name,
-      instansi.instansi_name,
-      cabang.cabang_name,
-      divisi.divisi_name, bagian.bagian_name
+      instansi.instansi_name
     ');
 
-    $this->db->join('users', 'pengembalian.user_id = users.id_users', 'LEFT');
+    $this->db->join('anggota', 'pengembalian.anggota_id = anggota.id_anggota', 'LEFT');
     $this->db->join('arsip', 'pengembalian.arsip_id = arsip.id_arsip', 'LEFT');
-    $this->db->join('bagian', 'pengembalian.bagian_id = bagian.id_bagian', 'LEFT');
-    $this->db->join('divisi', 'pengembalian.divisi_id = divisi.id_divisi', 'LEFT');
-    $this->db->join('cabang', 'pengembalian.cabang_id = cabang.id_cabang', 'LEFT');
     $this->db->join('instansi', 'pengembalian.instansi_id = instansi.id_instansi', 'LEFT');
 
     $this->db->where('is_delete_pengembalian', '0');
 
-    $this->db->order_by('id_pengembalian', 'DESC');
+    $this->db->order_by($this->id, $this->order);
 
     return $this->db->get($this->table)->result();
   }
@@ -35,25 +30,20 @@ class Pengembalian_model extends CI_Model{
   function get_all_by_instansi()
   {
     $this->db->select('
-      id_pengembalian, tgl_kembali, pengembalian.divisi_id, pengembalian.user_id, pengembalian.arsip_id, pengembalian.created_at, pengembalian.created_by,
-      users.id_users, users.name,
+      id_pengembalian, tgl_kembali, pengembalian.anggota_id, pengembalian.arsip_id, pengembalian.created_at, pengembalian.created_by,
+      anggota.id_anggota, anggota.anggota_name,
       arsip.id_arsip, arsip.arsip_name,
-      instansi.instansi_name,
-      cabang.cabang_name,
-      divisi.divisi_name, bagian.bagian_name
+      instansi.instansi_name
     ');
 
-    $this->db->join('users', 'pengembalian.user_id = users.id_users', 'LEFT');
+    $this->db->join('anggota', 'pengembalian.anggota_id = anggota.id_anggota', 'LEFT');
     $this->db->join('arsip', 'pengembalian.arsip_id = arsip.id_arsip', 'LEFT');
     $this->db->join('instansi', 'pengembalian.instansi_id = instansi.id_instansi', 'LEFT');
-    $this->db->join('cabang', 'pengembalian.cabang_id = cabang.id_cabang', 'LEFT');
-    $this->db->join('divisi', 'pengembalian.divisi_id = divisi.id_divisi', 'LEFT');
-    $this->db->join('bagian', 'pengembalian.bagian_id = bagian.id_bagian', 'LEFT');
 
     $this->db->where('is_delete_pengembalian', '0');
     $this->db->where('pengembalian.instansi_id', $this->session->instansi_id);
 
-    $this->db->order_by('id_pengembalian', 'DESC');
+    $this->db->order_by($this->id, $this->order);
 
     return $this->db->get($this->table)->result();
   }

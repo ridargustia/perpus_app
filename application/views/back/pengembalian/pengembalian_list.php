@@ -31,13 +31,8 @@
                 <tr>
                   <th style="text-align: center">No</th>
                   <th style="text-align: center">Dikembalikan Pada</th>
-                  <th style="text-align: center">Nama Arsip</th>
+                  <th style="text-align: center">Judul Buku</th>
                   <th style="text-align: center">Nama Peminjam</th>
-                  <th style="text-align: center">Divisi</th>
-                  <th style="text-align: center">Program Studi</th>
-                  <?php if(is_grandadmin() or is_masteradmin()) { ?>
-                  <th style="text-align: center">Fakultas</th>
-                  <?php } ?>
                   <?php if(is_grandadmin()) { ?>
                   <th style="text-align: center">Perguruan Tinggi</th>
                   <?php } ?>
@@ -50,18 +45,13 @@
                 <?php $no = 1; foreach($get_all as $data){
                   // action
                   $edit = '<a href="'.base_url('admin/pengembalian/update/'.$data->id_pengembalian).'" class="btn btn-warning" title="Ubah Data"><i class="fa fa-pencil"></i></a>';
-                  $delete = '<a href="'.base_url('admin/pengembalian/delete/'.$data->id_pengembalian).'" onClick="return confirm(\'Are you sure?\');" class="btn btn-danger" title="Hapus Data"><i class="fa fa-trash"></i></a>';
+                  $delete = '<a href="'.base_url('admin/pengembalian/delete/'.$data->id_pengembalian).'" onClick="return confirm(\'Apakah anda yakin ingin hapus data?\');" class="btn btn-danger" title="Hapus Data"><i class="fa fa-trash"></i></a>';
                 ?>
                   <tr>
                     <td style="text-align: center"><?php echo $no++ ?></td>
                     <td style="text-align: center"><?php echo date_only($data->tgl_kembali) ?></td>
                     <td style="text-align: left"><?php echo $data->arsip_name ?></td>
-                    <td style="text-align: center"><?php echo $data->name ?></td>
-                    <td style="text-align: left"><?php echo $data->bagian_name ?></td>
-                    <td style="text-align: left"><?php echo $data->divisi_name ?></td>
-                    <?php if(is_grandadmin() or is_masteradmin()) { ?>
-                    <td style="text-align: left"><?php echo $data->cabang_name ?></td>
-                    <?php } ?>
+                    <td style="text-align: center"><?php echo $data->anggota_name ?></td>
                     <?php if(is_grandadmin()) { ?>
                     <td style="text-align: left"><?php echo $data->instansi_name ?></td>
                     <?php } ?>
@@ -75,13 +65,8 @@
                 <tr>
                   <th style="text-align: center">No</th>
                   <th style="text-align: center">Dikembalikan Pada</th>
-                  <th style="text-align: center">Nama Arsip</th>
+                  <th style="text-align: center">Judul Buku</th>
                   <th style="text-align: center">Nama Peminjam</th>
-                  <th style="text-align: center">Divisi</th>
-                  <th style="text-align: center">Program Studi</th>
-                  <?php if(is_grandadmin() or is_masteradmin()) { ?>
-                  <th style="text-align: center">Fakultas</th>
-                  <?php } ?>
                   <?php if(is_grandadmin()) { ?>
                   <th style="text-align: center">Perguruan Tinggi</th>
                   <?php } ?>

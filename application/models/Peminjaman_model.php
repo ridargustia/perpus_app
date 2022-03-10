@@ -178,18 +178,14 @@ class Peminjaman_model extends CI_Model{
   function get_all_deleted()
   {
     $this->db->select('
-      id_peminjaman, tgl_peminjaman, tgl_kembali, peminjaman.divisi_id as divisi, peminjaman.user_id, peminjaman.arsip_id, peminjaman.is_kembali, peminjaman.created_at,
-      users.id_users, users.name,
+      id_peminjaman, tgl_peminjaman, tgl_kembali, peminjaman.anggota_id, peminjaman.arsip_id, peminjaman.is_kembali, peminjaman.created_at,
+      anggota.id_anggota, anggota.anggota_name,
       arsip.id_arsip, arsip.arsip_name,
-      divisi.divisi_name,
-      cabang.cabang_name,
       instansi.instansi_name
     ');
 
-    $this->db->join('users', 'peminjaman.user_id = users.id_users', 'LEFT');
+    $this->db->join('anggota', 'peminjaman.anggota_id = anggota.id_anggota', 'LEFT');
     $this->db->join('arsip', 'peminjaman.arsip_id = arsip.id_arsip', 'LEFT');
-    $this->db->join('divisi', 'peminjaman.divisi_id = divisi.id_divisi', 'LEFT');
-    $this->db->join('cabang', 'peminjaman.cabang_id = cabang.id_cabang', 'LEFT');
     $this->db->join('instansi', 'peminjaman.instansi_id = instansi.id_instansi', 'LEFT');
 
     $this->db->where('is_delete_peminjaman', '1');
@@ -200,18 +196,14 @@ class Peminjaman_model extends CI_Model{
   function get_all_deleted_by_instansi()
   {
     $this->db->select('
-      id_peminjaman, tgl_peminjaman, tgl_kembali, peminjaman.divisi_id as divisi, peminjaman.user_id, peminjaman.arsip_id, peminjaman.is_kembali, peminjaman.created_at,
-      users.id_users, users.name,
+      id_peminjaman, tgl_peminjaman, tgl_kembali, peminjaman.anggota_id, peminjaman.arsip_id, peminjaman.is_kembali, peminjaman.created_at,
+      anggota.id_anggota, anggota.anggota_name,
       arsip.id_arsip, arsip.arsip_name,
-      divisi.divisi_name,
-      cabang.cabang_name,
       instansi.instansi_name
     ');
 
-    $this->db->join('users', 'peminjaman.user_id = users.id_users', 'LEFT');
+    $this->db->join('anggota', 'peminjaman.anggota_id = anggota.id_anggota', 'LEFT');
     $this->db->join('arsip', 'peminjaman.arsip_id = arsip.id_arsip', 'LEFT');
-    $this->db->join('divisi', 'peminjaman.divisi_id = divisi.id_divisi', 'LEFT');
-    $this->db->join('cabang', 'peminjaman.cabang_id = cabang.id_cabang', 'LEFT');
     $this->db->join('instansi', 'peminjaman.instansi_id = instansi.id_instansi', 'LEFT');
 
     $this->db->where('peminjaman.instansi_id', $this->session->instansi_id);

@@ -22,9 +22,9 @@
       <?php if ($this->session->flashdata('message')) {
         echo $this->session->flashdata('message');
       } ?>
+      <?php echo form_open($action) ?>
       <?php echo validation_errors() ?>
       <div class="box box-primary">
-        <?php echo form_open($action) ?>
         <div class="box-body">
           <div class="row">
             <div class="col-md-6">
@@ -116,15 +116,47 @@
 
           <?php } ?>
         </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+
+      <!-- /.box -->
+      <div class="box box-primary">
+        <div class="box-header with-border">
+          <h3 class="box-title">DATA ANGGOTA</h3>
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+          </div>
+        </div>
+        <div class="box-body">
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="form-group"><label>Nama Anggota</label>
+                <?php echo form_input($anggota_name) ?>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group"><label>Jenis Kelamin</label>
+                <?php echo form_input($gender) ?>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group"><label>Angkatan</label>
+                <?php echo form_input($angkatan) ?>
+              </div>
+            </div>
+          </div>
+          <div class="form-group"><label>Address</label>
+            <?php echo form_textarea($address) ?>
+          </div>
+        </div>
         <?php echo form_input($id_peminjaman, $peminjaman->id_peminjaman) ?>
         <div class="box-footer">
           <button type="submit" name="button" class="btn btn-success"><i class="fa fa-save"></i> <?php echo $btn_submit ?></button>
           <button type="reset" name="button" class="btn btn-danger"><i class="fa fa-refresh"></i> <?php echo $btn_reset ?></button>
         </div>
-        <!-- /.box-body -->
-        <?php echo form_close() ?>
       </div>
-      <!-- /.box -->
+      <?php echo form_close() ?>
     </section>
     <!-- /.content -->
   </div>
@@ -159,7 +191,7 @@
       });
     });
     $(document).ready(function() {
-      $("#user_id").select2({
+      $("#no_induk").select2({
         // placeholder: "Pilih Divisi Dulu",
       });
     });
@@ -203,6 +235,24 @@
       });
       return false;
     }
+
+    $('#no_induk').on('change', function() {
+      var no_induk = $(this).val();
+      // alert(no_induk);
+      $.ajax({
+        url: "<?php echo base_url('admin/anggota/get_anggota/') ?>" + no_induk,
+        success: function(response) {
+          var myObj = JSON.parse(response);
+
+          $('#anggota_name').val(myObj.anggota_name);
+          $('#gender').val(myObj.gender);
+          $('#angkatan').val(myObj.angkatan);
+          $('#address').val(myObj.address);
+          // $('#instansi_id').val(myObj.instansi_name);
+
+        }
+      });
+    });
 
     // function tampilUser() {
     //   divisi_id = document.getElementById("divisi_id").value;

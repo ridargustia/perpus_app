@@ -10,7 +10,7 @@ class Pengembalian extends CI_Controller
 
     $this->data['module'] = 'Pengembalian';
 
-    $this->load->model(array('Pengembalian_model', 'Arsip_model', 'Peminjaman_model'));
+    $this->load->model(array('Pengembalian_model', 'Arsip_model', 'Peminjaman_model', 'Anggota_model'));
 
     $this->data['company_data']             = $this->Company_model->company_profile();
     $this->data['layout_template']          = $this->Template_model->layout();
@@ -18,7 +18,6 @@ class Pengembalian extends CI_Controller
     $this->data['footer']                   = $this->Footer_model->footer();
 
     $this->data['get_all_combobox_instansi']  = $this->Instansi_model->get_all_combobox();
-    $this->data['get_all_combobox_divisi']  = $this->Divisi_model->get_all_combobox();
 
     $this->data['btn_submit'] = 'Save';
     $this->data['btn_reset']  = 'Reset';
@@ -44,12 +43,6 @@ class Pengembalian extends CI_Controller
       $this->data['get_all'] = $this->Pengembalian_model->get_all();
     } elseif (is_masteradmin()) {
       $this->data['get_all'] = $this->Pengembalian_model->get_all_by_instansi();
-    } elseif (is_superadmin()) {
-      $this->data['get_all'] = $this->Pengembalian_model->get_all_by_cabang();
-    } elseif (is_admin()) {
-      $this->data['get_all'] = $this->Pengembalian_model->get_all_by_divisi();
-    } else {
-      $this->data['get_all'] = $this->Pengembalian_model->get_all_by_bagian();
     }
 
     $this->load->view('back/pengembalian/pengembalian_list', $this->data);

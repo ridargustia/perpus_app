@@ -30,11 +30,11 @@
                   <th style="text-align: center">No</th>
                   <th style="text-align: center">Tgl Peminjaman</th>
                   <th style="text-align: center">Tgl Pengembalian</th>
-                  <th style="text-align: center">Nama Arsip</th>
+                  <th style="text-align: center">Judul Buku</th>
                   <th style="text-align: center">Nama Peminjam</th>
-                  <th style="text-align: center">Program Studi</th>
-                  <th style="text-align: center">Fakultas</th>
+                  <?php if (is_grandadmin()) { ?>
                   <th style="text-align: center">Perguruan Tinggi</th>
+                  <?php } ?>
                   <th style="text-align: center">Created At</th>
                   <th style="text-align: center">Aksi</th>
                 </tr>
@@ -42,18 +42,18 @@
               <tbody>
                 <?php $no = 1; foreach($get_all_deleted as $data){
                   // action
-                  $restore = '<a href="'.base_url('admin/peminjaman/restore/'.$data->id_peminjaman).'" class="btn btn-sm btn-primary" title="Restore Arsip"><i class="fa fa-refresh"></i></a>';
-                  $delete = '<a href="'.base_url('admin/peminjaman/delete_permanent/'.$data->id_peminjaman).'" onClick="return confirm(\'Are you sure?\');" class="btn btn-sm btn-danger" title="Hapus Permanen"><i class="fa fa-remove"></i></a>';
+                  $restore = '<a href="'.base_url('admin/peminjaman/restore/'.$data->id_peminjaman).'" class="btn btn-sm btn-primary" title="Restore Buku"><i class="fa fa-refresh"></i></a>';
+                  $delete = '<a href="'.base_url('admin/peminjaman/delete_permanent/'.$data->id_peminjaman).'" onClick="return confirm(\'Apakah anda yakin ingin hapus data secara permanen?\');" class="btn btn-sm btn-danger" title="Hapus Permanen"><i class="fa fa-remove"></i></a>';
                 ?>
                   <tr>
                     <td style="text-align: center"><?php echo $no++ ?></td>
                     <td style="text-align: center"><?php echo date_only($data->tgl_peminjaman) ?></td>
                     <td style="text-align: center"><?php echo date_only($data->tgl_kembali) ?></td>
                     <td style="text-align: left"><?php echo $data->arsip_name ?></td>
-                    <td style="text-align: left"><?php echo $data->name ?></td>
-                    <td style="text-align: left"><?php echo $data->divisi_name ?></td>
-                    <td style="text-align: left"><?php echo $data->cabang_name ?></td>
+                    <td style="text-align: left"><?php echo $data->anggota_name ?></td>
+                    <?php if (is_grandadmin()) { ?>
                     <td style="text-align: left"><?php echo $data->instansi_name ?></td>
+                    <?php } ?>
                     <td style="text-align: center"><?php echo datetime_indo($data->created_at) ?></td>
                     <td style="text-align: center"><?php echo $restore ?> <?php echo $delete ?></td>
                   </tr>
@@ -64,11 +64,11 @@
                   <th style="text-align: center">No</th>
                   <th style="text-align: center">Tgl Peminjaman</th>
                   <th style="text-align: center">Tgl Pengembalian</th>
-                  <th style="text-align: center">Nama Arsip</th>
+                  <th style="text-align: center">Judul Buku</th>
                   <th style="text-align: center">Nama Peminjam</th>
-                  <th style="text-align: center">Program Studi</th>
-                  <th style="text-align: center">Fakultas</th>
+                  <?php if (is_grandadmin()) { ?>
                   <th style="text-align: center">Perguruan Tinggi</th>
+                  <?php } ?>
                   <th style="text-align: center">Created At</th>
                   <th style="text-align: center">Aksi</th>
                 </tr>
