@@ -507,23 +507,25 @@ class Peminjaman extends CI_Controller
 
   function get_peminjaman($peminjaman_id = '')
   {
-    $this->db->join('users', 'peminjaman.user_id = users.id_users');
-    $this->db->join('bagian', 'peminjaman.bagian_id = bagian.id_bagian');
-    $this->db->join('divisi', 'peminjaman.divisi_id = divisi.id_divisi');
-    $this->db->join('cabang', 'peminjaman.cabang_id = cabang.id_cabang');
+    $this->db->join('anggota', 'peminjaman.anggota_id = anggota.id_anggota');
     $this->db->join('instansi', 'peminjaman.instansi_id = instansi.id_instansi');
 
     $data = $this->db->get_where('peminjaman', array('id_peminjaman' => $peminjaman_id, 'is_kembali' => 0));
 
     if ($data->num_rows() != 0) {
+      if ($data->row()->gender == '1') {
+          $gender = "Laki-laki";
+      } elseif ($data->row()->gender == '2') {
+          $gender = "Perempuan";
+      }
+
       $output['success'] = 1;
 
       $output['arsip_id']       = $data->row()->arsip_id;
-      $output['name']           = $data->row()->name;
-      $output['bagian_name']    = $data->row()->bagian_name;
-      $output['divisi_name']    = $data->row()->divisi_name;
-      $output['cabang_name']    = $data->row()->cabang_name;
-      $output['instansi_name']  = $data->row()->instansi_name;
+      $output['anggota_name']           = $data->row()->anggota_name;
+      $output['no_induk']           = $data->row()->no_induk;
+      $output['gender']           = $gender;
+      $output['address']  = $data->row()->address;
     } else {
       $output['success'] = 0;
     }

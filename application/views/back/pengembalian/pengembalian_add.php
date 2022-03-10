@@ -29,33 +29,29 @@
           <div class="form-group"><label>Tanggal Pengembalian (*)</label>
             <?php echo form_input($tgl_kembali) ?>
           </div>
-          <div class="form-group"><label>Nama Arsip yang Akan Dikembalikan</label>
+          <div class="form-group"><label>Judul Buku yang Akan Dikembalikan</label>
             <?php echo form_dropdown('', $get_all_combobox_arsip_peminjaman, '', $peminjaman_id) ?>
           </div>
-          <div class="form-group"><label>Nama Peminjam</label>
-            <?php echo form_input($user_id); ?>
-          </div>
+          
           <div class="row">
-            <div class="col-lg-3">
-              <div class="form-group"><label>Divisi</label>
-                <?php echo form_input($bagian_id); ?>
+            <div class="col-lg-4">
+              <div class="form-group"><label>Nama Peminjam</label>
+                <?php echo form_input($anggota_id); ?>
               </div>
             </div>
-            <div class="col-lg-3">
-              <div class="form-group"><label>Program Studi</label>
-                <?php echo form_input($divisi_id); ?>
+            <div class="col-lg-4">
+              <div class="form-group"><label>No Induk Peminjam</label>
+                <?php echo form_input($no_induk); ?>
               </div>
             </div>
-            <div class="col-lg-3">
-              <div class="form-group"><label>Fakultas</label>
-                <?php echo form_input($cabang_id); ?>
+            <div class="col-lg-4">
+              <div class="form-group"><label>Jenis Kelamin</label>
+                <?php echo form_input($gender); ?>
               </div>
             </div>
-            <div class="col-lg-3">
-              <div class="form-group"><label>Perguruan Tinggi</label>
-                <?php echo form_input($instansi_id); ?>
-              </div>
-            </div>
+          </div>
+          <div class="form-group"><label>Address</label>
+            <?php echo form_textarea($address); ?>
           </div>
         </div>
         <?php echo form_input($arsip_id); ?>
@@ -104,11 +100,10 @@
           var myObj = JSON.parse(response);
 
           $('#arsip_id').val(myObj.arsip_id);
-          $('#user_id').val(myObj.name);
-          $('#bagian_id').val(myObj.bagian_name);
-          $('#divisi_id').val(myObj.divisi_name);
-          $('#cabang_id').val(myObj.cabang_name);
-          $('#instansi_id').val(myObj.instansi_name);
+          $('#anggota_id').val(myObj.anggota_name);
+          $('#no_induk').val(myObj.no_induk);
+          $('#gender').val(myObj.gender);
+          $('#address').val(myObj.address);
 
         }
       });

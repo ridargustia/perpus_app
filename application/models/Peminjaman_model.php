@@ -368,14 +368,14 @@ class Peminjaman_model extends CI_Model{
     {
       foreach($data->result_array() as $row)
       {
-        $result[''] = '- Silahkan Pilih Arsip';
+        $result[''] = '- Silahkan Pilih Buku';
         $result[$row['id_peminjaman']] = $row['arsip_name'];
       }
       return $result;
     }
     else
     {
-      $result[''] = '- Belum Ada Data Peminjaman Arsip -';
+      $result[''] = '- Belum Ada Data Peminjaman Buku -';
       return $result;
     }
   }
@@ -415,14 +415,14 @@ class Peminjaman_model extends CI_Model{
     {
       foreach($data->result_array() as $row)
       {
-        $result[''] = '- Silahkan Pilih Arsip';
+        $result[''] = '- Silahkan Pilih Buku';
         $result[$row['id_peminjaman']] = $row['arsip_name'];
       }
       return $result;
     }
     else
     {
-      $result[''] = '- Belum Ada Data Peminjaman Arsip -';
+      $result[''] = '- Belum Ada Data Peminjaman Buku -';
       return $result;
     }
   }
