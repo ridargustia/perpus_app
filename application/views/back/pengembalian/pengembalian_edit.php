@@ -30,33 +30,31 @@
 
             <div class="row">
               <div class="col-lg-6">
-                <div class="form-group"><label>Arsip yang Dipinjam Saat Ini</label>
+                <div class="form-group"><label>Buku yang Dipinjam Saat Ini</label>
                   <p><button class="btn bg-navy" name="button"><?php echo $pengembalian->arsip_name ?></button></p>
                 </div>
               </div>
               <div class="col-lg-6">
-                <div class="form-group"><label>Peminjam Arsip Saat Ini</label>
-                  <p><button class="btn bg-navy" name="button"><?php echo $pengembalian->name ?></button></p>
+                <div class="form-group"><label>No/Label Buku Saat Ini</label>
+                  <p><button class="btn bg-navy" name="button"><?php echo $pengembalian->no_arsip ?></button></p>
                 </div>
               </div>
             </div>
 
             <div class="row">
               <div class="col-lg-6">
-                <div class="form-group"><label>Divisi Saat Ini</label>
-                  <p><button class="btn bg-navy" name="button"><?php echo $pengembalian->bagian_name ?></button></p>
+                <div class="form-group"><label>Peminjam Buku Saat Ini</label>
+                  <p><button class="btn bg-navy" name="button"><?php echo $pengembalian->anggota_name ?></button></p>
                 </div>
               </div>
               <div class="col-lg-6">
-                <div class="form-group"><label>Program Studi Saat Ini</label>
-                  <p><button class="btn bg-navy" name="button"><?php echo $pengembalian->divisi_name ?></button></p>
+                <div class="form-group"><label>No Induk Peminjam Saat Ini</label>
+                  <p><button class="btn bg-navy" name="button"><?php echo $pengembalian->no_induk ?></button></p>
                 </div>
               </div>
-              <div class="col-lg-6">
-                <div class="form-group"><label>Fakultas Saat Ini</label>
-                  <p><button class="btn bg-navy" name="button"><?php echo $pengembalian->cabang_name ?></button></p>
-                </div>
-              </div>
+            </div>
+
+            <div class="row">
               <div class="col-lg-6">
                 <div class="form-group"><label>Perguruan Tinggi Saat Ini</label>
                   <p><button class="btn bg-navy" name="button"><?php echo $pengembalian->instansi_name ?></button></p>
@@ -64,31 +62,40 @@
               </div>
             </div>
 
-            <div class="form-group"><label>Arsip Baru yang Akan Dikembalikan</label>
+            <div class="form-group"><label>Buku Baru yang Akan Dikembalikan</label>
               <?php echo form_dropdown('', $get_all_combobox_arsip_peminjaman, '', $peminjaman_id) ?>
-            </div>
-
-            <div class="form-group"><label>Peminjam Arsip Baru(*)</label>
-              <?php echo form_input($user_id) ?>
             </div>
 
             <div class="row">
               <div class="col-md-3">
-                <div class="form-group"><label>Divisi</label>
-                  <?php echo form_input($bagian_id) ?>
+                <div class="form-group"><label>No/Label Buku Baru(*)</label>
+                  <?php echo form_input($no_arsip) ?>
                 </div>
               </div>
               <div class="col-md-3">
-                <div class="form-group"><label>Program Studi</label>
-                  <?php echo form_input($divisi_id) ?>
+                <div class="form-group"><label>Nama Peminjam Buku Baru(*)</label>
+                  <?php echo form_input($anggota_id) ?>
                 </div>
               </div>
               <div class="col-md-3">
-                <div class="form-group"><label>Fakultas</label>
-                  <?php echo form_input($cabang_id) ?>
+                <div class="form-group"><label>No Induk Peminjam Baru</label>
+                  <?php echo form_input($no_induk) ?>
                 </div>
               </div>
               <div class="col-md-3">
+                <div class="form-group"><label>Jenis Kelamin</label>
+                  <?php echo form_input($gender) ?>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group"><label>Alamat</label>
+                  <?php echo form_input($address) ?>
+                </div>
+              </div>
+              <div class="col-md-6">
                 <div class="form-group"><label>Perguruan Tinggi</label>
                   <?php echo form_input($instansi_id) ?>
                 </div>
@@ -98,6 +105,7 @@
           </div>
           <?php echo form_input($id_pengembalian, $pengembalian->id_pengembalian) ?>
           <?php echo form_input($arsip_id, $pengembalian->arsip_id) ?>
+          <?php echo form_input($id_peminjaman, $pengembalian->peminjaman_id) ?>
           <div class="box-footer">
             <button type="submit" name="button" class="btn btn-success"><i class="fa fa-save"></i> <?php echo $btn_submit ?></button>
             <button type="reset" name="button" class="btn btn-danger"><i class="fa fa-refresh"></i> <?php echo $btn_reset ?></button>
@@ -143,12 +151,12 @@
         success: function(response){
           var myObj = JSON.parse(response);
 
-          $('#user_id').val(myObj.name);
-          $('#bagian_id').val(myObj.bagian_name);
-          $('#divisi_id').val(myObj.divisi_name);
-          $('#cabang_id').val(myObj.cabang_name);
+          $('#anggota_id').val(myObj.anggota_name);
+          $('#no_induk').val(myObj.no_induk);
+          $('#gender').val(myObj.gender);
+          $('#address').val(myObj.address);
           $('#instansi_id').val(myObj.instansi_name);
-
+          $('#no_arsip').val(myObj.no_arsip);
         }
       });
     });

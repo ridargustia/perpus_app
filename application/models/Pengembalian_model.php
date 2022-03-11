@@ -356,20 +356,15 @@ class Pengembalian_model extends CI_Model{
   function get_by_id($id)
   {
     $this->db->select('
-      id_pengembalian, tgl_kembali, peminjaman_id, pengembalian.divisi_id as divisi, pengembalian.user_id, pengembalian.arsip_id,
-      users.id_users, users.name,
-      arsip.id_arsip, arsip.arsip_name,
-      instansi.instansi_name,
-      cabang.cabang_name,
-      divisi.divisi_name, bagian.bagian_name
+      id_pengembalian, tgl_kembali, peminjaman_id, pengembalian.anggota_id, pengembalian.arsip_id,
+      anggota.id_anggota, anggota.no_induk, anggota.anggota_name,
+      arsip.id_arsip, arsip.no_arsip, arsip.arsip_name,
+      instansi.instansi_name
     ');
 
     $this->db->join('arsip', 'pengembalian.arsip_id = arsip.id_arsip', 'LEFT');
-    $this->db->join('users', 'pengembalian.user_id = users.id_users', 'LEFT');
+    $this->db->join('anggota', 'pengembalian.anggota_id = anggota.id_anggota', 'LEFT');
     $this->db->join('instansi', 'pengembalian.instansi_id = instansi.id_instansi', 'LEFT');
-    $this->db->join('cabang', 'pengembalian.cabang_id = cabang.id_cabang', 'LEFT');
-    $this->db->join('divisi', 'pengembalian.divisi_id = divisi.id_divisi', 'LEFT');
-    $this->db->join('bagian', 'pengembalian.bagian_id = bagian.id_bagian', 'LEFT');
 
     $this->db->where($this->id, $id);
 

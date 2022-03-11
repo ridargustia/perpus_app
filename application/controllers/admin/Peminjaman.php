@@ -509,6 +509,7 @@ class Peminjaman extends CI_Controller
   {
     $this->db->join('anggota', 'peminjaman.anggota_id = anggota.id_anggota');
     $this->db->join('instansi', 'peminjaman.instansi_id = instansi.id_instansi');
+    $this->db->join('arsip', 'peminjaman.arsip_id = arsip.id_arsip');
 
     $data = $this->db->get_where('peminjaman', array('id_peminjaman' => $peminjaman_id, 'is_kembali' => 0));
 
@@ -526,6 +527,8 @@ class Peminjaman extends CI_Controller
       $output['no_induk']           = $data->row()->no_induk;
       $output['gender']           = $gender;
       $output['address']  = $data->row()->address;
+      $output['instansi_name']  = $data->row()->instansi_name;
+      $output['no_arsip']  = $data->row()->no_arsip;
     } else {
       $output['success'] = 0;
     }

@@ -622,17 +622,12 @@ class Peminjaman_model extends CI_Model{
   function get_peminjaman_for_update_pengembalian($id)
   {
     $this->db->select('
-      peminjaman.id_peminjaman, peminjaman.arsip_id, peminjaman.user_id, peminjaman.instansi_id, peminjaman.cabang_id, peminjaman.divisi_id, peminjaman.bagian_id,
-      users.id_users, users.name,
+      peminjaman.id_peminjaman, peminjaman.arsip_id, peminjaman.anggota_id, peminjaman.instansi_id,
+      anggota.id_anggota, anggota.anggota_name,
       instansi.instansi_name,
-      cabang.cabang_name,
-      divisi.divisi_name, bagian.bagian_name,
     ');
     
-    $this->db->join('users', 'peminjaman.user_id = users.id_users');
-    $this->db->join('bagian', 'peminjaman.bagian_id = bagian.id_bagian');
-    $this->db->join('divisi', 'peminjaman.divisi_id = divisi.id_divisi');
-    $this->db->join('cabang', 'peminjaman.cabang_id = cabang.id_cabang');
+    $this->db->join('anggota', 'peminjaman.anggota_id = anggota.id_anggota');
     $this->db->join('instansi', 'peminjaman.instansi_id = instansi.id_instansi');
     
     $this->db->where('peminjaman.id_peminjaman', $id);
