@@ -382,13 +382,7 @@ class Pengembalian extends CI_Controller
       $this->data['get_all_deleted'] = $this->Pengembalian_model->get_all_deleted();
     } elseif (is_masteradmin()) {
       $this->data['get_all_deleted'] = $this->Pengembalian_model->get_all_deleted_by_instansi();
-    } elseif (is_superadmin()) {
-      $this->data['get_all_deleted'] = $this->Pengembalian_model->get_all_deleted_by_cabang();
-    } elseif (is_admin()) {
-      $this->data['get_all_deleted'] = $this->Pengembalian_model->get_all_deleted_by_divisi();
-    } elseif (is_pegawai()) {
-      $this->data['get_all_deleted'] = $this->Pengembalian_model->get_all_deleted_by_bagian();
-    }
+    } 
 
     $this->load->view('back/pengembalian/pengembalian_deleted_list', $this->data);
   }
