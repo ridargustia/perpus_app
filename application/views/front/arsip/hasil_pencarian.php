@@ -60,23 +60,26 @@
                   $deskripsi_arsip = !empty($search_form) ? highlightWords($hasil->deskripsi_arsip, $search_form) : $hasil->deskripsi_arsip;
 
                   // status peminjaman
-                  if ($hasil->is_available == '0') {
+                  if ($hasil->qty <= 0) {
                     $is_available = "<button type='button' name='button' class='btn btn-xs btn-danger'>DIPINJAM</button> ";
-                  } elseif ($hasil->is_available == '1') {
-                    $is_available = "<button type='button' name='button' class='btn btn-xs btn-success'>TERSEDIA</button>";
+                  } elseif ($hasil->qty > 0) {
+                    $is_available = "<button type='button' name='button' class='btn btn-xs btn-success'>TERSEDIA " . $hasil->qty . " BUKU</button>";
                   }
                 ?>
                   <li class="item">
                     <div class="product-img">
-                      <img src="<?php echo base_url('assets/images/arsip.jpg') ?>">
+                      <?php if ($hasil->cover_buku_thumb != NULL) { ?>
+                      <img src="<?php echo base_url('assets/images/cover_buku/'.$hasil->cover_buku_thumb) ?>" style="height: 90px; width:70px;">
+                      <?php } else { ?>
+                      <img src="<?php echo base_url('assets/images/noimage.jpg') ?>" style="height: 90px; width:70px;">
+                      <?php } ?>
                     </div>
                     <div class="product-info">
-                      <font style="font-size: 15px; font-weight: bold"><?php echo $hasil->no_arsip ?></font><br>
-                      <a class="product-title">
-                        <font style="font-size: 18px"><?php echo $arsip_name ?></font>
+                      <a class="product-title" style="margin-left:15px">
+                        <font style="font-size: 23px"><?php echo $arsip_name ?></font>
                       </a>
-                      <span class="label label-danger pull-right"><i class="fa fa-tag"></i> <?php echo $hasil->divisi_name ?></span>
-                      <p>
+                      <span class="label label-danger pull-right" style="font-size:15px"><i class="fa fa-tag"></i> <?php echo $hasil->no_arsip ?></span>
+                      <p style="margin-left:25px">
                         <?php if ($hasil->deskripsi_arsip != NULL) {
                           echo '<font style="font-size: 15px">' . $deskripsi_arsip . '</font>';
                         } else {
@@ -88,12 +91,11 @@
                   <br>
                   <div class="row">
                     <div class="col-sm-8 text-left">
-                      Lokasi | <?php echo $hasil->lokasi_name . ' > Rak ' . $hasil->rak_name . ' > Baris ' . $hasil->baris_name . ' > Box ' . $hasil->box_name . ' > Map ' . $hasil->map_name ?>
-                      <button type="button" name="button" class="btn btn-xs btn-primary"><?php echo $hasil->jenis_name ?></button>
+                      Lokasi | <b><?php echo $hasil->lokasi_name . '</b> > <b>Rak ' . $hasil->rak_name . '</b> > <b>Baris ' . $hasil->baris_name . '</b>' ?>
                       <?php echo $is_available ?>
                     </div>
                     <div class="col-sm-4 text-right">
-                      <a href="<?php echo base_url('arsip/detail/' . $hasil->id_arsip) ?>" class="btn btn-sm btn-success"><i class="fa fa-search"></i> PREVIEW</a>
+                      <a href="<?php echo base_url('book/detail/' . $hasil->id_arsip) ?>" class="btn btn-sm btn-success"><i class="fa fa-search"></i> PREVIEW</a>
                     </div>
                   </div>
                   <hr>

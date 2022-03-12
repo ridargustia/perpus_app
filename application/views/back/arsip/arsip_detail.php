@@ -23,7 +23,7 @@
         <div class="box-body">
           <div class="row">
             <div class="col-sm-4">
-              <div class="form-group"><label>Nomor Buku</label>
+              <div class="form-group"><label>No/Label Buku</label>
                 <p><?php echo $detail_arsip->no_arsip ?></p>
               </div>
             </div>
@@ -43,7 +43,7 @@
           </div>
           <div class="row">
             <div class="col-sm-3">
-              <div class="form-group"><label>Lokasi Arsip</label>
+              <div class="form-group"><label>Lokasi Buku</label>
                 <p><?php echo $detail_arsip->lokasi_name ?></p>
               </div>
             </div>

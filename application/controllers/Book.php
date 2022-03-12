@@ -51,7 +51,7 @@ class Book extends CI_Controller
 
   function detail($id)
   {
-    $this->data['page_title']   = 'Detail Arsip';
+    $this->data['page_title']   = 'Detail Buku';
 
     $this->data['detail_arsip']   = $this->Arsip_model->get_by_id_front($id);
     $this->data['file_upload']    = $this->File_model->get_by_arsip_id($id);
