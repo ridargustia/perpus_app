@@ -1078,12 +1078,12 @@ class Arsip_model extends CI_Model
 
     if ($data->num_rows() > 0) {
       foreach ($data->result_array() as $row) {
-        $result[''] = '- Silahkan Pilih Arsip -';
+        $result[''] = '- Silahkan Pilih Buku -';
         $result[$row['id_arsip']] = $row['arsip_name'];
       }
       return $result;
     } else {
-      $result[''] = '- Semua Arsip Telah Dipinjam -';
+      $result[''] = '- Semua Buku Telah Dipinjam -';
       return $result;
     }
   }
