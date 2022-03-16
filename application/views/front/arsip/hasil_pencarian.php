@@ -78,7 +78,6 @@
                       <a class="product-title" style="margin-left:15px">
                         <font style="font-size: 23px"><?php echo $arsip_name ?></font>
                       </a>
-                      <span class="label label-danger pull-right" style="font-size:15px"><i class="fa fa-tag"></i> <?php echo $hasil->no_arsip ?></span>
                       <p style="margin-left:25px">
                         <?php if ($hasil->deskripsi_arsip != NULL) {
                           echo '<font style="font-size: 15px">' . $deskripsi_arsip . '</font>';
@@ -91,7 +90,7 @@
                   <br>
                   <div class="row">
                     <div class="col-sm-8 text-left">
-                      Lokasi | <b><?php echo $hasil->lokasi_name . '</b> > <b>Rak ' . $hasil->rak_name . '</b> > <b>Baris ' . $hasil->baris_name . '</b>' ?>
+                      Lokasi | <b><?php echo $hasil->lokasi_name . '</b> > <b>Rak ' . $hasil->rak_name . '</b> > <b>Baris ' . $hasil->baris_name . '</b> > <b>Label ' . $hasil->no_arsip . '</b>' ?>
                       <?php echo $is_available ?>
                     </div>
                     <div class="col-sm-4 text-right">

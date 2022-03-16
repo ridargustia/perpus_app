@@ -75,7 +75,7 @@
           <div class="form-group">
             <label class="col-lg-2 control-label">Nomor / Label Buku</label>
             <div class="col-lg-10">
-              <?php echo form_input($no_arsip, $arsip->no_arsip) ?>
+              <?php echo form_input($no_arsip, substr($arsip->no_arsip, 0, -6)) ?>
             </div>
           </div>
 

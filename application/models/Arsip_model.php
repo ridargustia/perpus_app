@@ -32,7 +32,7 @@ class Arsip_model extends CI_Model
   function get_all_front()
   {
     $this->db->select('
-      arsip.id_arsip, arsip.arsip_name, arsip.deskripsi_arsip, arsip.no_arsip, arsip.lokasi_id, arsip.status_file, arsip.is_delete, arsip.cover_buku_thumb, arsip.qty,
+      arsip.id_arsip, arsip.arsip_name, arsip.deskripsi_arsip, arsip.no_arsip, arsip.lokasi_id, arsip.status_file, arsip.is_delete, arsip.cover_buku_thumb, arsip.qty, arsip.penulis_buku,
       baris.baris_name,
       rak.rak_name,
       lokasi.lokasi_name,

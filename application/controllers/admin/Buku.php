@@ -377,6 +377,22 @@ class Buku extends CI_Controller
     if ($this->form_validation->run() === FALSE) {
       $this->create();
     } else {
+      //Membuat kode/inisial penulis buku
+      $convert_to_array = explode(" ", $this->input->post('penulis_buku'));
+
+      $count_array = count($convert_to_array);
+      $last_name = $convert_to_array[$count_array-1];
+      
+      $kode_label_penulis = substr($last_name, 0, 3);
+
+      $kode_penulis = strtoupper($kode_label_penulis);
+
+      //Membuat inisial judul buku (mengambil huruf depan)
+      $inisial_judul = strtolower(substr($this->input->post('arsip_name'), 0, 1));
+
+      //Digabung jadi satu kalimat
+      $label_buku = strtoupper($this->input->post('no_arsip')) . ' ' . $kode_penulis . ' ' . $inisial_judul;
+
       if ($this->input->post('tahun_terbit') == NULL) {
         $tahun_terbit = '-';
       } else {
@@ -388,6 +404,11 @@ class Buku extends CI_Controller
       $created_at = date('Y-m-d H:i:s');
 
       $deskripsi = 'Oleh '.$this->input->post('penulis_buku').'. Terdiri dari '.$this->input->post('jumlah_halaman').' halaman berbahasa '.$bahasa->bahasa.' tentang "'.$this->input->post('tema_buku').'". Diterbitkan di '.$this->input->post('kota_penerbit').' oleh '.$this->input->post('penerbit').' pada tahun '.$this->input->post('tahun_terbit').' dan kemudian menjadi koleksi perpustakaan sejak '.datetime_indo3($created_at);
+      // var_dump($_FILES['cover']['size']); die();
+      if ($_FILES['cover']['size'] > 2000000) {
+        $this->session->set_flashdata('message', '<div class="alert alert-danger alert">Ukuran gambar tidak boleh lebih dari 2 MB</div>');
+        redirect(base_url('admin/buku'));
+      }
 
       if ($_FILES['cover']['error'] <> 4) {
         $nmfile = strtolower(url_title($this->input->post('arsip_name'))) . date('YmdHis');
@@ -398,7 +419,7 @@ class Buku extends CI_Controller
         $config['file_name']        = $nmfile;
 
         $this->load->library('upload', $config);
-
+        
         if (!$this->upload->do_upload('cover')) {
           $error = array('error' => $this->upload->display_errors());
           $this->session->set_flashdata('message', '<div class="alert alert-danger">' . $error['error'] . '</div>');
@@ -422,7 +443,7 @@ class Buku extends CI_Controller
             'lokasi_id'                       => $this->input->post('lokasi_id'),
             'rak_id'                          => $this->input->post('rak_id'),
             'baris_id'                        => $this->input->post('baris_id'),
-            'no_arsip'                        => $this->input->post('no_arsip'),
+            'no_arsip'                        => $label_buku,
             'arsip_name'                      => $this->input->post('arsip_name'),
             'penulis_buku'                    => $this->input->post('penulis_buku'),
             'jumlah_halaman'                  => $this->input->post('jumlah_halaman'),
@@ -438,7 +459,7 @@ class Buku extends CI_Controller
             'cover_buku'                      => $this->upload->data('file_name'),
             'cover_buku_thumb'                => $nmfile . '_thumb' . $this->upload->data('file_ext'),
           );
-
+          
           // eksekusi query INSERT
           $this->Arsip_model->insert($data);
 
@@ -452,7 +473,7 @@ class Buku extends CI_Controller
           'lokasi_id'                       => $this->input->post('lokasi_id'),
           'rak_id'                          => $this->input->post('rak_id'),
           'baris_id'                        => $this->input->post('baris_id'),
-          'no_arsip'                        => $this->input->post('no_arsip'),
+          'no_arsip'                        => $label_buku,
           'arsip_name'                      => $this->input->post('arsip_name'),
           'penulis_buku'                    => $this->input->post('penulis_buku'),
           'jumlah_halaman'                  => $this->input->post('jumlah_halaman'),
@@ -716,6 +737,22 @@ class Buku extends CI_Controller
     if ($this->form_validation->run() === FALSE) {
       $this->update($this->input->post('id_arsip'));
     } else {
+      //Membuat kode/inisial penulis buku
+      $convert_to_array = explode(" ", $this->input->post('penulis_buku'));
+
+      $count_array = count($convert_to_array);
+      $last_name = $convert_to_array[$count_array-1];
+      
+      $kode_label_penulis = substr($last_name, 0, 3);
+
+      $kode_penulis = strtoupper($kode_label_penulis);
+
+      //Membuat inisial judul buku (mengambil huruf depan)
+      $inisial_judul = strtolower(substr($this->input->post('arsip_name'), 0, 1));
+
+      //Digabung jadi satu kalimat
+      $label_buku = strtoupper($this->input->post('no_arsip')) . ' ' . $kode_penulis . ' ' . $inisial_judul;
+
       if ($this->input->post('tahun_terbit') == NULL) {
         $tahun_terbit = '-';
       } else {
@@ -728,6 +765,11 @@ class Buku extends CI_Controller
       $created_at = $data_arsip->waktu_dibuat;
 
       $deskripsi = 'Oleh '.$this->input->post('penulis_buku').'. Terdiri dari '.$this->input->post('jumlah_halaman').' halaman berbahasa '.$bahasa->bahasa.' tentang "'.$this->input->post('tema_buku').'". Diterbitkan di '.$this->input->post('kota_penerbit').' oleh '.$this->input->post('penerbit').' pada tahun '.$this->input->post('tahun_terbit').' dan kemudian menjadi koleksi perpustakaan sejak '.datetime_indo3($created_at);
+
+      if ($_FILES['cover']['size'] > 2000000) {
+        $this->session->set_flashdata('message', '<div class="alert alert-danger alert">Ukuran cover tidak boleh lebih dari 2 MB</div>');
+        redirect(base_url('admin/buku'));
+      }
 
       if ($_FILES['cover']['error'] <> 4) {
         $nmfile = strtolower(url_title($this->input->post('arsip_name'))) . date('YmdHis');
@@ -772,7 +814,7 @@ class Buku extends CI_Controller
             'lokasi_id'                       => $this->input->post('lokasi_id'),
             'rak_id'                          => $this->input->post('rak_id'),
             'baris_id'                        => $this->input->post('baris_id'),
-            'no_arsip'                        => $this->input->post('no_arsip'),
+            'no_arsip'                        => $label_buku,
             'arsip_name'                      => $this->input->post('arsip_name'),
             'penulis_buku'                    => $this->input->post('penulis_buku'),
             'jumlah_halaman'                  => $this->input->post('jumlah_halaman'),
@@ -799,7 +841,7 @@ class Buku extends CI_Controller
           'lokasi_id'                       => $this->input->post('lokasi_id'),
           'rak_id'                          => $this->input->post('rak_id'),
           'baris_id'                        => $this->input->post('baris_id'),
-          'no_arsip'                        => $this->input->post('no_arsip'),
+          'no_arsip'                        => $label_buku,
           'arsip_name'                      => $this->input->post('arsip_name'),
           'penulis_buku'                    => $this->input->post('penulis_buku'),
           'jumlah_halaman'                  => $this->input->post('jumlah_halaman'),
