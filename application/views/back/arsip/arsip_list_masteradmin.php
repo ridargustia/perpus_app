@@ -56,7 +56,8 @@
                   
                   $edit   = '<a href="' . base_url('admin/buku/update/' . $data->id_arsip) . '" class="btn btn-sm btn-warning" title="Ubah Buku"><i class="fa fa-pencil"></i></a>';
                   $delete = '<a href="' . base_url('admin/buku/delete/' . $data->id_arsip) . '" onClick="return confirm(\'Apakah anda yakin ingin menghapus data?\');" class="btn btn-sm btn-danger" title="Hapus Buku"><i class="fa fa-trash"></i></a>';                    
-                  $detail = '<a href="' . base_url('admin/buku/detail/' . $data->id_arsip) . '" class="btn btn-sm bg-purple" title="Tampilkan Buku"><i class="fa fa-search-plus"></i></a>';                  
+                  $detail = '<a href="' . base_url('admin/buku/detail/' . $data->id_arsip) . '" class="btn btn-sm bg-purple" title="Tampilkan Buku"><i class="fa fa-search-plus"></i></a>';
+                  $print = '<a href="' . base_url('admin/buku/print/' . $data->id_arsip) . '" target="_blank" class="btn btn-sm btn-info" title="Cetak Label Buku"><i class="fa fa-print"></i></a>';              
                 ?>
                   <tr>
                     <td style="text-align: center"><?php echo $no++ ?></td>
@@ -68,7 +69,7 @@
                     <td style="text-align: center"><?php echo $is_available ?></td>
                     <td style="text-align: center"><?php echo $data->qty ?></td>
                     <td style="text-align: center"><?php echo $data->created_by_arsip ?></td>
-                    <td style="text-align: center"><?php echo $detail . ' '; echo $edit . ' '; echo $delete; ?></td>
+                    <td style="text-align: center"><?php echo $detail . ' '; echo $edit . ' '; echo $delete . ' '; echo $print; ?></td>
                   </tr>
                 <?php } ?>
               </tbody>

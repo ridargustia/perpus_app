@@ -1361,6 +1361,7 @@ class Arsip_model extends CI_Model
   {
     $this->db->join('baris', 'arsip.baris_id = baris.id_baris');
     $this->db->join('rak', 'arsip.rak_id = rak.id_rak');
+    $this->db->join('instansi', 'arsip.instansi_id = instansi.id_instansi');
 
     $this->db->where($this->id, $id);
 
