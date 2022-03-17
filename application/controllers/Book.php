@@ -45,6 +45,11 @@ class Book extends CI_Controller
       $this->data['hasil_pencarian']  = $this->Arsip_model->cari_all_book_by_instansi_with_searchFormNotNull($search_form);
     }
    
+    foreach ($this->data['hasil_pencarian'] as $row) {
+      $total_eksemplar = $total_eksemplar + $row->qty;
+    }
+    
+    $this->data['total_eksemplar'] = $total_eksemplar;
 
     $this->load->view('front/arsip/hasil_pencarian', $this->data);
   }

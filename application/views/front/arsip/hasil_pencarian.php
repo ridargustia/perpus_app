@@ -39,12 +39,12 @@
                  //Form cari diisi
                  if ($this->input->get('search_form') != NULL) {
                   echo "
-                    Ada <b>" . $total_data . " data </b> ditemukan dari pencarian buku dengan keywords: '<b>" . $this->input->get('search_form') . "</b>'";
+                    Ada <b>" . $total_data . " data</b> dengan <b>" . $total_eksemplar . " eksemplar buku</b> ditemukan dari pencarian buku dengan keywords: '<b>" . $this->input->get('search_form') . "</b>'";
                 }
                 //Form cari null 
                 elseif ($this->input->get('search_form') == NULL) {
                   echo "
-                    Ada <b>" . $total_data . " data </b> ditemukan dari pencarian semua buku";
+                    Ada <b>" . $total_data . " data</b> dengan<b> " . $total_eksemplar . " eksemplar buku</b> ditemukan dari pencarian semua buku";
                 }
               }
               ?>
