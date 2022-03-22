@@ -16,6 +16,9 @@ class Buku extends CI_Controller
       'Arsip_model', 'Baris_model', 'Box_model', 'File_model', 'Jenis_model', 'Map_model', 'Rak_model', 'Token_model', 'Bahasa_model'
     ));
 
+    //Deklarasi Library
+    $this->load->library('Ciqrcode');
+
     $this->data['company_data']             = $this->Company_model->company_profile();
     $this->data['layout_template']          = $this->Template_model->layout();
     $this->data['skins_template']           = $this->Template_model->skins();
@@ -1098,5 +1101,16 @@ class Buku extends CI_Controller
     $this->data['label_buku'] = explode(" ", $this->data['buku']->no_arsip);
 
     $this->load->view('back/arsip/print_label', $this->data);
+  }
+
+  function render_qrcode($id)
+  {
+    QRcode::png(
+      $id,
+      $outfile = false,
+      $level = QR_ECLEVEL_H,
+      $size = 2,
+      $margin = 1
+    );
   }
 }
