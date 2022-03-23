@@ -27,7 +27,7 @@
         <p>Buku</p>
       </div>
       <div class="icon"><i class="fa fa-book"></i></div>
-      <a href="<?php echo base_url('admin/arsip/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
+      <a href="<?php echo base_url('admin/buku/index') ?>" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
     </div>
   </div>
 </div>
