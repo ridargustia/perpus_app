@@ -5,17 +5,11 @@
 <body class="hold-transition skin-blue layout-top-nav">
   <div class="wrapper">
 
-    <?php $this->load->view('front/template/navbar'); ?>
-
-    <div class="content-wrapper">
+    <div class="content-wrapper bg">
       <div class="container">
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>Detail Buku</h1>
-          <ol class="breadcrumb">
-            <li><a href="<?php echo base_url() ?>"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li><a href="#"> Detail Buku</a></li>
-          </ol>
         </section>
 
         <!-- Main content -->
@@ -92,7 +86,7 @@
 
             <?php
             // Jika grand/masteradmin, tampilkan semua file
-            if (is_grandadmin() or is_masteradmin()) {
+            if ($detail_arsip->status_file == '1') {
             ?>
               <div class="box-footer">
                 <div class="form-group"><label>File</label>

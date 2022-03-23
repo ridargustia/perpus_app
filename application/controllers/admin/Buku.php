@@ -457,6 +457,7 @@ class Buku extends CI_Controller
             'tahun_terbit'                    => $this->input->post('tahun_terbit'),
             'deskripsi_arsip'                 => $deskripsi,
             'is_available'                    => '1',
+            'status_file'                     => $this->input->post('status_file'),
             'qty'                             => $this->input->post('qty'),
             'created_by'                      => $this->session->userdata('username'),
             'cover_buku'                      => $this->upload->data('file_name'),
@@ -487,6 +488,7 @@ class Buku extends CI_Controller
           'tahun_terbit'                    => $this->input->post('tahun_terbit'),
           'deskripsi_arsip'                 => $deskripsi,
           'is_available'                    => '1',
+          'status_file'                     => $this->input->post('status_file'),
           'qty'                             => $this->input->post('qty'),
           'created_by'                      => $this->session->userdata('username'),
         );
@@ -827,6 +829,7 @@ class Buku extends CI_Controller
             'kota_penerbit'                   => $this->input->post('kota_penerbit'),
             'tahun_terbit'                    => $this->input->post('tahun_terbit'),
             'deskripsi_arsip'                 => $deskripsi,
+            'status_file'                     => $this->input->post('status_file'),
             'qty'                             => $this->input->post('qty'),
             'modified_by'                     => $this->session->userdata('username'),
             'cover_buku'                      => $this->upload->data('file_name'),
@@ -854,6 +857,7 @@ class Buku extends CI_Controller
           'kota_penerbit'                   => $this->input->post('kota_penerbit'),
           'tahun_terbit'                    => $this->input->post('tahun_terbit'),
           'deskripsi_arsip'                 => $deskripsi,
+          'status_file'                     => $this->input->post('status_file'),
           'qty'                             => $this->input->post('qty'),
           'modified_by'                     => $this->session->userdata('username'),
         );

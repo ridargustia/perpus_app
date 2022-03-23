@@ -189,6 +189,26 @@
             </div>
           </div>
 
+          <div class="form-group">
+            <label class="col-lg-2 control-label">Status Akses File</label>
+            <div class="col-lg-10">
+              <div class="pretty p-icon p-smooth">
+                <input type="radio" name="status_file" value="1" <?php if ($arsip->status_file == '1') {echo "checked";} ?> required />
+                <div class="state p-success">
+                  <i class="icon fa fa-check"></i>
+                  <label>Umum</label>
+                </div>
+              </div>
+              <div class="pretty p-icon p-smooth">
+                <input type="radio" name="status_file" value="0" <?php if ($arsip->status_file == '0') {echo "checked";} ?> />
+                <div class="state p-success">
+                  <i class="icon fa fa-check"></i>
+                  <label>Privat</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <hr>
 
           <h3><b>CATATAN:</b></h3>

@@ -55,7 +55,7 @@ class Book extends CI_Controller
     $this->load->view('front/arsip/hasil_pencarian', $this->data);
   }
 
-  function detail($id, $search_form)
+  function detail($id, $search_form='')
   {
     $this->data['page_title']   = 'Detail Buku';
 
