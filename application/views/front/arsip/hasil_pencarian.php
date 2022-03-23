@@ -94,7 +94,7 @@
                       <?php echo $is_available ?>
                     </div>
                     <div class="col-sm-4 text-right">
-                      <a href="<?php echo base_url('book/detail/' . $hasil->id_arsip) ?>" class="btn btn-sm btn-success"><i class="fa fa-search"></i> PREVIEW</a>
+                      <a href="<?php echo base_url('book/detail/' . $hasil->id_arsip . '/' . $search_form) ?>" class="btn btn-sm btn-success"><i class="fa fa-search"></i> PREVIEW</a>
                     </div>
                   </div>
                   <hr>

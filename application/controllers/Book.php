@@ -36,6 +36,7 @@ class Book extends CI_Controller
     $this->data['page_title']       = 'Hasil Pencarian';
 
     $search_form  = $this->input->get('search_form');
+    $this->data['search_form'] = $this->input->get('search_form');
 
     if ($search_form == NULL) {
       $this->data['hasil_pencarian']  = $this->Arsip_model->get_all_front();
@@ -54,7 +55,7 @@ class Book extends CI_Controller
     $this->load->view('front/arsip/hasil_pencarian', $this->data);
   }
 
-  function detail($id)
+  function detail($id, $search_form)
   {
     $this->data['page_title']   = 'Detail Buku';
 
@@ -65,6 +66,8 @@ class Book extends CI_Controller
     $this->data['instansiName']   = $instansi->instansi_name;
 
     $row = $this->data['detail_arsip'];
+
+    $this->data['search_form'] = $search_form;
 
     if ($this->data['detail_arsip'] == TRUE) {
       if (is_masteradmin() && $row->instansi_id != $this->session->instansi_id) {

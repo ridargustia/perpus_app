@@ -114,7 +114,7 @@
             <?php } ?>
           </div>
 
-          <a href="<?php echo base_url('auth/book_searching') ?>" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Kembali ke halaman sebelumnya</a>
+          <a href="<?php echo base_url('book/cari_book?search_form='.$search_form) ?>" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Kembali ke halaman sebelumnya</a>
 
         </section>
         <!-- /.content -->
