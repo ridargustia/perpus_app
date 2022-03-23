@@ -1109,7 +1109,7 @@ class Buku extends CI_Controller
       $id,
       $outfile = false,
       $level = QR_ECLEVEL_H,
-      $size = 2,
+      $size = 3,
       $margin = 1
     );
   }

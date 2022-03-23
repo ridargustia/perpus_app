@@ -11,7 +11,7 @@
             color: #232323;
             border-collapse: collapse;
             border: 1px solid #999;
-            width: 151.2px;
+            width: 226.8px;
             height: 113.4px;
             font-size: 10px;
         }
@@ -42,8 +42,8 @@
         </thead>
         <tbody>
             <tr>
-                <td rowspan="4" style="width:30px"></td>
-                <td style="width:55px"><?php echo $label_buku[0] ?></td>
+                <td rowspan="4" style="width:70px"></td>
+                <td style="width:75px"><?php echo $label_buku[0] ?></td>
                 <td rowspan="4"><img src="<?php echo base_url('admin/buku/render_qrcode/'.$buku->id_arsip) ?>" alt=""></td>
             </tr>
             <tr>
