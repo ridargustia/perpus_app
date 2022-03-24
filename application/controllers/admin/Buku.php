@@ -382,9 +382,19 @@ class Buku extends CI_Controller
     } else {
       //Membuat kode/inisial penulis buku
       $convert_to_array = explode(" ", $this->input->post('penulis_buku'));
-
       $count_array = count($convert_to_array);
-      $last_name = $convert_to_array[$count_array-1];
+      $there_is = false;
+
+      for($i = 0; $i < $count_array; $i++) {
+        if($convert_to_array[$i] == 'dan' or $convert_to_array[$i] == 'dkk.' or $convert_to_array[$i] == 'dkk'){
+          $last_name = $convert_to_array[$i-1];
+          $there_is = true;
+        } 
+      }
+
+      if ($there_is == false) {
+        $last_name = $convert_to_array[$count_array-1];
+      }
       
       $kode_label_penulis = substr($last_name, 0, 3);
 
@@ -746,7 +756,18 @@ class Buku extends CI_Controller
       $convert_to_array = explode(" ", $this->input->post('penulis_buku'));
 
       $count_array = count($convert_to_array);
-      $last_name = $convert_to_array[$count_array-1];
+      $there_is = false;
+
+      for($i = 0; $i < $count_array; $i++) {
+        if($convert_to_array[$i] == 'dan' or $convert_to_array[$i] == 'dkk.' or $convert_to_array[$i] == 'dkk'){
+          $last_name = $convert_to_array[$i-1];
+          $there_is = true;
+        } 
+      }
+
+      if ($there_is == false) {
+        $last_name = $convert_to_array[$count_array-1];
+      }
       
       $kode_label_penulis = substr($last_name, 0, 3);
 
