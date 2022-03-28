@@ -70,6 +70,9 @@
           <?php } ?>
         </div>
         <!-- /.box-body -->
+        <div class="box-footer">
+          <a href="<?php echo $scan_qrcode ?>" class="btn btn-primary"><i class="fa fa-qrcode"></i> <?php echo $btn_scan ?></a>
+        </div>
       </div>
 
       <!-- /.box -->

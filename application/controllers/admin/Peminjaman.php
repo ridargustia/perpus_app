@@ -20,7 +20,9 @@ class Peminjaman extends CI_Controller
     $this->data['btn_submit'] = 'Save';
     $this->data['btn_reset']  = 'Reset';
     $this->data['btn_add']    = 'Tambah Data';
+    $this->data['btn_scan']    = 'Scan QR Code';
     $this->data['add_action'] = base_url('admin/peminjaman/create');
+    $this->data['scan_qrcode'] = base_url('admin/peminjaman/scan_qrcode');
 
     is_login();
 
@@ -544,9 +546,9 @@ class Peminjaman extends CI_Controller
 
   function scan_qrcode()
   {
-    $this->data['page_title'] = 'Tambah Data ' . $this->data['module'];
+    $this->data['page_title'] = 'Scan QR Code ' . $this->data['module'];
     $this->data['action']     = 'admin/peminjaman/cek_qrcode';
 
-    $this->load->view('back/peminjaman/peminjaman_scanqrcode_new', $this->data);
+    $this->load->view('back/peminjaman/peminjaman_scanqrcode', $this->data);
   }
 }
