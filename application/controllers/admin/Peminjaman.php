@@ -541,4 +541,12 @@ class Peminjaman extends CI_Controller
     $this->data['divisi']  = $this->Divisi_model->get_all_combobox_by_user($this->uri->segment(4));
     $this->load->view('back/peminjaman/form_divisi', $this->data);
   }
+
+  function scan_qrcode()
+  {
+    $this->data['page_title'] = 'Tambah Data ' . $this->data['module'];
+    $this->data['action']     = 'admin/peminjaman/cek_qrcode';
+
+    $this->load->view('back/peminjaman/peminjaman_scanqrcode_new', $this->data);
+  }
 }
