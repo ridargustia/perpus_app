@@ -57,7 +57,7 @@
                   $edit   = '<a href="' . base_url('admin/buku/update/' . $data->id_arsip) . '" class="btn btn-sm btn-warning" title="Ubah Buku"><i class="fa fa-pencil"></i></a>';
                   $delete = '<a href="' . base_url('admin/buku/delete/' . $data->id_arsip) . '" onClick="return confirm(\'Apakah anda yakin ingin menghapus data?\');" class="btn btn-sm btn-danger" title="Hapus Buku"><i class="fa fa-trash"></i></a>';                    
                   $detail = '<a href="' . base_url('admin/buku/detail/' . $data->id_arsip) . '" class="btn btn-sm bg-purple" title="Tampilkan Buku"><i class="fa fa-search-plus"></i></a>';
-                  $print = '<a href="' . base_url('admin/buku/print/' . $data->id_arsip) . '" target="_blank" class="btn btn-sm btn-info" title="Cetak Label Buku"><i class="fa fa-print"></i></a>';              
+                  $print = '<a href="#" onclick="labelBuku(' . "'" . $data->id_arsip . "'" . ')" class="btn btn-sm btn-info" title="Cetak Label Buku"><i class="fa fa-print"></i></a>';              
                 ?>
                   <tr>
                     <td style="text-align: center"><?php echo $no++ ?></td>
@@ -79,6 +79,11 @@
         <!-- /.box-body -->
       </div>
       <!-- /.box -->
+      <div class="modal fade" id="ModalLabel" role="dialog" style="min-width: 100%;margin-left:0px">
+          <div class="modal-dialog" style="min-width: 90%;">
+              <div id="dataLabel"></div>
+          </div><!-- /.modal-dialog -->
+      </div>
     </section>
     <!-- /.content -->
   </div>
@@ -93,6 +98,30 @@
     $(document).ready(function() {
       $('#dataTable').DataTable();
     });
+
+    function labelBuku(id) {
+        $("#id").val(id);
+        $('#ModalLabel').modal("show");
+        loadLabel(id);
+    }
+
+    function loadLabel(id_arsip) {
+        // var url = "buku/ajax_label/" + id + "/";
+        $.ajax({
+            url: "<?php echo base_url(); ?>admin/buku/ajax_label/" + id_arsip + "",
+            type: "GET",
+            async: true,
+            data: {
+                
+            },
+            success: function (data) {
+                $('#dataLabel').html(data);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('Error adding / update data');
+            }
+        });
+    }
   </script>
 
 </div>
