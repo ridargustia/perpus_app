@@ -1085,6 +1085,11 @@ class Buku extends CI_Controller
     $this->load->view('back/arsip/v_arsip', $this->data);
   }
 
+  function form_empty()
+  {
+      $this->load->view('back/arsip/v_arsip_empty');
+  }
+
   function check_no_arsip()
   {
     $no_arsip = $this->input->post('no_arsip');
@@ -1130,8 +1135,10 @@ class Buku extends CI_Controller
 
   function render_qrcode($id)
   {
+    $id_qrcode = $id . '/book';
+    
     QRcode::png(
-      $id,
+      $id_qrcode,
       $outfile = false,
       $level = QR_ECLEVEL_H,
       $size = 3,

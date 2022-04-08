@@ -1,4 +1,11 @@
 <?php $this->load->view('back/template/meta'); ?>
+<style>
+  .btn-md {
+      padding: 1rem 2.4rem;
+      font-size: .94rem;
+      display: none;
+  }
+</style>
 <div class="wrapper">
 
   <?php $this->load->view('back/template/navbar'); ?>
@@ -22,7 +29,11 @@
       <?php if ($this->session->flashdata('message')) {
         echo $this->session->flashdata('message');
       } ?>
-      <?php echo form_open($action) ?>
+      
+      <?php
+      $attributes = array('id' => 'button'); 
+      echo form_open($action, $attributes); 
+      ?>
       <?php echo validation_errors() ?>
       <div class="box box-primary">
         <div class="box-header with-border">
@@ -38,6 +49,10 @@
               <div>
                   <video id="video" width="400" height="300" style="border: 1px solid gray"></video>
               </div>
+              <textarea hidden="" name="id_arsip" id="result" readonly></textarea>
+              <span>
+                <input type="submit" id="button" class="btn btn-success btn-md" value="Cek Kehadiran">
+              </span>
             </div>
             
           </div>
@@ -64,7 +79,8 @@
   <script type="text/javascript">
   window.addEventListener('load', function () {
       let selectedDeviceId;
-      let audio = new Audio("assets/audio/beep.mp3");
+      let audio = new Audio("../../assets/audio/beep.mp3");
+      // console.log(audio);
       const codeReader = new ZXing.BrowserQRCodeReader()
       console.log('ZXing code reader initialized')
       codeReader.getVideoInputDevices()

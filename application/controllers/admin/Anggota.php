@@ -13,6 +13,9 @@ class Anggota extends CI_Controller
 
         $this->load->model(array('Anggota_model'));
 
+        //Deklarasi Library
+        $this->load->library('Ciqrcode');
+
         $this->data['company_data']             = $this->Company_model->company_profile();
         $this->data['layout_template']          = $this->Template_model->layout();
         $this->data['skins_template']           = $this->Template_model->skins();
@@ -354,6 +357,11 @@ class Anggota extends CI_Controller
         $this->load->view('back/anggota/v_anggota', $this->data);
     }
 
+    function form_empty()
+    {
+        $this->load->view('back/anggota/v_anggota_empty');
+    }
+
     function get_anggota($id_anggota = '')
     {
         $this->db->join('instansi', 'anggota.instansi_id = instansi.id_instansi');
@@ -379,6 +387,26 @@ class Anggota extends CI_Controller
         }
 
         echo json_encode($output);
+    }
+
+    function ajax_label($id)
+    {
+        $this->data['anggota'] = $this->Anggota_model->get_by_id($id);
+
+        $this->load->view('back/anggota/print_qrcode', $this->data);
+    }
+
+    function render_qrcode($id)
+    {
+        $id_qrcode = $id . '/anggota';
+        
+        QRcode::png(
+        $id_qrcode,
+        $outfile = false,
+        $level = QR_ECLEVEL_H,
+        $size = 4,
+        $margin = 2
+        );
     }
 }
 

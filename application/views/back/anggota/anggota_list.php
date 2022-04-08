@@ -47,6 +47,7 @@
                   // action
                   $edit = '<a href="'.base_url('admin/anggota/update/'.$data->id_anggota).'" class="btn btn-warning" title="Ubah Anggota"><i class="fa fa-pencil"></i></a>';
                   $delete = '<a href="'.base_url('admin/anggota/delete/'.$data->id_anggota).'" onClick="return confirm(\'Apakah anda yakin ingin menghapus data?\');" class="btn btn-danger" title="Hapus Anggota"><i class="fa fa-trash"></i></a>';
+                  $print = '<a href="#" onclick="printQrcode(' . "'" . $data->id_anggota . "'" . ')" class="btn btn-info" title="Cetak QR Code Anggota"><i class="fa fa-qrcode"></i></a>';
 
                   //Gender
                   if ($data->gender == 1) {
@@ -66,7 +67,7 @@
                         <td style="text-align: center"><?php echo $data->instansi_name ?></td>
                     <?php } ?>
                     <td style="text-align: center"><?php echo $data->created_by_anggota ?></td>
-                    <td style="text-align: center"><?php echo $edit ?> <?php echo $delete ?></td>
+                    <td style="text-align: center"><?php echo $edit ?> <?php echo $delete ?> <?php echo $print ?></td>
                   </tr>
                 <?php } ?>
               </tbody>
@@ -91,6 +92,11 @@
         <!-- /.box-body -->
       </div>
       <!-- /.box -->
+      <div class="modal fade" id="ModalLabel" role="dialog" style="min-width: 100%;margin-left:0px">
+          <div class="modal-dialog" style="min-width: 90%;">
+              <div id="dataLabel"></div>
+          </div><!-- /.modal-dialog -->
+      </div>
     </section>
     <!-- /.content -->
   </div>
@@ -102,9 +108,33 @@
   <script src="<?php echo base_url('assets/plugins/') ?>datatables/js/jquery.dataTables.min.js"></script>
   <script src="<?php echo base_url('assets/plugins/') ?>datatables-bs/js/dataTables.bootstrap.min.js"></script>
   <script>
-  $(document).ready( function () {
-    $('#dataTable').DataTable();
-  } );
+    $(document).ready( function () {
+      $('#dataTable').DataTable();
+    } );
+
+    function printQrcode(id) {
+        $("#id").val(id);
+        $('#ModalLabel').modal("show");
+        loadLabel(id);
+    }
+
+    function loadLabel(id_anggota) {
+        // var url = "buku/ajax_label/" + id + "/";
+        $.ajax({
+            url: "<?php echo base_url(); ?>admin/anggota/ajax_label/" + id_anggota + "",
+            type: "GET",
+            async: true,
+            data: {
+                
+            },
+            success: function (data) {
+                $('#dataLabel').html(data);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('Error adding / update data');
+            }
+        });
+    }
   </script>
 
 </div>

@@ -2551,4 +2551,29 @@ class Arsip_model extends CI_Model
     $this->db->where($this->id . 'z', $id);
     $this->db->update($this->table, $data);
   }
+
+  function cek_id($id_arsip)
+  {
+      // $query_str =
+      //     $this->db->where('id_arsip', $id_arsip)
+      //     ->get('arsip');
+
+      $this->db->select('
+        arsip.id_arsip, arsip.arsip_name, arsip.no_arsip, arsip.penulis_buku, arsip.penerbit, arsip.kota_penerbit, arsip.tahun_terbit, arsip.lokasi_id, arsip.rak_id, arsip.baris_id, baris.baris_name, rak.rak_name, lokasi.lokasi_name
+      ');
+  
+      $this->db->join('lokasi', 'arsip.lokasi_id = lokasi.id_lokasi');
+      $this->db->join('rak', 'arsip.rak_id = rak.id_rak');
+      $this->db->join('baris', 'arsip.baris_id = baris.id_baris');
+
+      $this->db->where('id_arsip', $id_arsip);
+
+      $query_str = $this->db->get($this->table);
+
+      if ($query_str->num_rows() > 0) {
+          return $query_str->row();
+      } else {
+          return false;
+      }
+  }
 }
