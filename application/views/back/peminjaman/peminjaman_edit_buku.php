@@ -149,7 +149,8 @@
         </div>
       </div>
 
-      <?php echo form_input($id_arsip, $peminjaman->id_arsip) ?>
+      <?php echo form_input($current_arsip, $peminjaman->id_arsip) ?>
+      <?php echo form_input($new_arsip) ?>
       <?php echo form_input($id_peminjaman, $peminjaman->id_peminjaman) ?>
       <!-- /.box -->
       <div class="box box-primary">
@@ -243,6 +244,7 @@
                         tampilArsip();
                       <?php } ?>
 
+                      $('#new_arsip').val(myObj.id_arsip);
                       $('#id_arsip').val(myObj.id_arsip);
                       $('#arsip_name').val(myObj.arsip_name);
                       $('#no_arsip').val(myObj.no_arsip);
@@ -288,6 +290,7 @@
         success: function(response) {
           var myObj = JSON.parse(response);
 
+          $('#new_arsip').val(myObj.id_arsip);
           $('#id_arsip').val(myObj.id_arsip);
           $('#arsip_name').val(myObj.arsip_name);
           $('#no_arsip').val(myObj.no_arsip);

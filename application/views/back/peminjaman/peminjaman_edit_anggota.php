@@ -128,8 +128,12 @@
             <?php echo form_input($tgl_kembali, $peminjaman->tgl_kembali) ?>
           </div>
         </div>
-        <?php echo form_input($id_arsip, $id_buku) ?>
+        <?php echo form_input($current_arsip, $current_buku) ?>
+        <?php echo form_input($new_arsip, $new_buku) ?>
         <?php echo form_input($id_anggota, $peminjaman->id_anggota) ?>
+        <?php 
+        echo form_input($id_peminjaman, $peminjaman_id); 
+        ?>
         <div class="box-footer">
           <a href="#" onClick="document.location.reload(true)" class="btn btn-info"><i class="fa fa-refresh"></i> Ulangi Scan</a>
           <button type="submit" name="button" class="btn btn-success"><i class="fa fa-save"></i> <?php echo $btn_submit ?></button>
