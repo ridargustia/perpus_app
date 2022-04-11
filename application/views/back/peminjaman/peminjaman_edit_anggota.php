@@ -92,22 +92,29 @@
           <div class="row">
             <div class="col-sm-4">
               <div class="form-group"><label>Nama Anggota</label>
-                <?php echo form_input($anggota_name) ?>
+                <?php echo form_input($anggota_name, $peminjaman->anggota_name) ?>
               </div>
             </div>
             <div class="col-sm-4">
               <div class="form-group"><label>Jenis Kelamin</label>
-                <?php echo form_input($gender) ?>
+                <?php 
+                if ($peminjaman->gender == 1) {
+                  $jk = 'Laki-laki'; 
+                } elseif ($peminjaman->gender == 2) {
+                  $jk = 'Perempuan';
+                }
+                echo form_input($gender, $jk); 
+                ?>
               </div>
             </div>
             <div class="col-sm-4">
               <div class="form-group"><label>Angkatan</label>
-                <?php echo form_input($angkatan) ?>
+                <?php echo form_input($angkatan, $peminjaman->angkatan) ?>
               </div>
             </div>
           </div>
           <div class="form-group"><label>Address</label>
-            <?php echo form_textarea($address) ?>
+            <?php echo form_textarea($address, $peminjaman->address) ?>
           </div>
         </div>
       </div>
@@ -115,14 +122,14 @@
       <div class="box box-primary">
         <div class="box-body">
           <div class="form-group"><label>Tanggal Peminjaman</label>
-            <?php echo form_input($tgl_peminjaman) ?>
+            <?php echo form_input($tgl_peminjaman, $peminjaman->tgl_peminjaman) ?>
           </div>
           <div class="form-group"><label>Tanggal Pengembalian</label>
-            <?php echo form_input($tgl_kembali) ?>
+            <?php echo form_input($tgl_kembali, $peminjaman->tgl_kembali) ?>
           </div>
         </div>
         <?php echo form_input($id_arsip, $id_buku) ?>
-        <?php echo form_input($id_anggota) ?>
+        <?php echo form_input($id_anggota, $peminjaman->id_anggota) ?>
         <div class="box-footer">
           <a href="#" onClick="document.location.reload(true)" class="btn btn-info"><i class="fa fa-refresh"></i> Ulangi Scan</a>
           <button type="submit" name="button" class="btn btn-success"><i class="fa fa-save"></i> <?php echo $btn_submit ?></button>
@@ -204,13 +211,13 @@
                       $('#instansi_id').html(<?php echo $result ?>);
                       
                       <?php if (is_grandadmin()) { ?>
-                      $.ajax({
-                        url: "<?php echo base_url(); ?>admin/anggota/form_empty",
-                        success: function(response2) {
-                          $("#no_induk").html(response2);
-                        },
-                        dataType: "html"
-                      });
+                        $.ajax({
+                          url: "<?php echo base_url(); ?>admin/anggota/form_empty",
+                          success: function(response2) {
+                            $("#no_induk").html(response2);
+                          },
+                          dataType: "html"
+                        });
                       <?php } elseif (is_masteradmin()) { ?>
                         tampilNoInduk();
                       <?php } ?>
@@ -220,8 +227,6 @@
                       $('#gender').val(myObj.gender);
                       $('#angkatan').val(myObj.angkatan);
                       $('#address').val(myObj.address);
-                      $('#tgl_peminjaman').val(myObj.tgl_peminjaman);
-                      $('#tgl_kembali').val(myObj.tgl_kembali);
                     }
                   });
                 }
@@ -260,8 +265,6 @@
           $('#gender').val(myObj.gender);
           $('#angkatan').val(myObj.angkatan);
           $('#address').val(myObj.address);
-          $('#tgl_peminjaman').val(myObj.tgl_peminjaman);
-          $('#tgl_kembali').val(myObj.tgl_kembali);
         }
       });
     });

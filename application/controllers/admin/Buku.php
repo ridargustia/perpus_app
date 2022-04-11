@@ -1087,7 +1087,9 @@ class Buku extends CI_Controller
 
   function form_empty()
   {
+    if (is_grandadmin()) {
       $this->load->view('back/arsip/v_arsip_empty');
+    } 
   }
 
   function check_no_arsip()

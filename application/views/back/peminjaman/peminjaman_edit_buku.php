@@ -37,7 +37,7 @@
       <!-- /.box -->
       <div class="box box-primary">
         <div class="box-header with-border">
-          <h3 class="box-title">SCAN QR CODE ANGGOTA DISINI</h3>
+          <h3 class="box-title">SCAN QR CODE BUKU DISINI</h3>
           <div class="box-tools pull-right">
             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
           </div>
@@ -62,70 +62,100 @@
         <!-- /.box-body -->
       </div>
 
-      <!-- /.box -->
       <div class="box box-primary">
         <div class="box-header with-border">
-          <h3 class="box-title">DATA ANGGOTA</h3>
+          <h3 class="box-title">DATA BUKU YANG AKAN DIPINJAM</h3>
           <div class="box-tools pull-right">
             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
           </div>
         </div>
         <div class="box-body">
-        <?php if (is_grandadmin()) { ?>
+          <?php if (is_grandadmin()) { ?>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group"><label>Perguruan Tinggi (*)</label>
+                  <?php echo form_dropdown('', $get_all_combobox_instansi, '', $instansi_id) ?>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group"><label>Judul Buku yang Akan Dipinjam</label>
+                  <?php echo form_dropdown('', array('' => '- Pilih Perguruan Tinggi Dulu -'), '', $arsip_id) ?>
+                </div>
+              </div>
+            </div>
+
+          <?php } elseif (is_masteradmin()) { ?>
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="form-group"><label>Atau Pilih Buku Dari Daftar Berikut</label>
+                  <?php echo form_dropdown('', $get_all_combobox_arsip_available, '', $arsip_id) ?>
+                </div>
+              </div>
+            </div>
+          <?php } ?>
+        </div>
+        <div class="box-footer">
           <div class="row">
-            <div class="col-sm-6">
-              <div class="form-group"><label>Pilih Perguruan Tinggi</label>
-                <?php echo form_dropdown('', $get_all_combobox_instansi, '', $instansi_id) ?>
+            <div class="col-sm-8">
+              <div class="form-group"><label>Judul Buku</label>
+                <?php echo form_input($arsip_name, $peminjaman->arsip_name) ?>
               </div>
             </div>
-            <div class="col-sm-6">
-              <div class="form-group"><label>No Induk Anggota Peminjam Buku</label>
-                <?php echo form_dropdown('', array('' => '- Pilih Perguruan Tinggi Dulu -'), '', $no_induk) ?>
+            <div class="col-sm-4">
+              <div class="form-group"><label>No/Label Buku</label>
+                <?php echo form_input($no_arsip, $peminjaman->no_arsip) ?>
               </div>
             </div>
           </div>
-        <?php } elseif (is_masteradmin()) { ?>
-          <div class="form-group"><label>Atau Pilih No Induk Anggota dari Daftar Berikut</label>
-            <?php echo form_dropdown('', $get_all_combobox_anggota, '', $no_induk) ?>
-          </div>
-        <?php } ?>
           <div class="row">
             <div class="col-sm-4">
-              <div class="form-group"><label>Nama Anggota</label>
-                <?php echo form_input($anggota_name) ?>
+              <div class="form-group"><label>Penulis Buku</label>
+                <?php echo form_input($penulis_buku, $peminjaman->penulis_buku) ?>
               </div>
             </div>
             <div class="col-sm-4">
-              <div class="form-group"><label>Jenis Kelamin</label>
-                <?php echo form_input($gender) ?>
+              <div class="form-group"><label>Penerbit</label>
+                <?php echo form_input($penerbit, $peminjaman->penerbit) ?>
               </div>
             </div>
             <div class="col-sm-4">
-              <div class="form-group"><label>Angkatan</label>
-                <?php echo form_input($angkatan) ?>
+              <div class="form-group"><label>Kota Penerbit</label>
+                <?php echo form_input($kota_penerbit, $peminjaman->kota_penerbit) ?>
               </div>
             </div>
           </div>
-          <div class="form-group"><label>Address</label>
-            <?php echo form_textarea($address) ?>
+          <div class="row">
+            <div class="col-sm-3">
+              <div class="form-group"><label>Lokasi Buku</label>
+                <?php echo form_input($lokasi_name, $peminjaman->lokasi_name) ?>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="form-group"><label>Rak</label>
+                <?php echo form_input($rak_name, $peminjaman->rak_name) ?>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="form-group"><label>Baris</label>
+                <?php echo form_input($baris_name, $peminjaman->baris_name) ?>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="form-group"><label>Tahun Terbit</label>
+                <?php echo form_input($tahun_terbit, $peminjaman->tahun_terbit) ?>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
+      <?php echo form_input($id_arsip, $peminjaman->id_arsip) ?>
+      <?php echo form_input($id_peminjaman, $peminjaman->id_peminjaman) ?>
+      <!-- /.box -->
       <div class="box box-primary">
-        <div class="box-body">
-          <div class="form-group"><label>Tanggal Peminjaman</label>
-            <?php echo form_input($tgl_peminjaman) ?>
-          </div>
-          <div class="form-group"><label>Tanggal Pengembalian</label>
-            <?php echo form_input($tgl_kembali) ?>
-          </div>
-        </div>
-        <?php echo form_input($id_arsip, $id_buku) ?>
-        <?php echo form_input($id_anggota) ?>
         <div class="box-footer">
           <a href="#" onClick="document.location.reload(true)" class="btn btn-info"><i class="fa fa-refresh"></i> Ulangi Scan</a>
-          <button type="submit" name="button" class="btn btn-success"><i class="fa fa-save"></i> <?php echo $btn_submit ?></button>
+          <button type="submit" name="button" class="btn btn-success"><i class="fa fa-mail-forward"></i> Selanjutnya</button>
         </div>
       </div>
       <?php echo form_close() ?>
@@ -169,7 +199,7 @@
                 sourceSelectPanel.style.display = 'block'
             }
             codeReader.decodeFromInputVideoDevice(selectedDeviceId, 'video').then((result) => {
-                // console.log(result)
+                
                 document.getElementById('result').textContent = result.text
                 if(result != null){
                     audio.play();
@@ -179,10 +209,8 @@
                 let id_qrcode = string_kode.split("/");
 
                 if (id_qrcode[1] == 'book') {
-                  
-                } else if (id_qrcode[1] == 'anggota') {
                   $.ajax({
-                    url: "<?php echo base_url('admin/peminjaman/get_anggota/') ?>" + id_qrcode[0],
+                    url: "<?php echo base_url('admin/peminjaman/get_buku/') ?>" + id_qrcode[0],
                     success: function(response) {
                       var myObj = JSON.parse(response);
 
@@ -202,28 +230,33 @@
                       ?>
 
                       $('#instansi_id').html(<?php echo $result ?>);
-                      
+
                       <?php if (is_grandadmin()) { ?>
-                      $.ajax({
-                        url: "<?php echo base_url(); ?>admin/anggota/form_empty",
-                        success: function(response2) {
-                          $("#no_induk").html(response2);
-                        },
-                        dataType: "html"
-                      });
+                        $.ajax({
+                          url: "<?php echo base_url(); ?>admin/buku/form_empty",
+                          success: function(response2) {
+                            $("#arsip_id").html(response2);
+                          },
+                          dataType: "html"
+                        });
                       <?php } elseif (is_masteradmin()) { ?>
-                        tampilNoInduk();
+                        tampilArsip();
                       <?php } ?>
-                      
-                      $('#id_anggota').val(myObj.id_anggota);
-                      $('#anggota_name').val(myObj.anggota_name);
-                      $('#gender').val(myObj.gender);
-                      $('#angkatan').val(myObj.angkatan);
-                      $('#address').val(myObj.address);
-                      $('#tgl_peminjaman').val(myObj.tgl_peminjaman);
-                      $('#tgl_kembali').val(myObj.tgl_kembali);
+
+                      $('#id_arsip').val(myObj.id_arsip);
+                      $('#arsip_name').val(myObj.arsip_name);
+                      $('#no_arsip').val(myObj.no_arsip);
+                      $('#penulis_buku').val(myObj.penulis_buku);
+                      $('#penerbit').val(myObj.penerbit);
+                      $('#kota_penerbit').val(myObj.kota_penerbit);
+                      $('#lokasi_name').val(myObj.lokasi_name);
+                      $('#rak_name').val(myObj.rak_name);
+                      $('#baris_name').val(myObj.baris_name);
+                      $('#tahun_terbit').val(myObj.tahun_terbit);
                     }
                   });
+                } else if (id_qrcode[1] == 'anggota') {
+                  
                 }
             }).catch((err) => {
                 console.error(err)
@@ -238,45 +271,48 @@
 
     $(document).ready(function() {
       $("#instansi_id").select2({
-        // placeholder: "Silahkan Pilih Arsip",
+        // placeholder: "Silahkan Pilih Instansi",
       });
     });
     $(document).ready(function() {
-      $("#no_induk").select2({
+      $("#arsip_id").select2({
         // placeholder: "Silahkan Pilih Arsip",
       });
     });
 
-    $('#no_induk').on('change', function() {
-      var no_induk = $(this).val();
+    $('#arsip_id').on('change', function() {
+      var arsip_id = $(this).val();
       // alert(no_induk);
       $.ajax({
-        url: "<?php echo base_url('admin/peminjaman/get_anggota/') ?>" + no_induk,
+        url: "<?php echo base_url('admin/peminjaman/get_buku/') ?>" + arsip_id,
         success: function(response) {
           var myObj = JSON.parse(response);
 
-          $('#id_anggota').val(myObj.id_anggota);
-          $('#anggota_name').val(myObj.anggota_name);
-          $('#gender').val(myObj.gender);
-          $('#angkatan').val(myObj.angkatan);
-          $('#address').val(myObj.address);
-          $('#tgl_peminjaman').val(myObj.tgl_peminjaman);
-          $('#tgl_kembali').val(myObj.tgl_kembali);
+          $('#id_arsip').val(myObj.id_arsip);
+          $('#arsip_name').val(myObj.arsip_name);
+          $('#no_arsip').val(myObj.no_arsip);
+          $('#penulis_buku').val(myObj.penulis_buku);
+          $('#penerbit').val(myObj.penerbit);
+          $('#kota_penerbit').val(myObj.kota_penerbit);
+          $('#lokasi_name').val(myObj.lokasi_name);
+          $('#rak_name').val(myObj.rak_name);
+          $('#baris_name').val(myObj.baris_name);
+          $('#tahun_terbit').val(myObj.tahun_terbit);
         }
       });
     });
 
-    function tampilNoInduk() {
+    function tampilArsip() {
       <?php if (is_grandadmin()) { ?>
         instansi_id = document.getElementById("instansi_id").value;
       <?php } elseif (is_masteradmin()) { ?>
         instansi_id = <?php echo $this->session->instansi_id ?>;
       <?php } ?>
-      
+
       $.ajax({
-        url: "<?php echo base_url(); ?>admin/anggota/pilih_anggota/" + instansi_id + "",
+        url: "<?php echo base_url(); ?>admin/buku/pilih_arsip_available/" + instansi_id + "",
         success: function(response) {
-          $("#no_induk").html(response);
+          $("#arsip_id").html(response);
         },
         dataType: "html"
       });

@@ -153,8 +153,8 @@
       <!-- /.box -->
       <div class="box box-primary">
         <div class="box-footer">
-          <button type="submit" name="button" class="btn btn-success"><i class="fa fa-save"></i> Selanjutnya</button>
           <a href="#" onClick="document.location.reload(true)" class="btn btn-info"><i class="fa fa-refresh"></i> Ulangi Scan</a>
+          <button type="submit" name="button" class="btn btn-success"><i class="fa fa-save"></i> Selanjutnya</button>
         </div>
       </div>
       <?php echo form_close() ?>
@@ -177,7 +177,7 @@
   <script type="text/javascript">
     window.addEventListener('load', function () {
         let selectedDeviceId;
-        let audio = new Audio("../../assets/audio/beep.mp3");
+        let audio = new Audio("<?php echo base_url() ?>assets/audio/beep.mp3");
         const codeReader = new ZXing.BrowserQRCodeReader()
         console.log('ZXing code reader initialized')
         codeReader.getVideoInputDevices()
@@ -230,13 +230,17 @@
 
                       $('#instansi_id').html(<?php echo $result ?>);
 
-                      $.ajax({
-                        url: "<?php echo base_url(); ?>admin/buku/form_empty",
-                        success: function(response2) {
-                          $("#arsip_id").html(response2);
-                        },
-                        dataType: "html"
-                      });
+                      <?php if (is_grandadmin()) { ?>
+                        $.ajax({
+                          url: "<?php echo base_url(); ?>admin/buku/form_empty",
+                          success: function(response2) {
+                            $("#arsip_id").html(response2);
+                          },
+                          dataType: "html"
+                        });
+                      <?php } elseif (is_masteradmin()) { ?>
+                        tampilArsip();
+                      <?php } ?>
 
                       $('#id_arsip').val(myObj.id_arsip);
                       $('#arsip_name').val(myObj.arsip_name);
@@ -298,7 +302,12 @@
     });
 
     function tampilArsip() {
-      instansi_id = document.getElementById("instansi_id").value;
+      <?php if (is_grandadmin()) { ?>
+        instansi_id = document.getElementById("instansi_id").value;
+      <?php } elseif (is_masteradmin()) { ?>
+        instansi_id = <?php echo $this->session->instansi_id ?>;
+      <?php } ?>
+
       $.ajax({
         url: "<?php echo base_url(); ?>admin/buku/pilih_arsip_available/" + instansi_id + "",
         success: function(response) {

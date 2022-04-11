@@ -20,6 +20,9 @@ class Peminjaman extends CI_Controller
     $this->data['btn_submit'] = 'Save';
     $this->data['btn_reset']  = 'Reset';
     $this->data['btn_add']    = 'Tambah Data';
+    $this->data['btn_next']    = 'Selanjutnya';
+    $this->data['btn_back']    = 'Kembali';
+    $this->data['btn_edit']    = 'Edit';
     $this->data['add_book_action'] = base_url('admin/peminjaman/create_book');
 
     is_login();
@@ -305,15 +308,120 @@ class Peminjaman extends CI_Controller
         'name'          => 'tgl_peminjaman',
         'id'            => 'tgl_peminjaman',
         'class'         => 'form-control',
-        'autocomplete'  => 'off',
         'required'      => '',
+        'readonly'      => '',
       ];
       $this->data['tgl_kembali'] = [
         'name'          => 'tgl_kembali',
         'id'            => 'tgl_kembali',
         'class'         => 'form-control',
-        'autocomplete'  => 'off',
         'required'      => '',
+        'readonly'      => '',
+      ];
+      $this->data['current_arsip_name'] = [
+        'name'          => 'current_arsip_name',
+        'id'            => 'current_arsip_name',
+        'class'         => 'form-control',
+        'required'      => '',
+        'readonly'      => '',
+      ];
+      $this->data['current_no_arsip'] = [
+        'name'          => 'current_no_arsip',
+        'id'            => 'current_no_arsip',
+        'class'         => 'form-control',
+        'required'      => '',
+        'readonly'      => '',
+      ];
+      $this->data['current_penulis_buku'] = [
+        'name'          => 'current_penulis_buku',
+        'id'            => 'current_penulis_buku',
+        'class'         => 'form-control',
+        'required'      => '',
+        'readonly'      => '',
+      ];
+      $this->data['current_penerbit'] = [
+        'name'          => 'current_penerbit',
+        'id'            => 'current_penerbit',
+        'class'         => 'form-control',
+        'required'      => '',
+        'readonly'      => '',
+      ];
+      $this->data['current_kota_penerbit'] = [
+        'name'          => 'current_kota_penerbit',
+        'id'            => 'current_kota_penerbit',
+        'class'         => 'form-control',
+        'required'      => '',
+        'readonly'      => '',
+      ];
+      $this->data['current_lokasi_name'] = [
+        'name'          => 'current_lokasi_name',
+        'id'            => 'current_lokasi_name',
+        'class'         => 'form-control',
+        'required'      => '',
+        'readonly'      => '',
+      ];
+      $this->data['current_rak_name'] = [
+        'name'          => 'current_rak_name',
+        'id'            => 'current_rak_name',
+        'class'         => 'form-control',
+        'required'      => '',
+        'readonly'      => '',
+      ];
+      $this->data['current_baris_name'] = [
+        'name'          => 'current_baris_name',
+        'id'            => 'current_baris_name',
+        'class'         => 'form-control',
+        'required'      => '',
+        'readonly'      => '',
+      ];
+      $this->data['current_tahun_terbit'] = [
+        'name'          => 'current_tahun_terbit',
+        'id'            => 'current_tahun_terbit',
+        'class'         => 'form-control',
+        'required'      => '',
+        'readonly'      => '',
+      ];
+      $this->data['current_anggota_name'] = [
+        'name'          => 'current_anggota_name',
+        'id'            => 'current_anggota_name',
+        'class'         => 'form-control',
+        'required'      => '',
+        'readonly'      => '',
+      ];
+      $this->data['current_no_induk'] = [
+        'name'          => 'current_no_induk',
+        'id'            => 'current_no_induk',
+        'class'         => 'form-control',
+        'required'      => '',
+        'readonly'      => '',
+      ];
+      $this->data['current_gender'] = [
+        'name'          => 'current_gender',
+        'id'            => 'current_gender',
+        'class'         => 'form-control',
+        'required'      => '',
+        'readonly'      => '',
+      ];
+      $this->data['current_angkatan'] = [
+        'name'          => 'current_angkatan',
+        'id'            => 'current_angkatan',
+        'class'         => 'form-control',
+        'required'      => '',
+        'readonly'      => '',
+      ];
+      $this->data['current_address'] = [
+        'name'          => 'current_address',
+        'id'            => 'current_address',
+        'class'         => 'form-control',
+        'required'      => '',
+        'readonly'      => '',
+      ];
+      $this->data['current_instansi_name'] = [
+        'name'          => 'current_instansi_name',
+        'id'            => 'current_instansi_name',
+        'class'         => 'form-control',
+        'required'      => '',
+        'readonly'      => '',
       ];
       $this->data['no_induk'] = [
         'name'          => 'no_induk',
@@ -331,6 +439,146 @@ class Peminjaman extends CI_Controller
         'class'         => 'form-control',
         'onChange'      => 'tampilArsip(), tampilNoInduk()',
         'required'      => '',
+      ];
+
+      $this->load->view('back/peminjaman/peminjaman_edit', $this->data);
+    } else {
+      $this->session->set_flashdata('message', '<div class="alert alert-danger">Data tidak ditemukan</div>');
+      redirect('admin/peminjaman');
+    }
+  }
+
+  function update_book($id)
+  {
+    $this->data['peminjaman']           = $this->Peminjaman_model->get_by_id($id);
+
+    if ($this->data['peminjaman']) {
+      $this->data['page_title'] = 'Update Data ' . $this->data['module'];
+      $this->data['action']     = 'admin/peminjaman/update_anggota';
+
+      if (is_grandadmin()) {
+        $this->data['get_all_combobox_instansi']            = $this->Instansi_model->get_all_combobox();
+      } elseif (is_masteradmin()) {
+        $this->data['get_all_combobox_arsip_available']                = $this->Arsip_model->get_all_combobox_arsip_available_by_instansi($this->session->instansi_id);
+      }
+
+      $this->data['id_arsip'] = [
+        'name'          => 'id_arsip',
+        'id'            => 'id_arsip',
+        'type'          => 'hidden',
+      ];
+      $this->data['id_peminjaman'] = [
+        'name'          => 'id_peminjaman',
+        'id'            => 'id_peminjaman',
+        'type'          => 'hidden',
+      ];
+      $this->data['instansi_id'] = [
+        'name'          => 'instansi_id',
+        'id'            => 'instansi_id',
+        'class'         => 'form-control',
+        'onChange'      => 'tampilArsip()',
+      ];
+      $this->data['arsip_id'] = [
+        'name'          => 'arsip_id',
+        'id'            => 'arsip_id',
+        'class'         => 'form-control',
+      ];
+      $this->data['arsip_name'] = [
+        'name'          => 'arsip_name',
+        'id'            => 'arsip_name',
+        'class'         => 'form-control',
+        'required'      => '',
+        'readonly'      => '',
+      ];
+      $this->data['no_arsip'] = [
+        'name'          => 'no_arsip',
+        'id'            => 'no_arsip',
+        'class'         => 'form-control',
+        'required'      => '',
+        'readonly'      => '',
+      ];
+      $this->data['penulis_buku'] = [
+        'name'          => 'penulis_buku',
+        'id'            => 'penulis_buku',
+        'class'         => 'form-control',
+        'required'      => '',
+        'readonly'      => '',
+      ];
+      $this->data['penerbit'] = [
+        'name'          => 'penerbit',
+        'id'            => 'penerbit',
+        'class'         => 'form-control',
+        'required'      => '',
+        'readonly'      => '',
+      ];
+      $this->data['kota_penerbit'] = [
+        'name'          => 'kota_penerbit',
+        'id'            => 'kota_penerbit',
+        'class'         => 'form-control',
+        'required'      => '',
+        'readonly'      => '',
+      ];
+      $this->data['lokasi_name'] = [
+        'name'          => 'lokasi_name',
+        'id'            => 'lokasi_name',
+        'class'         => 'form-control',
+        'required'      => '',
+        'readonly'      => '',
+      ];
+      $this->data['rak_name'] = [
+        'name'          => 'rak_name',
+        'id'            => 'rak_name',
+        'class'         => 'form-control',
+        'required'      => '',
+        'readonly'      => '',
+      ];
+      $this->data['baris_name'] = [
+        'name'          => 'baris_name',
+        'id'            => 'baris_name',
+        'class'         => 'form-control',
+        'required'      => '',
+        'readonly'      => '',
+      ];
+      $this->data['tahun_terbit'] = [
+        'name'          => 'tahun_terbit',
+        'id'            => 'tahun_terbit',
+        'class'         => 'form-control',
+        'required'      => '',
+        'readonly'      => '',
+      ];
+      
+      $this->load->view('back/peminjaman/peminjaman_edit_buku', $this->data);
+    } else {
+      $this->session->set_flashdata('message', '<div class="alert alert-danger">Data tidak ditemukan</div>');
+      redirect('admin/peminjaman');
+    }
+  }
+
+  function update_anggota()
+  {
+    $this->data['peminjaman']           = $this->Peminjaman_model->get_by_id($this->input->post('id_peminjaman'));
+
+    if ($this->data['peminjaman']) {
+      $this->data['page_title'] = 'Update Data ' . $this->data['module'];
+      $this->data['action']     = 'admin/peminjaman/update_action';
+      $this->data['id_buku'] = $this->input->post('id_arsip');
+
+      if (is_grandadmin()) {
+        $this->data['get_all_combobox_instansi']            = $this->Instansi_model->get_all_combobox();
+      } elseif (is_masteradmin()) {
+        $this->data['get_all_combobox_anggota']     = $this->Anggota_model->get_all_combobox_by_instansi($this->session->instansi_id);
+      } 
+  
+      $this->data['instansi_id'] = [
+        'name'          => 'instansi_id',
+        'id'            => 'instansi_id',
+        'class'         => 'form-control',
+        'onChange'      => 'tampilNoInduk()',
+      ];
+      $this->data['no_induk'] = [
+        'name'          => 'no_induk',
+        'id'            => 'no_induk',
+        'class'         => 'form-control',
       ];
       $this->data['anggota_name'] = [
         'name'          => 'anggota_name',
@@ -361,8 +609,29 @@ class Peminjaman extends CI_Controller
         'required'      => '',
         'readonly'      => '',
       ];
-
-      $this->load->view('back/peminjaman/peminjaman_edit', $this->data);
+      $this->data['tgl_peminjaman'] = [
+        'name'          => 'tgl_peminjaman',
+        'id'            => 'tgl_peminjaman',
+        'class'         => 'form-control',
+        'readonly'      => '',
+      ];
+      $this->data['tgl_kembali'] = [
+        'name'          => 'tgl_kembali',
+        'id'            => 'tgl_kembali',
+        'class'         => 'form-control',
+        'readonly'      => '',
+      ];
+      $this->data['id_arsip'] = [
+        'name'          => 'id_arsip',
+        'type'          => 'hidden',
+      ];
+      $this->data['id_anggota'] = [
+        'name'          => 'id_anggota',
+        'id'            => 'id_anggota',
+        'type'          => 'hidden',
+      ];
+      
+      $this->load->view('back/peminjaman/peminjaman_edit_anggota', $this->data);
     } else {
       $this->session->set_flashdata('message', '<div class="alert alert-danger">Data tidak ditemukan</div>');
       redirect('admin/peminjaman');

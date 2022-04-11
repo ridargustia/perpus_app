@@ -25,7 +25,75 @@
       <?php echo form_open($action) ?>
       <?php echo validation_errors() ?>
       <div class="box box-primary">
+        <div class="box-header with-border">
+          <h3 class="box-title">BUKU YANG DIPINJAM SAAT INI</h3>
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+          </div>
+        </div>
         <div class="box-body">
+          <div class="row">
+            <div class="col-sm-8">
+              <div class="form-group"><label>Judul Buku</label>
+                <input type="hidden" class="form-control" name="current_arsip" value="<?php echo $peminjaman->arsip_id ?>">
+                <?php echo form_input($current_arsip_name, $peminjaman->arsip_name) ?>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group"><label>No/Label Buku</label>
+                <?php echo form_input($current_no_arsip, $peminjaman->no_arsip) ?>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="form-group"><label>Penulis Buku</label>
+                <?php echo form_input($current_penulis_buku, $peminjaman->penulis_buku) ?>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group"><label>Penerbit</label>
+                <?php echo form_input($current_penerbit, $peminjaman->penerbit) ?>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group"><label>Kota Penerbit</label>
+                <?php echo form_input($current_kota_penerbit, $peminjaman->kota_penerbit) ?>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-3">
+              <div class="form-group"><label>Lokasi Buku</label>
+                <?php echo form_input($current_lokasi_name, $peminjaman->lokasi_name) ?>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="form-group"><label>Rak</label>
+                <?php echo form_input($current_rak_name, $peminjaman->rak_name) ?>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="form-group"><label>Baris</label>
+                <?php echo form_input($current_baris_name, $peminjaman->baris_name) ?>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="form-group"><label>Tahun Terbit</label>
+                <?php echo form_input($current_tahun_terbit, $peminjaman->tahun_terbit) ?>
+              </div>
+            </div>
+          </div>
+
+          <?php if (is_grandadmin()) { ?>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group"><label>Perguruan Tinggi Saat Ini</label>
+              <?php echo form_input($current_instansi_name, $peminjaman->instansi_name) ?>
+              </div>
+            </div>
+          </div>
+          <?php } ?>
           <div class="row">
             <div class="col-md-6">
               <div class="form-group"><label>Tanggal Peminjaman (*)</label>
@@ -38,124 +106,56 @@
               </div>
             </div>
           </div>
-
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group"><label>Buku yang Dipinjam Saat Ini</label>
-                <input type="hidden" class="form-control" name="current_arsip" value="<?php echo $peminjaman->arsip_id ?>">
-                <p><button class="btn btn-primary" name="button"><?php echo $peminjaman->arsip_name ?></button></p>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group"><label>No/Label Buku yang Dipinjam Saat Ini</label>
-                <p><button class="btn btn-primary" name="button"><?php echo $peminjaman->no_arsip ?></button></p>
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group"><label>Peminjam Buku Saat Ini</label>
-                <input type="hidden" class="form-control" name="current_peminjam" value="<?php echo $peminjaman->anggota_id ?>">
-                <p><button class="btn btn-primary" name="button"><?php echo $peminjaman->anggota_name ?></button></p>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group"><label>No Induk Peminjam Buku Saat Ini</label>
-                <p><button class="btn btn-primary" name="button"><?php echo $peminjaman->no_induk ?></button></p>
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-3">
-              <div class="form-group"><label>Perguruan Tinggi Saat Ini</label>
-                <p><button class="btn btn-primary" name="button"><?php echo $peminjaman->instansi_name ?></button></p>
-              </div>
-            </div>
-          </div>
-
-          <hr>
-
-          <?php if (is_grandadmin()) { ?>
-            <div class="row">
-              <div class="col-lg-12">
-                <div class="form-group"><label>Perguruan Tinggi (*)</label>
-                  <?php echo form_dropdown('', $get_all_combobox_instansi, '', $instansi_id) ?>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-lg-6">
-                <div class="form-group"><label>Judul Buku yang Akan Dipinjam</label>
-                  <?php echo form_dropdown('', array('' => '- Pilih Perguruan Tinggi Dulu -'), '', $new_arsip) ?>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="form-group"><label>No Induk Peminjam Buku</label>
-                <?php echo form_dropdown('', array('' => '- Pilih Perguruan Tinggi Dulu -'), '', $no_induk) ?>
-                </div>
-              </div>
-            </div>
-
-          <?php } elseif (is_masteradmin()) { ?>
-
-            <div class="row">
-              <div class="col-lg-6">
-                <div class="form-group"><label>Judul Buku yang Akan Dipinjam</label>
-                <?php echo form_dropdown('', $get_all_combobox_arsip_available, '', $new_arsip) ?>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <div class="form-group"><label>No Induk Peminjam Buku</label>
-                  <?php echo form_dropdown('', $get_all_combobox_anggota, '', $no_induk) ?>
-                </div>
-              </div>
-            </div>
-
-          <?php } ?>
         </div>
         <!-- /.box-body -->
       </div>
       <!-- /.box -->
 
-      <!-- /.box -->
       <div class="box box-primary">
         <div class="box-header with-border">
-          <h3 class="box-title">DATA ANGGOTA</h3>
+          <h3 class="box-title">PEMINJAM BUKU SAAT INI</h3>
           <div class="box-tools pull-right">
             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
           </div>
         </div>
         <div class="box-body">
           <div class="row">
-            <div class="col-sm-4">
-              <div class="form-group"><label>Nama Anggota</label>
-                <?php echo form_input($anggota_name) ?>
+            <div class="col-md-6">
+              <div class="form-group"><label>Nama</label>
+                <input type="hidden" class="form-control" name="current_peminjam" value="<?php echo $peminjaman->anggota_id ?>">
+                <?php echo form_input($current_anggota_name, $peminjaman->anggota_name) ?>
               </div>
             </div>
-            <div class="col-sm-4">
-              <div class="form-group"><label>Jenis Kelamin</label>
-                <?php echo form_input($gender) ?>
-              </div>
-            </div>
-            <div class="col-sm-4">
-              <div class="form-group"><label>Angkatan</label>
-                <?php echo form_input($angkatan) ?>
+            <div class="col-md-6">
+              <div class="form-group"><label>No Induk</label>
+                <?php echo form_input($current_no_induk, $peminjaman->no_induk) ?>
               </div>
             </div>
           </div>
-          <div class="form-group"><label>Address</label>
-            <?php echo form_textarea($address) ?>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group"><label>Jenis Kelamin</label>
+                <?php echo form_input($current_gender, $peminjaman->gender) ?>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group"><label>Angkatan</label>
+                <?php echo form_input($current_angkatan, $peminjaman->angkatan) ?>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group"><label>Alamat</label>
+            <?php echo form_input($current_address, $peminjaman->address) ?>
           </div>
         </div>
-        <?php echo form_input($id_peminjaman, $peminjaman->id_peminjaman) ?>
         <div class="box-footer">
-          <button type="submit" name="button" class="btn btn-success"><i class="fa fa-save"></i> <?php echo $btn_submit ?></button>
-          <button type="reset" name="button" class="btn btn-danger"><i class="fa fa-refresh"></i> <?php echo $btn_reset ?></button>
+          <a href="<?php echo base_url('admin/peminjaman') ?>" class="btn btn-info"><i class="fa fa-arrow-left"></i> <?php echo $btn_back ?></a>
+          <a href="<?php echo base_url('admin/peminjaman/update_book/'.$peminjaman->id_peminjaman) ?>" class="btn btn-primary"><i class="fa fa-pencil"></i> <?php echo $btn_edit ?></a>
         </div>
       </div>
+
       <?php echo form_close() ?>
     </section>
     <!-- /.content -->
@@ -173,18 +173,6 @@
   <script type="text/javascript" src="<?php echo base_url() ?>assets/plugins/select2/dist/js/select2.full.min.js"></script>
 
   <script type="text/javascript">
-    $('#tgl_peminjaman').datepicker({
-      autoclose: true,
-      format: 'yyyy-mm-dd',
-      zIndexOffset: 9999,
-      todayHighlight: true,
-    });
-    $('#tgl_kembali').datepicker({
-      autoclose: true,
-      format: 'yyyy-mm-dd',
-      zIndexOffset: 9999,
-      todayHighlight: true,
-    });
     $(document).ready(function() {
       $("#new_arsip").select2({
         // placeholder: "Pilih Divisi Dulu",
@@ -195,22 +183,6 @@
         // placeholder: "Pilih Divisi Dulu",
       });
     });
-
-    // $('#user_id').on('change', function() {
-    //   var user_id = $(this).val();
-    //   //alert(peminjaman_id);
-    //   $.ajax({
-    //     url: "<?php echo base_url('admin/peminjaman/get_cabang_divisi_instansi_by_user/') ?>" + user_id,
-    //     success: function(response) {
-    //       var myObj = JSON.parse(response);
-
-    //       $('#instansi_id').val(myObj.instansi_name);
-    //       $('#cabang_id').val(myObj.cabang_name);
-    //       $('#divisi_id').val(myObj.divisi_name);
-
-    //     }
-    //   });
-    // });
 
     function tampilArsip() {
       instansi_id = document.getElementById("instansi_id").value;
