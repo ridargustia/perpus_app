@@ -1156,4 +1156,11 @@ class Buku extends CI_Controller
 
       $this->load->view('back/arsip/print_label', $this->data);
   }
+
+  function ajax_preview_cover($id)
+  {
+      $this->data['buku'] = $this->Arsip_model->get_by_id($id);
+
+      $this->load->view('back/arsip/preview_cover', $this->data);
+  }
 }
