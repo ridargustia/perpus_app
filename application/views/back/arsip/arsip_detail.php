@@ -65,7 +65,7 @@
           </div>
           <div class="row">
             <div class="col-sm-4">
-              <div class="form-group"><label>Dibuat Pada</label>
+              <div class="form-group"><label>Dikoleksi Perpustakaan Sejak</label>
                 <p><?php echo datetime_indo($detail_arsip->waktu_dibuat) ?></p>
               </div>
             </div>
