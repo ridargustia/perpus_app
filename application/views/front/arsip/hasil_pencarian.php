@@ -69,7 +69,9 @@
                   <li class="item">
                     <div class="product-img">
                       <?php if ($hasil->cover_buku_thumb != NULL) { ?>
-                      <img src="<?php echo base_url('assets/images/cover_buku/'.$hasil->cover_buku_thumb) ?>" style="height: 90px; width:70px;">
+                      <a href="#" onclick="previewCover(<?php echo $hasil->id_arsip ?>)" title="Preview Cover">
+                        <img src="<?php echo base_url('assets/images/cover_buku/'.$hasil->cover_buku_thumb) ?>" style="height: 90px; width:70px;">
+                      </a>
                       <?php } else { ?>
                       <img src="<?php echo base_url('assets/images/noimage.jpg') ?>" style="height: 90px; width:70px;">
                       <?php } ?>
@@ -103,6 +105,11 @@
             </div>
           </div>
           <!-- /.box -->
+          <div class="modal fade" id="ModalPreview" role="dialog" style="min-width: 100%;margin-left:0px">
+              <div class="modal-dialog" style="min-width: 100%;">
+                  <div id="dataPreview"></div>
+              </div><!-- /.modal-dialog -->
+          </div>
         </section>
         <!-- /.content -->
       </div>
@@ -111,6 +118,32 @@
     <!-- /.content-wrapper -->
 
     <?php $this->load->view('front/template/footer'); ?>
+
+    <script>
+      function previewCover(id) {
+        $("#id").val(id);
+        $('#ModalPreview').modal("show");
+        loadPreview(id);
+      }
+
+      function loadPreview(id_arsip) {
+        // var url = "buku/ajax_label/" + id + "/";
+        $.ajax({
+            url: "<?php echo base_url(); ?>book/ajax_preview_cover/" + id_arsip + "",
+            type: "GET",
+            async: true,
+            data: {
+                
+            },
+            success: function (data) {
+                $('#dataPreview').html(data);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('Error adding / update data');
+            }
+        });
+      }
+    </script>
 
 </body>
 

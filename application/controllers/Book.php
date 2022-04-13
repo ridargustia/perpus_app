@@ -83,4 +83,11 @@ class Book extends CI_Controller
       redirect('home');
     }
   }
+
+  function ajax_preview_cover($id)
+  {
+      $this->data['buku'] = $this->Arsip_model->get_by_id($id);
+
+      $this->load->view('back/arsip/preview_cover', $this->data);
+  }
 }

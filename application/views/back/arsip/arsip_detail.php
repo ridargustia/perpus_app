@@ -101,7 +101,9 @@
             <div class="col-sm-6">
               <div class="form-group"><label>Cover Buku</label><br>
                 <?php if ($detail_arsip->cover_buku_thumb != NULL) { ?>
-                  <img src="<?php echo base_url('assets/images/cover_buku/'.$detail_arsip->cover_buku_thumb) ?>" width="100px" height="120px">
+                  <a href="#" onclick="previewCover(<?php echo $detail_arsip->id_arsip ?>)" title="Preview Cover">
+                    <img src="<?php echo base_url('assets/images/cover_buku/'.$detail_arsip->cover_buku_thumb) ?>" width="100px" height="120px">
+                  </a>
                 <?php } else { ?>
                   <img src="<?php echo base_url('assets/images/noimage.jpg') ?>" width="100px" height="120px">
                 <?php } ?>
@@ -115,6 +117,12 @@
       </div>
 
       <a href="<?php echo base_url('admin/buku/index') ?>" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Kembali ke halaman sebelumnya</a>
+
+      <div class="modal fade" id="ModalPreview" role="dialog" style="min-width: 100%;margin-left:0px">
+          <div class="modal-dialog" style="min-width: 100%;">
+              <div id="dataPreview"></div>
+          </div><!-- /.modal-dialog -->
+      </div>
 
       <!-- /.box -->
     </section>
@@ -146,6 +154,30 @@
       placeholder: "- Please Choose Jenis Arsip -",
       theme: "flat"
     });
+
+    function previewCover(id) {
+      $("#id").val(id);
+      $('#ModalPreview').modal("show");
+      loadPreview(id);
+    }
+
+    function loadPreview(id_arsip) {
+      // var url = "buku/ajax_label/" + id + "/";
+      $.ajax({
+          url: "<?php echo base_url(); ?>admin/buku/ajax_preview_cover/" + id_arsip + "",
+          type: "GET",
+          async: true,
+          data: {
+              
+          },
+          success: function (data) {
+              $('#dataPreview').html(data);
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+              alert('Error adding / update data');
+          }
+      });
+    }
   </script>
 
 </div>

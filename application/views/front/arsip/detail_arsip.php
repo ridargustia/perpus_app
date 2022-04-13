@@ -136,7 +136,7 @@
       function loadPreview(id_arsip) {
         // var url = "buku/ajax_label/" + id + "/";
         $.ajax({
-            url: "<?php echo base_url(); ?>admin/buku/ajax_preview_cover/" + id_arsip + "",
+            url: "<?php echo base_url(); ?>book/ajax_preview_cover/" + id_arsip + "",
             type: "GET",
             async: true,
             data: {
