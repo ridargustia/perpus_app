@@ -136,6 +136,22 @@ class Peminjaman_model extends CI_Model{
     return $this->db->get($this->table)->result();
   }
 
+  function get_all_by_anggota($anggota_id)
+  {
+    $this->db->select('
+      id_peminjaman, tgl_peminjaman, tgl_kembali, peminjaman.arsip_id, arsip.id_arsip, arsip.arsip_name
+    ');
+
+    $this->db->join('arsip', 'peminjaman.arsip_id = arsip.id_arsip', 'LEFT');
+
+    $this->db->where('is_delete_peminjaman', '0');
+    $this->db->where('peminjaman.anggota_id', $anggota_id);
+
+    $this->db->order_by($this->id, $this->order);
+
+    return $this->db->get($this->table)->result();
+  }
+
   function get_all_by_sadmin()
   {
     $this->db->select('
@@ -174,6 +190,8 @@ class Peminjaman_model extends CI_Model{
 
     return $this->db->get($this->table)->result();
   }
+
+  
 
   function get_all_deleted()
   {

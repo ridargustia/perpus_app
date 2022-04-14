@@ -56,31 +56,23 @@ class Pengembalian extends CI_Controller
     $this->data['action']     = 'admin/pengembalian/create_action';
 
     if (is_grandadmin()) {
-      $this->data['get_all_combobox_arsip_peminjaman']      = $this->Peminjaman_model->get_all_combobox_arsip_peminjaman();
+      $this->data['get_all_combobox_instansi']            = $this->Instansi_model->get_all_combobox();
+      // $this->data['get_all_combobox_arsip_peminjaman']      = $this->Peminjaman_model->get_all_combobox_arsip_peminjaman();
     } elseif (is_masteradmin()) {
-      $this->data['get_all_combobox_arsip_peminjaman']      = $this->Peminjaman_model->get_all_combobox_arsip_peminjaman_by_instansi($this->session->instansi_id);
+      $this->data['get_all_combobox_anggota']     = $this->Anggota_model->get_all_combobox_by_instansi($this->session->instansi_id);
+      // $this->data['get_all_combobox_arsip_peminjaman']      = $this->Peminjaman_model->get_all_combobox_arsip_peminjaman_by_instansi($this->session->instansi_id);
     }
 
-    $this->data['tgl_kembali'] = [
-      'name'          => 'tgl_kembali',
-      'id'            => 'tgl_kembali',
+    $this->data['instansi_id'] = [
+      'name'          => 'instansi_id',
+      'id'            => 'instansi_id',
       'class'         => 'form-control',
-      'autocomplete'  => 'off',
-      'required'      => '',
-      'value'         => $this->form_validation->set_value('tgl_kembali'),
+      'onChange'      => 'tampilNoInduk()',
     ];
-    $this->data['arsip_id'] = [
-      'name'          => 'arsip_id',
-      'id'            => 'arsip_id',
+    $this->data['no_induk'] = [
+      'name'          => 'no_induk',
+      'id'            => 'no_induk',
       'class'         => 'form-control',
-      'type'          => 'hidden',
-      'required'      => '',
-    ];
-    $this->data['peminjaman_id'] = [
-      'name'          => 'peminjaman_id',
-      'id'            => 'peminjaman_id',
-      'class'         => 'form-control',
-      'required'      => '',
     ];
     $this->data['anggota_id'] = [
       'name'          => 'anggota_id',
@@ -89,28 +81,32 @@ class Pengembalian extends CI_Controller
       'required'      => '',
       'readonly'      => '',
     ];
-    $this->data['gender'] = [
-      'name'          => 'gender',
-      'id'            => 'gender',
+    $this->data['anggota_name'] = [
+      'name'          => 'anggota_name',
+      'id'            => 'anggota_name',
       'class'         => 'form-control',
       'required'      => '',
       'readonly'      => '',
     ];
-    $this->data['address'] = [
-      'name'          => 'address',
-      'id'            => 'address',
-      'class'         => 'form-control',
-      'rows'          => '2',
-      'required'      => '',
-      'readonly'      => '',
-    ];
-    $this->data['no_induk'] = [
-      'name'          => 'no_induk',
-      'id'            => 'no_induk',
-      'class'         => 'form-control',
-      'required'      => '',
-      'readonly'      => '',
-    ];
+    // $this->data['id_anggota'] = [
+    //   'name'          => 'id_anggota',
+    //   'id'            => 'id_anggota',
+    //   'type'          => 'hidden',
+    //   'onChange'      => 'tampilBukuDipinjam()',
+    // ];
+    // $this->data['arsip_id'] = [
+    //   'name'          => 'arsip_id',
+    //   'id'            => 'arsip_id',
+    //   'class'         => 'form-control',
+    //   'type'          => 'hidden',
+    //   'required'      => '',
+    // ];
+    // $this->data['peminjaman_id'] = [
+    //   'name'          => 'peminjaman_id',
+    //   'id'            => 'peminjaman_id',
+    //   'class'         => 'form-control',
+    //   'required'      => '',
+    // ];
 
     $this->load->view('back/pengembalian/pengembalian_add', $this->data);
   }
@@ -410,5 +406,50 @@ class Pengembalian extends CI_Controller
       $this->session->set_flashdata('message', '<div class="alert alert-danger">No data found</div>');
       redirect('admin/pengembalian');
     }
+  }
+
+  function get_anggota($id_anggota = '')
+  {
+    $data = $this->db->get_where('anggota', array('id_anggota' => $id_anggota));
+
+    if ($data->num_rows() != 0) {
+        $output['success'] = 1;
+
+        $output['id_anggota']    = $data->row()->id_anggota;
+        $output['no_induk']      = $data->row()->no_induk;
+        $output['anggota_name']  = $data->row()->anggota_name;
+    } else {
+        $output['success'] = 0;
+    }
+
+    echo json_encode($output);
+  }
+
+  function tampil_buku_dipinjam($id)
+  {
+    $this->data['buku_dipinjam'] = $this->Peminjaman_model->get_all_by_anggota($id);
+
+    $this->load->view('back/peminjaman/V_peminjaman_list', $this->data);
+  }
+
+  function get_peminjaman($no_induk = '')
+  {
+    $this->db->join('anggota', 'peminjaman.anggota_id = anggota.id_anggota');
+    $this->db->join('instansi', 'peminjaman.instansi_id = instansi.id_instansi');
+    $this->db->join('arsip', 'peminjaman.arsip_id = arsip.id_arsip');
+
+    $data = $this->db->get_where('peminjaman', array('anggota_id' => $no_induk));
+
+    if ($data->num_rows() != 0) {
+      $output['success'] = 1;
+
+      $output['id_anggota']     = $data->row()->anggota_id;
+      $output['anggota_name']   = $data->row()->anggota_name;
+      $output['no_induk']       = $data->row()->no_induk;
+    } else {
+      $output['success'] = 0;
+    }
+
+    echo json_encode($output);
   }
 }
