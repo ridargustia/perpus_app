@@ -66,6 +66,7 @@ class Peminjaman extends CI_Controller
       'name'          => 'id_arsip',
       'id'            => 'id_arsip',
       'type'          => 'hidden',
+      'required'      => '',
     ];
     $this->data['instansi_id'] = [
       'name'          => 'instansi_id',
@@ -155,6 +156,11 @@ class Peminjaman extends CI_Controller
   {
     is_create();
 
+    if ($this->input->post('id_arsip') == null) {
+      $this->session->set_flashdata('message', '<div class="alert alert-danger">Data buku harus diisi terlebih dahulu.</div>');
+      redirect('admin/peminjaman/create_book');
+    }
+
     $this->data['page_title'] = 'Tambah Data ' . $this->data['module'];
     $this->data['action']     = 'admin/peminjaman/create_action';
     $this->data['id_buku'] = $this->input->post('id_arsip'); 
@@ -209,14 +215,12 @@ class Peminjaman extends CI_Controller
       'name'          => 'tgl_peminjaman',
       'id'            => 'tgl_peminjaman',
       'class'         => 'form-control',
-      'value'         => $this->form_validation->set_value('tgl_peminjaman'),
       'readonly'      => '',
     ];
     $this->data['tgl_kembali'] = [
       'name'          => 'tgl_kembali',
       'id'            => 'tgl_kembali',
       'class'         => 'form-control',
-      'value'         => $this->form_validation->set_value('tgl_kembali'),
       'readonly'      => '',
     ];
     $this->data['id_arsip'] = [
@@ -228,56 +232,53 @@ class Peminjaman extends CI_Controller
       'id'            => 'id_anggota',
       'type'          => 'hidden',
     ];
+    $this->data['id_instansi'] = [
+      'name'          => 'id_instansi',
+      'id'            => 'id_instansi',
+      'type'          => 'hidden',
+    ];
     
     $this->load->view('back/peminjaman/peminjaman_add_anggota', $this->data);
   }
 
   function create_action()
   {
-    $this->form_validation->set_rules('tgl_kembali', 'Tanggal Pengembalian', 'trim|required');
-    $this->form_validation->set_rules('tgl_peminjaman', 'Tanggal Peminjaman', 'trim|required');
-
-    $this->form_validation->set_message('required', '{field} wajib diisi');
-
-    $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
-
-    // $data_user = $this->Auth_model->get_by_id($this->input->post('user_id'));
+    if ($this->input->post('id_anggota') == null) {
+      $this->session->set_flashdata('message', '<div class="alert alert-danger">Gagal disimpan. Data anggota harus diisi.</div>');
+      redirect('admin/peminjaman');
+    }
 
     if (is_grandadmin()) {
-      $instansi_id  = $this->input->post('instansi_id');
+      $instansi_id  = $this->input->post('id_instansi');
     } elseif (is_masteradmin()) {
       $instansi_id  = $this->session->instansi_id;
     } 
 
-    if ($this->form_validation->run() === FALSE) {
-      $this->create();
-    } else {
-      $data = array(
-        'tgl_peminjaman'    => $this->input->post('tgl_peminjaman'),
-        'tgl_kembali'       => $this->input->post('tgl_kembali'),
-        'arsip_id'          => $this->input->post('id_arsip'),
-        'anggota_id'        => $this->input->post('id_anggota'),
-        'instansi_id'       => $instansi_id,
-        'created_by'        => $this->session->username,
-      );
-      // var_dump($this->input->post('no_induk'));
-      // die();
-      $this->Peminjaman_model->insert($data);
-      write_log();
+    $data = array(
+      'tgl_peminjaman'    => $this->input->post('tgl_peminjaman'),
+      'tgl_kembali'       => $this->input->post('tgl_kembali'),
+      'arsip_id'          => $this->input->post('id_arsip'),
+      'anggota_id'        => $this->input->post('id_anggota'),
+      'instansi_id'       => $instansi_id,
+      'created_by'        => $this->session->username,
+    );
+    // var_dump($data);
+    // die();
+    $this->Peminjaman_model->insert($data);
+    write_log();
 
-      $data_buku = $this->Arsip_model->get_by_id($this->input->post('id_arsip'));
+    $data_buku = $this->Arsip_model->get_by_id($this->input->post('id_arsip'));
 
-      $stok_result = $data_buku->qty - 1;
+    $stok_result = $data_buku->qty - 1;
 
-      // mengurangi qty buku karena buku sedang dipinjam
-      $this->db->where('id_arsip', $this->input->post('id_arsip'));
-      $this->db->update('arsip', array('qty' => $stok_result));
+    // mengurangi qty buku karena buku sedang dipinjam
+    $this->db->where('id_arsip', $this->input->post('id_arsip'));
+    $this->db->update('arsip', array('qty' => $stok_result));
 
-      write_log();
+    write_log();
 
-      $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil disimpan</div>');
-      redirect('admin/peminjaman');
-    }
+    $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil disimpan</div>');
+    redirect('admin/peminjaman');
   }
 
   function update($id)
@@ -675,6 +676,8 @@ class Peminjaman extends CI_Controller
       if ($this->input->post('new_arsip') == NULL) {
         // echo "ARSIP BARU KOSONG";
         $data = array(
+          'anggota_id'        => $this->input->post('id_anggota'),
+          'instansi_id'       => $data_anggota->instansi_id,
           'tgl_peminjaman'    => $this->input->post('tgl_peminjaman'),
           'tgl_kembali'       => $this->input->post('tgl_kembali'),
           'modified_by'       => $this->session->username,
@@ -1129,6 +1132,7 @@ class Peminjaman extends CI_Controller
         $output['gender']           = $gender;
         $output['angkatan']    = $data->row()->angkatan;
         $output['address']    = $data->row()->address;
+        $output['instansi_id']    = $data->row()->instansi_id;
         $output['tgl_peminjaman']    = date('Y-m-d');
         $output['tgl_kembali']    = date('Y-m-d', strtotime('+7 days', strtotime(date('Y-m-d'))));
     } else {

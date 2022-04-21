@@ -30,7 +30,9 @@
         echo $this->session->flashdata('message');
       } ?>
       <?php echo validation_errors() ?>
-      <?php echo form_open($action) ?>
+      <?php 
+        echo form_open($action);
+      ?>
       <div class="box box-primary">
         <div class="box-header with-border">
           <h3 class="box-title">SCAN QR CODE ANGGOTA DISINI</h3>
@@ -107,8 +109,8 @@
           </div>
         </div>
         <div class="box-footer">
-          <button type="submit" name="button" class="btn btn-success"><i class="fa fa-save"></i> <?php echo $btn_submit ?></button>
-          <button type="reset" name="button" class="btn btn-danger"><i class="fa fa-refresh"></i> <?php echo $btn_reset ?></button>
+          <a href="#" onClick="document.location.reload(true)" class="btn btn-info"><i class="fa fa-refresh"></i> Ulangi Scan</a>
+          <a href="<?php echo base_url() ?>admin/pengembalian" class="btn btn-success"><i class="fa fa-check"></i> Selesai</a>
         </div>
       </div>
       <?php echo form_close() ?>
@@ -131,6 +133,19 @@
 
   <script type="text/javascript">
     window.addEventListener('load', function () {
+        <?php if ($this->session->flashdata('anggota_id')) { ?>
+          $.ajax({
+            url: "<?php echo base_url('admin/pengembalian/get_anggota/'.$this->session->flashdata('anggota_id')) ?>",
+            success: function(response) {
+              var myObj = JSON.parse(response);
+
+              $('#anggota_id').val(myObj.no_induk);
+              $('#anggota_name').val(myObj.anggota_name);
+
+              tampilBukuDipinjam(myObj.id_anggota);
+            }
+          });
+        <?php } ?>
         let selectedDeviceId;
         let audio = new Audio("<?php echo base_url() ?>assets/audio/beep.mp3");
         const codeReader = new ZXing.BrowserQRCodeReader()
@@ -163,7 +178,7 @@
                 let id_qrcode = string_kode.split("/");
 
                 if (id_qrcode[1] == 'book') {
-                  
+                  //NOTIFIKASI FAILED
                 } else if (id_qrcode[1] == 'anggota') {
                   $.ajax({
                     url: "<?php echo base_url('admin/pengembalian/get_anggota/') ?>" + id_qrcode[0],
@@ -219,12 +234,12 @@
 
     $('#no_induk').on('change', function() {
       var no_induk = $(this).val();
-      //alert(peminjaman_id);
+      // alert(no_induk);
       $.ajax({
-        url: "<?php echo base_url('admin/pengembalian/get_peminjaman/') ?>" + no_induk,
+        url: "<?php echo base_url('admin/pengembalian/get_anggota/') ?>" + no_induk,
         success: function(response) {
           var myObj = JSON.parse(response);
-
+          
           $('#anggota_id').val(myObj.no_induk);
           $('#anggota_name').val(myObj.anggota_name);
 
@@ -264,6 +279,7 @@
           }
       });
     }
+
   </script>
 
 </div>

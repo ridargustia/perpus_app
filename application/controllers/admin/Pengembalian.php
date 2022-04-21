@@ -452,4 +452,87 @@ class Pengembalian extends CI_Controller
 
     echo json_encode($output);
   }
+
+  function verifikasi_buku($id_peminjaman)
+  {
+      $this->data['page_title'] = 'Tambah Data ' . $this->data['module'];
+      $this->data['action']     = 'admin/pengembalian/verifikasi_action';
+
+      $this->data['data_peminjaman'] = $this->Peminjaman_model->get_by_id($id_peminjaman);
+
+      $this->data['arsip_id'] = [
+        'name'  => 'arsip_id',
+        'id'    => 'arsip_id',
+        'type'  => 'hidden'
+      ];
+      $this->data['peminjaman_id'] = [
+        'name'  => 'peminjaman_id',
+        'id'    => 'peminjaman_id',
+        'type'  => 'hidden'
+      ];
+      $this->data['anggota_id'] = [
+        'name'  => 'anggota_id',
+        'id'    => 'anggota_id',
+        'type'  => 'hidden'
+      ];
+
+      $this->load->view('back/pengembalian/scan_verifikasi_buku', $this->data);
+  }
+
+  function verifikasi_action()
+  {
+    $string_kode = $this->input->post('id_qrcode');
+    $id_qrcode = explode("/", $string_kode);
+
+    $arsip_id = $this->input->post('arsip_id');
+    $id_peminjaman = $this->input->post('peminjaman_id');
+    $anggota_id = $this->input->post('anggota_id');
+
+    if ($id_qrcode[1] == 'book') {
+      if ($id_qrcode[0] == $arsip_id) {
+        $data_peminjaman = $this->Peminjaman_model->get_by_id($id_peminjaman);
+
+        $data = array(
+          'tgl_kembali'         => date('Y-m-d'),
+          'peminjaman_id'       => $this->input->post('peminjaman_id'),
+          'arsip_id'            => $this->input->post('arsip_id'),
+          'anggota_id'          => $data_peminjaman->anggota_id,
+          'instansi_id'         => $data_peminjaman->instansi_id,
+          'created_by'          => $this->session->username,
+        );
+  
+        $this->Pengembalian_model->insert($data);
+  
+        write_log();
+  
+        // menambah qty buku
+        $data_buku = $this->Arsip_model->get_by_id($this->input->post('arsip_id'));
+  
+        $stok_result = $data_buku->qty + 1;
+  
+        $this->db->where('id_arsip', $this->input->post('arsip_id'));
+        $this->db->update('arsip', array('qty' => $stok_result));
+  
+        write_log();
+  
+        // mengganti status is_kembali peminjaman buku
+        $this->db->where('id_peminjaman', $this->input->post('peminjaman_id'));
+        $this->db->update('peminjaman', array('is_kembali' => '1'));
+  
+        write_log();
+
+        //NOTIFIKASI SUKSES
+        $this->session->set_flashdata('message', '<div class="alert alert-success">Authentication Success</div>');
+        $this->session->set_flashdata('anggota_id', $anggota_id);
+        redirect('admin/pengembalian/create');
+      } else {
+        //NOTIFIKASI FAILED
+        $this->session->set_flashdata('message', '<div class="alert alert-danger">Authentication Failed</div>');
+        $this->session->set_flashdata('anggota_id', $anggota_id);
+        redirect('admin/pengembalian/create');
+      }
+    } elseif ($id_qrcode[1] == 'anggota') {
+      //NOTIFIKASI FAILED
+    }
+  }
 }

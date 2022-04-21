@@ -10,16 +10,22 @@
             </tr>
         </thead>
         <tbody>
+            <?php if (!$buku_dipinjam) { ?>
+                <tr>
+                    <td colspan='5' style='text-align: center;'>Tidak ada buku yang dipinjam</td>
+                </tr>
+            <?php } ?>
             <?php 
             $no = 1;
-            foreach($buku_dipinjam as $data) { 
+            foreach($buku_dipinjam as $data) {
+                $kembalikan = '<a href="'.base_url('admin/pengembalian/verifikasi_buku/'.$data->id_peminjaman).'" class="btn btn-sm btn-info" title="Kembalikan Buku"><i class="fa fa-refresh"></i></a>'; 
             ?>
             <tr>
                 <th scope="row"><?php echo $no++ ?></th>
                 <td><?php echo $data->arsip_name ?></td>
                 <td><?php echo $data->tgl_peminjaman ?></td>
                 <td><?php echo $data->tgl_kembali ?></td>
-                <td><a href="#" class="btn btn-sm btn-info"><i class="fa fa-refresh"></i></a></td>
+                <td><?php echo $kembalikan ?></td>
             </tr>
             <?php } ?>
         </tbody>

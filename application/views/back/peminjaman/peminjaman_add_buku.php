@@ -154,7 +154,7 @@
       <div class="box box-primary">
         <div class="box-footer">
           <a href="#" onClick="document.location.reload(true)" class="btn btn-info"><i class="fa fa-refresh"></i> Ulangi Scan</a>
-          <button type="submit" name="button" class="btn btn-success"><i class="fa fa-save"></i> Selanjutnya</button>
+          <button type="submit" name="button" class="btn btn-success"><i class="fa fa-share"></i> Selanjutnya</button>
         </div>
       </div>
       <?php echo form_close() ?>

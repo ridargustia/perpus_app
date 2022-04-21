@@ -123,6 +123,7 @@
         </div>
         <?php echo form_input($id_arsip, $id_buku) ?>
         <?php echo form_input($id_anggota) ?>
+        <?php echo form_input($id_instansi) ?>
         <div class="box-footer">
           <a href="#" onClick="document.location.reload(true)" class="btn btn-info"><i class="fa fa-refresh"></i> Ulangi Scan</a>
           <button type="submit" name="button" class="btn btn-success"><i class="fa fa-save"></i> <?php echo $btn_submit ?></button>
@@ -222,6 +223,7 @@
                       $('#address').val(myObj.address);
                       $('#tgl_peminjaman').val(myObj.tgl_peminjaman);
                       $('#tgl_kembali').val(myObj.tgl_kembali);
+                      $('#id_instansi').val(myObj.instansi_id);
                     }
                   });
                 }
@@ -262,6 +264,7 @@
           $('#address').val(myObj.address);
           $('#tgl_peminjaman').val(myObj.tgl_peminjaman);
           $('#tgl_kembali').val(myObj.tgl_kembali);
+          $('#id_instansi').val(myObj.instansi_id);
         }
       });
     });

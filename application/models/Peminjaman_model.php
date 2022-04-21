@@ -145,6 +145,7 @@ class Peminjaman_model extends CI_Model{
     $this->db->join('arsip', 'peminjaman.arsip_id = arsip.id_arsip', 'LEFT');
 
     $this->db->where('is_delete_peminjaman', '0');
+    $this->db->where('is_kembali', '0');
     $this->db->where('peminjaman.anggota_id', $anggota_id);
 
     $this->db->order_by($this->id, $this->order);
