@@ -349,14 +349,17 @@ class Pengembalian_model extends CI_Model{
   {
     $this->db->select('
       id_pengembalian, tgl_kembali, peminjaman_id, pengembalian.anggota_id, pengembalian.arsip_id,
-      anggota.id_anggota, anggota.no_induk, anggota.anggota_name,
-      arsip.id_arsip, arsip.no_arsip, arsip.arsip_name,
+      anggota.id_anggota, anggota.no_induk, anggota.anggota_name, anggota.gender, anggota.angkatan, anggota.address,
+      arsip.id_arsip, arsip.no_arsip, arsip.arsip_name, arsip.penulis_buku, arsip.penerbit, arsip.kota_penerbit, arsip.tahun_terbit, lokasi.lokasi_name, rak.rak_name, baris.baris_name,
       instansi.instansi_name
     ');
 
     $this->db->join('arsip', 'pengembalian.arsip_id = arsip.id_arsip', 'LEFT');
     $this->db->join('anggota', 'pengembalian.anggota_id = anggota.id_anggota', 'LEFT');
     $this->db->join('instansi', 'pengembalian.instansi_id = instansi.id_instansi', 'LEFT');
+    $this->db->join('lokasi', 'arsip.lokasi_id = lokasi.id_lokasi', 'LEFT');
+    $this->db->join('rak', 'arsip.rak_id = rak.id_rak', 'LEFT');
+    $this->db->join('baris', 'arsip.baris_id = baris.id_baris', 'LEFT');
 
     $this->db->where($this->id, $id);
 
