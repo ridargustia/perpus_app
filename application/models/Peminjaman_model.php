@@ -723,4 +723,20 @@ class Peminjaman_model extends CI_Model{
     $this->db->delete($this->table);
   }
 
+  function get_peminjaman_by_anggota($id_anggota)
+  {
+    $this->db->select('
+      peminjaman.id_peminjaman, peminjaman.tgl_peminjaman, peminjaman.tgl_kembali, peminjaman.arsip_id, peminjaman.anggota_id, peminjaman.instansi_id, peminjaman.created_at, peminjaman.created_by, anggota.id_anggota, anggota.no_induk, anggota.anggota_name, anggota.instansi_id, anggota.gender, anggota.angkatan, anggota.address, arsip.id_arsip, arsip.arsip_name, arsip.no_arsip, arsip.cover_buku, arsip.cover_buku_thumb, instansi.instansi_name
+    ');
+    
+    $this->db->join('anggota', 'peminjaman.anggota_id = anggota.id_anggota');
+    $this->db->join('arsip', 'peminjaman.arsip_id = arsip.id_arsip');
+    $this->db->join('instansi', 'anggota.instansi_id = instansi.id_instansi');
+    
+    $this->db->where('peminjaman.anggota_id', $id_anggota);
+    $this->db->where('peminjaman.is_kembali', '0');
+    $this->db->where('peminjaman.is_delete_peminjaman', '0');
+
+    return $this->db->get($this->table)->result();
+  }
 }

@@ -39,14 +39,57 @@ class Peminjaman extends CI_Controller
     is_read();
 
     $this->data['page_title'] = 'Data ' . $this->data['module'];
+    $data_array = array();
+    $result = array();
+
+    // if (is_grandadmin()) {
+    //   $this->data['get_all'] = $this->Peminjaman_model->get_all();
+    // } elseif (is_masteradmin()) {
+    //   $this->data['get_all'] = $this->Peminjaman_model->get_all_by_instansi();
+    // }
 
     if (is_grandadmin()) {
-      $this->data['get_all'] = $this->Peminjaman_model->get_all();
+      $get_all = $this->Peminjaman_model->get_all();
     } elseif (is_masteradmin()) {
-      $this->data['get_all'] = $this->Peminjaman_model->get_all_by_instansi();
+      $get_all = $this->Peminjaman_model->get_all_by_instansi();
     }
 
+    foreach($get_all as $data) {
+      array_push($data_array, $data->anggota_id);
+    }
+    $anggota_id = array_unique($data_array);
+
+    for($i=0; $i<count($data_array); $i++) {
+      if($anggota_id[$i] != NULL) {
+        array_push($result, $anggota_id[$i]);
+
+      }  
+    }
+
+    $this->data['get_all'] = array();
+    for($i=0; $i<count($result); $i++){
+      $data_anggota = $this->Anggota_model->get_by_id_for_peminjaman_list($result[$i]);
+      if($data_anggota){
+        array_push($this->data['get_all'], $data_anggota);
+      }
+    }
+
+    // var_dump($this->data['get_all']); die();
+
     $this->load->view('back/peminjaman/peminjaman_list', $this->data);
+  }
+
+  function detail($id_anggota)
+  {
+    $this->data['page_title'] = 'Detail ' . $this->data['module'];
+
+    $this->data['get_peminjaman'] = $this->Peminjaman_model->get_peminjaman_by_anggota($id_anggota);
+
+    $this->data['get_user'] = $this->Anggota_model->get_by_id_for_detail_peminjaman($id_anggota);
+
+    // var_dump($this->data['get_user']); die();
+
+    $this->load->view('back/peminjaman/peminjaman_detail', $this->data);
   }
 
   function create_book()
@@ -757,6 +800,31 @@ class Peminjaman extends CI_Controller
     }
   }
 
+  function delete_peminjaman_by_anggota($id_anggota)
+  {
+    $delete = $this->Peminjaman_model->get_peminjaman_by_anggota($id_anggota);
+
+    if($delete) {
+      foreach($delete as $data) {
+        $data_peminjaman = array(
+          'is_delete_peminjaman'   => '1',
+          'deleted_by'  => $this->session->username,
+          'deleted_at'  => date('Y-m-d H:i:a'),
+        );
+
+        $this->Peminjaman_model->soft_delete($data->id_peminjaman, $data_peminjaman);
+      }
+      
+      write_log();
+
+      $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil dihapus</div>');
+      redirect('admin/peminjaman');
+    } else {
+      $this->session->set_flashdata('message', '<div class="alert alert-danger">Data tidak ditemukan</div>');
+      redirect('admin/peminjaman');
+    }
+  }
+
   function delete_permanent($id)
   {
     is_delete();
@@ -918,12 +986,12 @@ class Peminjaman extends CI_Controller
       $output['success'] = 1;
 
       $output['arsip_id']       = $data->row()->arsip_id;
-      $output['anggota_name']           = $data->row()->anggota_name;
-      $output['no_induk']           = $data->row()->no_induk;
-      $output['gender']           = $gender;
-      $output['address']  = $data->row()->address;
+      $output['anggota_name']   = $data->row()->anggota_name;
+      $output['no_induk']       = $data->row()->no_induk;
+      $output['gender']         = $gender;
+      $output['address']        = $data->row()->address;
       $output['instansi_name']  = $data->row()->instansi_name;
-      $output['no_arsip']  = $data->row()->no_arsip;
+      $output['no_arsip']       = $data->row()->no_arsip;
     } else {
       $output['success'] = 0;
     }
@@ -1141,4 +1209,330 @@ class Peminjaman extends CI_Controller
 
     echo json_encode($output);
   }
+
+  function print_invoice()
+	{
+		require FCPATH . '/vendor/autoload.php';
+		require FCPATH . '/vendor/setasign/fpdf/fpdf.php';
+
+		$pdf = new FPDF('P','mm','A4');
+    $pdf->AddPage();
+    
+    $pdf->SetFont('Arial','B',14);
+    $pdf->Cell(189 ,5,'PERPUSTAKAAN',0,1, 'C');
+    $pdf->Cell(189 ,8,'JAYA ABADI',0,1, 'C');
+
+    $pdf->SetFont('Arial','',14);
+    $pdf->Cell(189 ,5,'JL. Selalu Bahagia',0,1, 'C');
+		// $pdf->Cell(25 ,5,'Date',0,0);
+		// $pdf->Cell(34 ,5,'01 Januari 2020',0,1);//end of line
+
+    $pdf->SetLineWidth(1);
+    $pdf->Line(10,30,199,30);
+    $pdf->SetLineWidth(0);
+    $pdf->Line(10,31,199,31);
+
+		// $pdf->Cell(130 ,5,'Jakarta, Indonesia, 32122',0,0);
+		// $pdf->Cell(25 ,5,'Invoice #',0,0);
+		// $pdf->Cell(34 ,5,'1234567',0,1);//end of line
+
+		// $pdf->Cell(130 ,5,'Phone 021121212',0,0);
+		// $pdf->Cell(59 ,5,'',0,1);
+
+		//make a dummy empty cell as a vertical spacer
+		$pdf->Cell(189 ,5,'',0,1);//end of line
+
+		//billing address
+    $pdf->SetFont('Arial','',12);
+		$pdf->Cell(189 ,10,'KARTU PEMINJAMAN DAN PENGEMBALIAN BUKU',0,1, 'C');//end of line
+
+		//add dummy cell at beginning of each line for indentation
+		$pdf->Cell(37 ,6,'No Induk Anggota',0,0);
+    $pdf->Cell(5 ,6,':',0,0);
+    $pdf->Cell(147 ,6,'1600018161',0,1);
+		$pdf->Cell(37 ,6,'Nama Anggota',0,0);
+    $pdf->Cell(5 ,6,':',0,0);
+    $pdf->Cell(147 ,6,'Ridar Gustia Priatama',0,1);
+    $pdf->Cell(37 ,6,'Tanggal',0,0);
+    $pdf->Cell(5 ,6,':',0,0);
+    $pdf->Cell(147 ,6,'12 Mei 2022',0,1);
+
+		$pdf->Cell(189 ,5,'',0,1);//end of line
+
+		//Ujicoba invoice contents
+    // while($hasil=mysqli_fetch_array($data)){
+    //   $cellWidth=20; //lebar sel
+    //   $cellHeight=1; //tinggi sel satu baris normal
+    
+    //   //periksa apakah teksnya melibihi kolom?
+    //   if($pdf->GetStringWidth($hasil['pesan']) < $cellWidth){
+    //     //jika tidak, maka tidak melakukan apa-apa
+    //     $line=1;
+    //   }else{
+    //     //jika ya, maka hitung ketinggian yang dibutuhkan untuk sel akan dirapikan
+    //     //dengan memisahkan teks agar sesuai dengan lebar sel
+    //     //lalu hitung berapa banyak baris yang dibutuhkan agar teks pas dengan sel
+        
+    //     $textLength=strlen($hasil['pesan']);	//total panjang teks
+    //     $errMargin=5;		//margin kesalahan lebar sel, untuk jaga-jaga
+    //     $startChar=0;		//posisi awal karakter untuk setiap baris
+    //     $maxChar=0;			//karakter maksimum dalam satu baris, yang akan ditambahkan nanti
+    //     $textArray=array();	//untuk menampung data untuk setiap baris
+    //     $tmpString="";		//untuk menampung teks untuk setiap baris (sementara)
+        
+    //     while($startChar < $textLength){ //perulangan sampai akhir teks
+    //       //perulangan sampai karakter maksimum tercapai
+    //       while( 
+    //       $pdf->GetStringWidth( $tmpString ) < ($cellWidth-$errMargin) &&
+    //       ($startChar+$maxChar) < $textLength ) {
+    //         $maxChar++;
+    //         $tmpString=substr($hasil['pesan'],$startChar,$maxChar);
+    //       }
+    //       //pindahkan ke baris berikutnya
+    //       $startChar=$startChar+$maxChar;
+    //       //kemudian tambahkan ke dalam array sehingga kita tahu berapa banyak baris yang dibutuhkan
+    //       array_push($textArray,$tmpString);
+    //       //reset variabel penampung
+    //       $maxChar=0;
+    //       $tmpString='';
+          
+    //     }
+    //     //dapatkan jumlah baris
+    //     $line=count($textArray);
+    //   }
+    
+    //   //tulis selnya
+    //   $pdf->SetFillColor(255,255,255);
+    //   $pdf->Cell(1,($line * $cellHeight),$no++,1,0,'C',true); //sesuaikan ketinggian dengan jumlah garis
+    //   $pdf->Cell(4,($line * $cellHeight),$hasil['tanggal'],1,0); //sesuaikan ketinggian dengan jumlah garis
+    
+    //   //memanfaatkan MultiCell sebagai ganti Cell
+    //   //atur posisi xy untuk sel berikutnya menjadi di sebelahnya.
+    //   //ingat posisi x dan y sebelum menulis MultiCell
+    //   $xPos=$pdf->GetX();
+    //   $yPos=$pdf->GetY();
+    //   $pdf->MultiCell($cellWidth,$cellHeight,$hasil['pesan'],1);
+    
+    //   //kembalikan posisi untuk sel berikutnya di samping MultiCell 
+    //   //dan offset x dengan lebar MultiCell
+    //   $pdf->SetXY($xPos + $cellWidth , $yPos);
+    
+    //   $pdf->Cell(3,($line * $cellHeight),$hasil['pengirim'],1,1); //sesuaikan ketinggian dengan jumlah garis
+    // }
+
+
+    // Kolom tgl peminjaman=================================================================
+    $cellWidthTglPeminjaman=25; //lebar sel
+    $cellHeightTglPeminjaman=5; //tinggi sel satu baris normal
+  
+    //periksa apakah teksnya melibihi kolom?
+    if($pdf->GetStringWidth('Tgl Peminjaman') < $cellWidthTglPeminjaman){
+      //jika tidak, maka tidak melakukan apa-apa
+      $lineTglPeminjaman=1;
+    }else{
+      //jika ya, maka hitung ketinggian yang dibutuhkan untuk sel akan dirapikan
+      //dengan memisahkan teks agar sesuai dengan lebar sel
+      //lalu hitung berapa banyak baris yang dibutuhkan agar teks pas dengan sel
+      
+      $textLengthTglPeminjaman=strlen('Tgl Peminjaman');	//total panjang teks
+      $errMarginTglPeminjaman=5;		//margin kesalahan lebar sel, untuk jaga-jaga
+      $startCharTglPeminjaman=0;		//posisi awal karakter untuk setiap baris
+      $maxCharTglPeminjaman=0;			//karakter maksimum dalam satu baris, yang akan ditambahkan nanti
+      $textArrayTglPeminjaman=array();	//untuk menampung data untuk setiap baris
+      $tmpStringTglPeminjaman="";		//untuk menampung teks untuk setiap baris (sementara)
+      
+      while($startCharTglPeminjaman < $textLengthTglPeminjaman){ //perulangan sampai akhir teks
+        //perulangan sampai karakter maksimum tercapai
+        while( 
+        $pdf->GetStringWidth( $tmpStringTglPeminjaman ) < ($cellWidthTglPeminjaman-$errMarginTglPeminjaman) &&
+        ($startCharTglPeminjaman+$maxCharTglPeminjaman) < $textLengthTglPeminjaman ) {
+          $maxCharTglPeminjaman++;
+          $tmpStringTglPeminjaman=substr('Tgl Peminjaman',$startCharTglPeminjaman,$maxCharTglPeminjaman);
+        }
+        //pindahkan ke baris berikutnya
+        $startCharTglPeminjaman=$startCharTglPeminjaman+$maxCharTglPeminjaman;
+        //kemudian tambahkan ke dalam array sehingga kita tahu berapa banyak baris yang dibutuhkan
+        array_push($textArrayTglPeminjaman,$tmpStringTglPeminjaman);
+        //reset variabel penampung
+        $maxCharTglPeminjaman=0;
+        $tmpStringTglPeminjaman='';
+        
+      }
+      //dapatkan jumlah baris
+      $lineTglPeminjaman=count($textArrayTglPeminjaman);
+    }
+    // End kolom tgl peminjaman=================================================================
+
+    // Kolom tgl Pengembalian=================================================================
+    $cellWidthTglPengembalian=30; //lebar sel
+    $cellHeightTglPengembalian=5; //tinggi sel satu baris normal
+  
+    //periksa apakah teksnya melibihi kolom?
+    if($pdf->GetStringWidth('Tgl Pengembalian') < $cellWidthTglPengembalian){
+      //jika tidak, maka tidak melakukan apa-apa
+      $lineTglPengembalian=1;
+    }else{
+      //jika ya, maka hitung ketinggian yang dibutuhkan untuk sel akan dirapikan
+      //dengan memisahkan teks agar sesuai dengan lebar sel
+      //lalu hitung berapa banyak baris yang dibutuhkan agar teks pas dengan sel
+      
+      $textLengthTglPengembalian=strlen('Tgl Pengembalian');	//total panjang teks
+      $errMarginTglPengembalian=5;		//margin kesalahan lebar sel, untuk jaga-jaga
+      $startCharTglPengembalian=0;		//posisi awal karakter untuk setiap baris
+      $maxCharTglPengembalian=0;			//karakter maksimum dalam satu baris, yang akan ditambahkan nanti
+      $textArrayTglPengembalian=array();	//untuk menampung data untuk setiap baris
+      $tmpStringTglPengembalian="";		//untuk menampung teks untuk setiap baris (sementara)
+      
+      while($startCharTglPengembalian < $textLengthTglPengembalian){ //perulangan sampai akhir teks
+        //perulangan sampai karakter maksimum tercapai
+        while( 
+        $pdf->GetStringWidth( $tmpStringTglPengembalian ) < ($cellWidthTglPengembalian-$errMarginTglPengembalian) &&
+        ($startCharTglPengembalian+$maxCharTglPengembalian) < $textLengthTglPengembalian ) {
+          $maxCharTglPengembalian++;
+          $tmpStringTglPengembalian=substr('Tgl Pengembalian',$startCharTglPengembalian,$maxCharTglPengembalian);
+        }
+        //pindahkan ke baris berikutnya
+        $startCharTglPengembalian=$startCharTglPengembalian+$maxCharTglPengembalian;
+        //kemudian tambahkan ke dalam array sehingga kita tahu berapa banyak baris yang dibutuhkan
+        array_push($textArrayTglPengembalian,$tmpStringTglPengembalian);
+        //reset variabel penampung
+        $maxCharTglPengembalian=0;
+        $tmpStringTglPengembalian='';
+        
+      }
+      //dapatkan jumlah baris
+      $lineTglPengembalian=count($textArrayTglPengembalian);
+    }
+    // End kolom tgl Pengembalian=================================================================
+
+    // Kolom Paraf Petugas=================================================================
+    $cellWidthParaf=20; //lebar sel
+    $cellHeightParaf=5; //tinggi sel satu baris normal
+  
+    //periksa apakah teksnya melibihi kolom?
+    if($pdf->GetStringWidth('Paraf Petugas') < $cellWidthParaf){
+      //jika tidak, maka tidak melakukan apa-apa
+      $lineParaf=1;
+    }else{
+      //jika ya, maka hitung ketinggian yang dibutuhkan untuk sel akan dirapikan
+      //dengan memisahkan teks agar sesuai dengan lebar sel
+      //lalu hitung berapa banyak baris yang dibutuhkan agar teks pas dengan sel
+      
+      $textLengthParaf=strlen('Paraf Petugas');	//total panjang teks
+      $errMarginParaf=5;		//margin kesalahan lebar sel, untuk jaga-jaga
+      $startCharParaf=0;		//posisi awal karakter untuk setiap baris
+      $maxCharParaf=0;			//karakter maksimum dalam satu baris, yang akan ditambahkan nanti
+      $textArrayParaf=array();	//untuk menampung data untuk setiap baris
+      $tmpStringParaf="";		//untuk menampung teks untuk setiap baris (sementara)
+      
+      while($startCharParaf < $textLengthParaf){ //perulangan sampai akhir teks
+        //perulangan sampai karakter maksimum tercapai
+        while( 
+        $pdf->GetStringWidth( $tmpStringParaf ) < ($cellWidthParaf-$errMarginParaf) &&
+        ($startCharParaf+$maxCharParaf) < $textLengthParaf ) {
+          $maxCharParaf++;
+          $tmpStringParaf=substr('Paraf Petugas',$startCharParaf,$maxCharParaf);
+        }
+        //pindahkan ke baris berikutnya
+        $startCharParaf=$startCharParaf+$maxCharParaf;
+        //kemudian tambahkan ke dalam array sehingga kita tahu berapa banyak baris yang dibutuhkan
+        array_push($textArrayParaf,$tmpStringParaf);
+        //reset variabel penampung
+        $maxCharParaf=0;
+        $tmpStringParaf='';
+        
+      }
+      //dapatkan jumlah baris
+      $lineParaf=count($textArrayParaf);
+    }
+    // End kolom Paraf Petugas=================================================================
+    
+    //tulis selnya
+    $pdf->SetFont('Arial','B',10);
+    $pdf->SetFillColor(255,255,255);
+    $pdf->Cell(10,($lineTglPeminjaman * $cellHeightTglPeminjaman),'No',1,0,'C',true); //sesuaikan ketinggian dengan jumlah garis
+  
+    //memanfaatkan MultiCell sebagai ganti Cell
+    //atur posisi xy untuk sel berikutnya menjadi di sebelahnya.
+    //ingat posisi x dan y sebelum menulis MultiCell
+    $xPos=$pdf->GetX();
+    $yPos=$pdf->GetY();
+    $pdf->MultiCell($cellWidthTglPeminjaman,$cellHeightTglPeminjaman,'Tgl Peminjaman',1,'C');
+  
+    //kembalikan posisi untuk sel berikutnya di samping MultiCell 
+    //dan offset x dengan lebar MultiCell
+    $pdf->SetXY($xPos + $cellWidthTglPeminjaman , $yPos);
+  
+    $pdf->Cell(50,($lineTglPeminjaman * $cellHeightTglPeminjaman),'Judul Buku',1,0,'C'); //sesuaikan ketinggian dengan jumlah garis
+    $pdf->Cell(30,($lineTglPeminjaman * $cellHeightTglPeminjaman),'Label Buku',1,0,'C'); //sesuaikan ketinggian dengan jumlah garis
+
+    //memanfaatkan MultiCell sebagai ganti Cell
+    //atur posisi xy untuk sel berikutnya menjadi di sebelahnya.
+    //ingat posisi x dan y sebelum menulis MultiCell
+    $xPos=$pdf->GetX();
+    $yPos=$pdf->GetY();
+    $pdf->MultiCell($cellWidthTglPengembalian,$cellHeightTglPengembalian,'Tgl Pengembalian',1,'C');
+  
+    //kembalikan posisi untuk sel berikutnya di samping MultiCell 
+    //dan offset x dengan lebar MultiCell
+    $pdf->SetXY($xPos + $cellWidthTglPengembalian , $yPos);
+
+    //memanfaatkan MultiCell sebagai ganti Cell
+    //atur posisi xy untuk sel berikutnya menjadi di sebelahnya.
+    //ingat posisi x dan y sebelum menulis MultiCell
+    $xPos=$pdf->GetX();
+    $yPos=$pdf->GetY();
+    $pdf->MultiCell($cellWidthParaf,$cellHeightParaf,'Paraf Petugas',1,'C');
+  
+    //kembalikan posisi untuk sel berikutnya di samping MultiCell 
+    //dan offset x dengan lebar MultiCell
+    $pdf->SetXY($xPos + $cellWidthParaf , $yPos);
+
+    $pdf->Cell(23,($lineTglPengembalian * $cellHeightTglPengembalian),'Keterangan',1,0,'C'); //sesuaikan ketinggian dengan jumlah garis
+
+
+    // //Invoice Contents
+		// $pdf->SetFont('Arial','B',12);
+		// $pdf->Cell(10 ,5,'No',1,0,'L');
+		// $pdf->Cell(35 ,5,'Tgl Peminjaman',1,0,'C');
+		// $pdf->Cell(25 ,5,'Judul Buku',1,0);
+    // $pdf->Cell(25 ,5,'Label',1,0);
+    // $pdf->Cell(25 ,5,'Tgl Pengembalian',1,0);
+    // $pdf->Cell(25 ,5,'Paraf Petugas',1,0);
+		// $pdf->Cell(34 ,5,'Keterangan',1,1);
+
+		// $pdf->SetFont('Arial','',12);
+
+		// $pdf->Cell(100 ,5,'Produk A',1,0);
+		// $pdf->Cell(30 ,5,'Rp 100.000',1,0);
+		// $pdf->Cell(25 ,5,2,1,0);
+		// $pdf->Cell(34 ,5,'Rp 200.000',1,1,'R');
+
+		// $pdf->Cell(100 ,5,'Produk B',1,0);
+		// $pdf->Cell(30 ,5,'Rp 100.000',1,0);
+		// $pdf->Cell(25 ,5,3,1,0);
+		// $pdf->Cell(34 ,5,'Rp 300.000',1,1,'R');
+
+		// $pdf->Cell(100 ,5,'',0,0);
+		// $pdf->Cell(55 ,5,'Subtotal',0,0);
+		// $pdf->Cell(34 ,5,'Rp 500.000',1,1,'R');//end of line
+
+		// $pdf->Cell(100 ,5,'',0,0);
+		// $pdf->Cell(55 ,5,'Biaya Pengiriman',0,0);
+		// $pdf->Cell(34 ,5,'Rp 10.000',1,1,'R');//end of line
+
+		// $pdf->Cell(100 ,5,'',0,0);
+		// $pdf->Cell(55 ,5,'Total',0,0);
+		// $pdf->Cell(34 ,5,'Rp 510.000',1,1,'R');//end of line
+
+		// $pdf->Cell(100 ,5,'',0,0);
+		// $pdf->Cell(55 ,5,'PPN',0,0);
+		// $pdf->Cell(34 ,5,'Rp 5.100',1,1,'R');//end of line
+
+		// $pdf->Cell(100 ,5,'',0,0);
+		// $pdf->Cell(55 ,5,'Grandtotal',0,0);
+		// $pdf->Cell(34 ,5,'Rp 515.100',1,1,'R');//end of line
+
+    $pdf->Output();
+	}
 }

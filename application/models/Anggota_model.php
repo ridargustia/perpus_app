@@ -81,6 +81,36 @@ class Anggota_model extends CI_Model
         return $this->db->get($this->table)->result();
     }
 
+    function get_by_id_for_detail_peminjaman($id)
+    {
+        $this->db->select('
+            anggota.id_anggota, anggota.no_induk, anggota.anggota_name, instansi.instansi_name, anggota.gender, anggota.angkatan, anggota.address
+        ');
+
+        $this->db->join('instansi', 'anggota.instansi_id = instansi.id_instansi', 'left');
+
+        $this->db->where('anggota.is_delete', '0');
+
+        $this->db->where($this->id, $id);
+        return $this->db->get($this->table)->row();
+    }
+
+    function get_by_id_for_peminjaman_list($id_anggota)
+    {
+        $this->db->select('
+            anggota.id_anggota, anggota.no_induk, anggota.anggota_name, instansi.instansi_name, peminjaman.is_delete_peminjaman, peminjaman.is_kembali
+        ');
+
+        $this->db->join('anggota', 'peminjaman.anggota_id = anggota.id_anggota', 'left');
+        $this->db->join('instansi', 'anggota.instansi_id = instansi.id_instansi', 'left');
+
+        $this->db->where('peminjaman.anggota_id', $id_anggota);
+        $this->db->where('is_delete_peminjaman', '0');
+        $this->db->where('is_kembali', '0');
+
+        return $this->db->get('peminjaman')->row();
+    }
+
     function get_by_id($id)
     {
         $this->db->where($this->id, $id);

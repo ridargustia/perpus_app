@@ -19,27 +19,147 @@
 
     <!-- Main content -->
     <section class="content">
-      <div class="box box-primary">
-        <div class="box-body">
-          <div class="form-group"><label>Kode Peminjaman (*)</label>
-            <p><?php echo $peminjaman->kode_peminjaman ?></p>
+      <div class="row">
+        <div class="col-md-8">
+          <?php 
+            foreach($get_peminjaman as $data) { 
+              $kembalikan = '<a href="'.base_url('admin/peminjaman/print_invoice/'.$data->id_peminjaman).'" class="btn btn-sm btn-info" title="Kembalikan Buku"><i class="fa fa-rotate-left"></i> Kembalikan</a>';
+              $delete = '<a href="'.base_url('admin/peminjaman/delete/'.$data->id_peminjaman).'" onClick="return confirm(\'Apakah anda yakin ingin menghapus data?\');" class="btn btn-sm btn-danger" title="Hapus Data"><i class="fa fa-trash"></i> Hapus</a>';
+              $edit = '<a href="'.base_url('admin/peminjaman/update/'.$data->id_peminjaman).'" class="btn btn-sm btn-warning" title="Ganti Buku"><i class="fa fa-pencil"></i> Ganti Buku</a>';
+          ?>
+            <div class="box box-primary">
+              <div class="box-body">
+                <div class="row">
+                  <div class="col-md-4">
+                    <?php if ($data->cover_buku != NULL) { ?>
+                      <a href="#" onclick="previewCover(<?php echo $data->id_arsip ?>)" title="Preview Cover">
+                        <img src="<?php echo base_url('assets/images/cover_buku/'.$data->cover_buku) ?>" width="100%" height="275px" style="object-fit:contain">
+                      </a>
+                    <?php } else { ?>
+                      <img src="<?php echo base_url('assets/images/noimage.jpg') ?>" width="100%">
+                    <?php } ?>
+                    <!-- <img src="<?php //echo base_url('assets/images/noimage.jpg') ?>" width="100%"> -->
+                  </div>
+                  <div class="col-md-8">
+                    <table class="table">
+                      <tbody>
+                        <tr>
+                          <td>No Label</td>
+                          <td class="text-right"><b><?php echo $data->no_arsip ?></b></td>
+                        </tr>
+                        <tr>
+                          <td>Judul Buku</td>
+                          <td class="text-right"><b><?php echo $data->arsip_name ?></b></td>
+                        </tr>
+                        <tr>
+                          <td style="width:130px">Tgl Peminjaman</td>
+                          <td class="text-right"><b><?php echo datetime_indo3($data->tgl_peminjaman) ?></b></td>
+                        </tr>
+                        <tr>
+                          <td>Tgl Pengembalian</td>
+                          <td class="text-right"><b><?php echo datetime_indo3($data->tgl_kembali) ?></b></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="box-footer">
+                <div style="text-align: right">
+                  <?php echo $kembalikan.' '; echo $edit.' '; echo $delete; ?>
+                </div>
+              </div>
+            </div>
+          <?php } ?>
+        </div>
+        <div class="col-md-4">
+          <div class="box box-primary">
+            <div class="box-header">
+              <h3 class="box-title">Identitas Peminjam Buku</h3>
+            </div>
+            <div class="box-body">
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <td style="width:130px">No Induk</td>
+                    <td class="text-right"><b><?php echo $get_user->no_induk ?></b></td>
+                  </tr>
+                  <tr>
+                    <td>Nama Anggota</td>
+                    <td class="text-right"><b><?php echo $get_user->anggota_name ?></b></td>
+                  </tr>
+                  <tr>
+                    <td>Gender</td>
+                    <td class="text-right"><b>
+                    <?php 
+                      if($get_user->gender == 1) {
+                        $gender = 'Laki-laki';
+                      } elseif($get_user->gender == 2) {
+                        $gender = 'Perempuan';
+                      }
+                      echo $gender 
+                    ?>
+                    </b></td>
+                  </tr>
+                  <tr>
+                    <td>Angkatan</td>
+                    <td class="text-right"><b><?php echo $get_user->angkatan ?></b></td>
+                  </tr>
+                  <tr>
+                    <td>Address</td>
+                    <td class="text-right"><b><?php echo $get_user->address ?></b></td>
+                  </tr>
+                  <?php if(is_grandadmin()) { ?>
+                    <tr>
+                      <td>Perguruan Tinggi</td>
+                      <td class="text-right"><b><?php echo $get_user->instansi_name ?></b></td>
+                    </tr>
+                  <?php } ?>
+                </tbody>
+              </table>
+            </div>
           </div>
-          <div class="form-group"><label>Nama Peminjam (*)</label>
-            <p><?php echo $peminjaman->name ?></p>
-          </div>
-          <div class="form-group"><label>Nama Arsip (*)</label>
-            <p><?php echo $peminjaman->arsip_name ?></p>
-          </div>
-          <p><a href="<?php echo base_url('admin/pengembalian') ?>" class="btn btn-lg btn-info"> Kembali Ke Halaman Sebelumnya</a></p>
         </div>
       </div>
+      
       <!-- /.box -->
+      <div class="modal fade" id="ModalPreview" role="dialog" style="min-width: 100%;margin-left:0px">
+          <div class="modal-dialog" style="min-width: 100%;">
+              <div id="dataPreview"></div>
+          </div><!-- /.modal-dialog -->
+      </div>
     </section>
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
 
   <?php $this->load->view('back/template/footer'); ?>
+
+  <script>
+    function previewCover(id) {
+        $("#id").val(id);
+        $('#ModalPreview').modal("show");
+        loadPreview(id);
+      }
+
+      function loadPreview(id_arsip) {
+        // var url = "buku/ajax_label/" + id + "/";
+        $.ajax({
+            url: "<?php echo base_url(); ?>book/ajax_preview_cover/" + id_arsip + "",
+            type: "GET",
+            async: true,
+            data: {
+                
+            },
+            success: function (data) {
+                $('#dataPreview').html(data);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('Error adding / update data');
+            }
+        });
+      }
+  </script>
 
 </div>
 <!-- ./wrapper -->
