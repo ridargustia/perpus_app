@@ -136,7 +136,15 @@
           <div class="row">
             <div class="col-md-6">
               <div class="form-group"><label>Jenis Kelamin</label>
-                <?php echo form_input($current_gender, $peminjaman->gender) ?>
+                <?php 
+                  if($peminjaman->gender == 1){
+                    $gender = 'Laki-laki';
+                  }elseif($peminjaman->gender == 2){
+                    $gender = 'Perempuan';
+                  }
+
+                  echo form_input($current_gender, $gender) 
+                ?>
               </div>
             </div>
             <div class="col-md-6">
@@ -173,41 +181,6 @@
   <script type="text/javascript" src="<?php echo base_url() ?>assets/plugins/select2/dist/js/select2.full.min.js"></script>
 
   <script type="text/javascript">
-    $(document).ready(function() {
-      $("#new_arsip").select2({
-        // placeholder: "Pilih Divisi Dulu",
-      });
-    });
-    $(document).ready(function() {
-      $("#no_induk").select2({
-        // placeholder: "Pilih Divisi Dulu",
-      });
-    });
-
-    function tampilArsip() {
-      instansi_id = document.getElementById("instansi_id").value;
-      $.ajax({
-        url: "<?php echo base_url(); ?>admin/buku/pilih_arsip_available/" + instansi_id + "",
-        success: function(response) {
-          $("#new_arsip").html(response);
-        },
-        dataType: "html"
-      });
-      return false;
-    }
-
-    function tampilNoInduk() {
-      instansi_id = document.getElementById("instansi_id").value;
-      $.ajax({
-        url: "<?php echo base_url(); ?>admin/anggota/pilih_anggota/" + instansi_id + "",
-        success: function(response) {
-          $("#no_induk").html(response);
-        },
-        dataType: "html"
-      });
-      return false;
-    }
-
     $('#no_induk').on('change', function() {
       var no_induk = $(this).val();
       // alert(no_induk);
@@ -225,18 +198,6 @@
         }
       });
     });
-
-    // function tampilUser() {
-    //   divisi_id = document.getElementById("divisi_id").value;
-    //   $.ajax({
-    //     url: "<?php echo base_url(); ?>admin/auth/pilih_user/" + divisi_id + "",
-    //     success: function(response) {
-    //       $("#user_id").html(response);
-    //     },
-    //     dataType: "html"
-    //   });
-    //   return false;
-    // }
   </script>
 
 </div>

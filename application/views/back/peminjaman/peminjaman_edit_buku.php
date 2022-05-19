@@ -29,10 +29,7 @@
       <?php if ($this->session->flashdata('message')) {
         echo $this->session->flashdata('message');
       } ?>
-      <?php 
-        $attributes = array('id' => 'button'); 
-        echo form_open($action, $attributes);
-      ?>
+      <?php echo form_open($action); ?>
       <?php echo validation_errors() ?>
       <!-- /.box -->
       <div class="box box-primary">
@@ -245,7 +242,6 @@
                       <?php } ?>
 
                       $('#new_arsip').val(myObj.id_arsip);
-                      $('#id_arsip').val(myObj.id_arsip);
                       $('#arsip_name').val(myObj.arsip_name);
                       $('#no_arsip').val(myObj.no_arsip);
                       $('#penulis_buku').val(myObj.penulis_buku);
@@ -291,7 +287,6 @@
           var myObj = JSON.parse(response);
 
           $('#new_arsip').val(myObj.id_arsip);
-          $('#id_arsip').val(myObj.id_arsip);
           $('#arsip_name').val(myObj.arsip_name);
           $('#no_arsip').val(myObj.no_arsip);
           $('#penulis_buku').val(myObj.penulis_buku);

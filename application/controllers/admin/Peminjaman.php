@@ -334,16 +334,6 @@ class Peminjaman extends CI_Controller
       $this->data['page_title'] = 'Update Data ' . $this->data['module'];
       $this->data['action']     = 'admin/peminjaman/update_action';
 
-      if (is_grandadmin()) {
-        $this->data['get_all_combobox_user']                = $this->Auth_model->get_all_combobox();
-        $this->data['get_all_combobox_arsip_available']     = $this->Arsip_model->get_all_combobox_arsip_available();
-        $this->data['get_all_combobox_instansi']            = $this->Instansi_model->get_all_combobox();
-        
-      } elseif (is_masteradmin()) {
-        $this->data['get_all_combobox_anggota']                = $this->Anggota_model->get_all_combobox_by_instansi($this->session->instansi_id);
-        $this->data['get_all_combobox_arsip_available']     = $this->Arsip_model->get_all_combobox_arsip_available_by_instansi($this->session->instansi_id);
-      }
-
       $this->data['id_peminjaman'] = [
         'name'          => 'id_peminjaman',
         'type'          => 'hidden',
@@ -466,23 +456,6 @@ class Peminjaman extends CI_Controller
         'class'         => 'form-control',
         'required'      => '',
         'readonly'      => '',
-      ];
-      $this->data['no_induk'] = [
-        'name'          => 'no_induk',
-        'id'            => 'no_induk',
-        'class'         => 'form-control',
-      ];
-      $this->data['new_arsip'] = [
-        'name'          => 'new_arsip',
-        'id'            => 'new_arsip',
-        'class'         => 'form-control',
-      ];
-      $this->data['instansi_id'] = [
-        'name'          => 'instansi_id',
-        'id'            => 'instansi_id',
-        'class'         => 'form-control',
-        'onChange'      => 'tampilArsip(), tampilNoInduk()',
-        'required'      => '',
       ];
 
       $this->load->view('back/peminjaman/peminjaman_edit', $this->data);
@@ -714,7 +687,6 @@ class Peminjaman extends CI_Controller
     if ($this->form_validation->run() === FALSE) {
       $this->update($this->input->post('id_peminjaman'));
     } else {
-      
       // jika nilai arsip baru tidak diisi, maka isikan dengan nilai dari current arsip
       if ($this->input->post('new_arsip') == NULL) {
         // echo "ARSIP BARU KOSONG";
@@ -746,7 +718,7 @@ class Peminjaman extends CI_Controller
           $stok_result_buku_baru = $data_buku->qty - 1;
         } else {
           $this->session->set_flashdata('message', '<div class="alert alert-danger">Stok buku dengan judul <b>"'.$data_buku->arsip_name.'"</b> saat ini sedang kosong.</div>');
-          redirect('admin/peminjaman');
+          redirect('admin/peminjaman/update_book/'.$this->input->post('id_peminjaman'));
         }
 
         // mengurangi qty buku karena buku sedang dipinjam
@@ -771,7 +743,7 @@ class Peminjaman extends CI_Controller
       write_log();
 
       $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil disimpan</div>');
-      redirect('admin/peminjaman');
+      redirect('admin/peminjaman/detail/'.$this->input->post('id_anggota'));
     }
   }
 
@@ -793,10 +765,10 @@ class Peminjaman extends CI_Controller
       write_log();
 
       $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil dihapus</div>');
-      redirect('admin/peminjaman');
+      redirect('admin/peminjaman/detail/'.$delete->anggota_id);
     } else {
       $this->session->set_flashdata('message', '<div class="alert alert-danger">Data tidak ditemukan</div>');
-      redirect('admin/peminjaman');
+      redirect('admin/peminjaman/detail/'.$delete->anggota_id);
     }
   }
 
@@ -923,7 +895,7 @@ class Peminjaman extends CI_Controller
           'tgl_kembali'   => date('Y-m-d'),
           'peminjaman_id' => $id,
           'arsip_id'      => $row->arsip_id,
-          'anggota_id'       => $row->anggota_id,
+          'anggota_id'    => $row->anggota_id,
           'instansi_id'   => $row->instansi_id,
           'created_by'    => $this->session->username,
         );

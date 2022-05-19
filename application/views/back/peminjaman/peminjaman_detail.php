@@ -21,11 +21,12 @@
     <section class="content">
       <div class="row">
         <div class="col-md-8">
+          <?php if($this->session->flashdata('message')){echo $this->session->flashdata('message');} ?>
           <?php 
             foreach($get_peminjaman as $data) { 
-              $kembalikan = '<a href="'.base_url('admin/peminjaman/print_invoice/'.$data->id_peminjaman).'" class="btn btn-sm btn-info" title="Kembalikan Buku"><i class="fa fa-rotate-left"></i> Kembalikan</a>';
-              $delete = '<a href="'.base_url('admin/peminjaman/delete/'.$data->id_peminjaman).'" onClick="return confirm(\'Apakah anda yakin ingin menghapus data?\');" class="btn btn-sm btn-danger" title="Hapus Data"><i class="fa fa-trash"></i> Hapus</a>';
+              $kembalikan = '<a href="'.base_url('admin/peminjaman/set_kembali/'.$data->id_peminjaman).'" class="btn btn-sm btn-info" title="Kembalikan Buku"><i class="fa fa-rotate-left"></i> Kembalikan</a>';
               $edit = '<a href="'.base_url('admin/peminjaman/update/'.$data->id_peminjaman).'" class="btn btn-sm btn-warning" title="Ganti Buku"><i class="fa fa-pencil"></i> Ganti Buku</a>';
+              $delete = '<a href="'.base_url('admin/peminjaman/delete/'.$data->id_peminjaman).'" onClick="return confirm(\'Apakah anda yakin ingin menghapus data?\');" class="btn btn-sm btn-danger" title="Hapus Data"><i class="fa fa-trash"></i> Hapus</a>';
           ?>
             <div class="box box-primary">
               <div class="box-body">
