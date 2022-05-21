@@ -670,6 +670,15 @@ class Peminjaman_model extends CI_Model{
     return $this->db->get($this->table)->num_rows();
   }
 
+  function total_rows_by_anggota($id_anggota)
+  {
+    $this->db->where('anggota_id', $id_anggota);
+    $this->db->where('is_kembali', '0');
+    $this->db->where('is_delete_peminjaman', '0');
+
+    return $this->db->get($this->table)->num_rows();
+  }
+
   function total_rows_by_instansi()
   {
     $this->db->join('instansi', 'peminjaman.instansi_id = instansi.id_instansi');

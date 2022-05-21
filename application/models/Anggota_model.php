@@ -111,6 +111,19 @@ class Anggota_model extends CI_Model
         return $this->db->get('peminjaman')->row();
     }
 
+    function get_by_id_for_print_invoice($id_anggota)
+    {
+        $this->db->select('
+            anggota.id_anggota, anggota.no_induk, anggota.anggota_name, instansi.instansi_name
+        ');
+
+        $this->db->join('instansi', 'anggota.instansi_id = instansi.id_instansi', 'left');
+
+        $this->db->where('anggota.id_anggota', $id_anggota);
+
+        return $this->db->get($this->table)->row();
+    }
+
     function get_by_id($id)
     {
         $this->db->where($this->id, $id);

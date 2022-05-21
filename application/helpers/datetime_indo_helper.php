@@ -30,6 +30,17 @@ function datetime_indo3($string)
   // output FROM: 2019-02-17 09:50:36 TO Hari Tanggal Bulan Tahun 09:50:36
 }
 
+function datetime_indo4($string)
+{
+  $datetime = $string;
+  $dt       = strtotime($datetime); //make timestamp with datetime string
+  $string   = date("d/m/Y", $dt); //echo the year of the datestamp just created
+
+  return $string;
+
+  // output FROM: 2019-02-17 09:50:36 TO 17-02-2019 09:50:36
+}
+
 function date_only($string)
 {
   $string = date("j F Y", strtotime($string));

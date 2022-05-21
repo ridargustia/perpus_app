@@ -1182,12 +1182,16 @@ class Peminjaman extends CI_Controller
     echo json_encode($output);
   }
 
-  function print_invoice()
+  function print_invoice_coba($id_anggota)
 	{
+    $data_peminjaman = $this->Peminjaman_model->get_peminjaman_by_anggota($id_anggota);
+
+    // var_dump($data_peminjaman); die();
+
 		require FCPATH . '/vendor/autoload.php';
 		require FCPATH . '/vendor/setasign/fpdf/fpdf.php';
 
-		$pdf = new FPDF('P','mm','A4');
+		$pdf = new FPDF('P','mm',array(75,110));
     $pdf->AddPage();
     
     $pdf->SetFont('Arial','B',14);
@@ -1336,7 +1340,7 @@ class Peminjaman extends CI_Controller
     // End kolom tgl peminjaman=================================================================
 
     // Kolom tgl Pengembalian=================================================================
-    $cellWidthTglPengembalian=30; //lebar sel
+    $cellWidthTglPengembalian=25; //lebar sel
     $cellHeightTglPengembalian=5; //tinggi sel satu baris normal
   
     //periksa apakah teksnya melibihi kolom?
@@ -1378,7 +1382,7 @@ class Peminjaman extends CI_Controller
     // End kolom tgl Pengembalian=================================================================
 
     // Kolom Paraf Petugas=================================================================
-    $cellWidthParaf=20; //lebar sel
+    $cellWidthParaf=17; //lebar sel
     $cellHeightParaf=5; //tinggi sel satu baris normal
   
     //periksa apakah teksnya melibihi kolom?
@@ -1420,7 +1424,7 @@ class Peminjaman extends CI_Controller
     // End kolom Paraf Petugas=================================================================
     
     //tulis selnya
-    $pdf->SetFont('Arial','B',10);
+    $pdf->SetFont('Arial','B',9);
     $pdf->SetFillColor(255,255,255);
     $pdf->Cell(10,($lineTglPeminjaman * $cellHeightTglPeminjaman),'No',1,0,'C',true); //sesuaikan ketinggian dengan jumlah garis
   
@@ -1435,8 +1439,8 @@ class Peminjaman extends CI_Controller
     //dan offset x dengan lebar MultiCell
     $pdf->SetXY($xPos + $cellWidthTglPeminjaman , $yPos);
   
-    $pdf->Cell(50,($lineTglPeminjaman * $cellHeightTglPeminjaman),'Judul Buku',1,0,'C'); //sesuaikan ketinggian dengan jumlah garis
-    $pdf->Cell(30,($lineTglPeminjaman * $cellHeightTglPeminjaman),'Label Buku',1,0,'C'); //sesuaikan ketinggian dengan jumlah garis
+    $pdf->Cell(53,($lineTglPeminjaman * $cellHeightTglPeminjaman),'Judul Buku',1,0,'C'); //sesuaikan ketinggian dengan jumlah garis
+    $pdf->Cell(35,($lineTglPeminjaman * $cellHeightTglPeminjaman),'Label Buku',1,0,'C'); //sesuaikan ketinggian dengan jumlah garis
 
     //memanfaatkan MultiCell sebagai ganti Cell
     //atur posisi xy untuk sel berikutnya menjadi di sebelahnya.
@@ -1460,7 +1464,75 @@ class Peminjaman extends CI_Controller
     //dan offset x dengan lebar MultiCell
     $pdf->SetXY($xPos + $cellWidthParaf , $yPos);
 
-    $pdf->Cell(23,($lineTglPengembalian * $cellHeightTglPengembalian),'Keterangan',1,0,'C'); //sesuaikan ketinggian dengan jumlah garis
+    $pdf->Cell(23,($lineTglPengembalian * $cellHeightTglPengembalian),'Keterangan',1,1,'C'); //sesuaikan ketinggian dengan jumlah garis
+
+    //Data Peminjaman===========================================================
+
+    $no=1;
+    foreach($data_peminjaman as $row){
+      $cellWidth=53; //lebar sel
+      $cellHeight=8; //tinggi sel satu baris normal
+      
+      //periksa apakah teksnya melibihi kolom?
+      if($pdf->GetStringWidth($row->arsip_name) < $cellWidth){
+        //jika tidak, maka tidak melakukan apa-apa
+        $line=1;
+      }else{
+        //jika ya, maka hitung ketinggian yang dibutuhkan untuk sel akan dirapikan
+        //dengan memisahkan teks agar sesuai dengan lebar sel
+        //lalu hitung berapa banyak baris yang dibutuhkan agar teks pas dengan sel
+        
+        $textLength=strlen($row->arsip_name);	//total panjang teks
+        $errMargin=1;		//margin kesalahan lebar sel, untuk jaga-jaga
+        $startChar=0;		//posisi awal karakter untuk setiap baris
+        $maxChar=0;			//karakter maksimum dalam satu baris, yang akan ditambahkan nanti
+        $textArray=array();	//untuk menampung data untuk setiap baris
+        $tmpString="";		//untuk menampung teks untuk setiap baris (sementara)
+        
+        while($startChar < $textLength){ //perulangan sampai akhir teks
+          //perulangan sampai karakter maksimum tercapai
+          while( 
+          $pdf->GetStringWidth( $tmpString ) < ($cellWidth-$errMargin) &&
+          ($startChar+$maxChar) < $textLength ) {
+            $maxChar++;
+            $tmpString=substr($row->arsip_name,$startChar,$maxChar);
+          }
+          //pindahkan ke baris berikutnya
+          $startChar=$startChar+$maxChar;
+          //kemudian tambahkan ke dalam array sehingga kita tahu berapa banyak baris yang dibutuhkan
+          array_push($textArray,$tmpString);
+          //reset variabel penampung
+          $maxChar=0;
+          $tmpString='';
+          
+        }
+        //dapatkan jumlah baris
+        $line=count($textArray);
+      }
+      // End kolom Judul Buku=============================================
+      
+      //tulis selnya
+      $pdf->SetFont('Arial','',9);
+      $pdf->SetFillColor(255,255,255);
+      $pdf->Cell(10,($line * $cellHeight),$no++,1,0,'C',true); //sesuaikan ketinggian dengan jumlah garis
+      $pdf->Cell(25,($line * $cellHeight),$row->tgl_peminjaman,1,0,'C'); //sesuaikan ketinggian dengan jumlah garis
+    
+      //memanfaatkan MultiCell sebagai ganti Cell
+      //atur posisi xy untuk sel berikutnya menjadi di sebelahnya.
+      //ingat posisi x dan y sebelum menulis MultiCell
+      $xPos=$pdf->GetX();
+      $yPos=$pdf->GetY();
+      $pdf->MultiCell($cellWidth,$cellHeight,$row->arsip_name,1);
+    
+      //kembalikan posisi untuk sel berikutnya di samping MultiCell 
+      //dan offset x dengan lebar MultiCell
+      $pdf->SetXY($xPos + $cellWidth , $yPos);
+
+      $pdf->Cell(35,($line * $cellHeight),$row->no_arsip,1,0,'C'); //sesuaikan ketinggian dengan jumlah garis
+      $pdf->Cell(25,($line * $cellHeight),$row->tgl_kembali,1,0,'C'); //sesuaikan ketinggian dengan jumlah garis
+      $pdf->Cell(17,($line * $cellHeight),'',1,0,'C'); //sesuaikan ketinggian dengan jumlah garis
+      $pdf->Cell(23,($line * $cellHeight),'',1,1,'C'); //sesuaikan ketinggian dengan jumlah garis
+    }
 
 
     // //Invoice Contents
@@ -1504,6 +1576,127 @@ class Peminjaman extends CI_Controller
 		// $pdf->Cell(100 ,5,'',0,0);
 		// $pdf->Cell(55 ,5,'Grandtotal',0,0);
 		// $pdf->Cell(34 ,5,'Rp 515.100',1,1,'R');//end of line
+
+    $pdf->Output();
+	}
+
+  function print_invoice($id_anggota)
+	{
+    $data_peminjaman = $this->Peminjaman_model->get_peminjaman_by_anggota($id_anggota);
+    $data_anggota = $this->Anggota_model->get_by_id_for_print_invoice($id_anggota);
+    $total_rows_by_anggota = $this->Peminjaman_model->total_rows_by_anggota($id_anggota);
+
+    // var_dump($data_anggota); die();
+
+		require FCPATH . '/vendor/autoload.php';
+		require FCPATH . '/vendor/setasign/fpdf/fpdf.php';
+
+		$pdf = new FPDF('P','mm',array(75,121));
+    $pdf->SetTopMargin(5);
+    $pdf->SetLeftMargin(5);
+    $pdf->AddPage();
+    
+    $pdf->SetFont('Arial','B',8);
+    $pdf->Cell(65 ,3,'PERPUSTAKAAN',0,1, 'C');
+    $pdf->Cell(65 ,3,strtoupper($data_anggota->instansi_name),0,1, 'C');
+
+    $pdf->SetFont('Arial','',7);
+    $pdf->Cell(65 ,3,'JL. Selalu Bahagia',0,1, 'C');
+		// $pdf->SetLineWidth(0);
+    // $pdf->Line(5,15,70,15);
+    $pdf->Cell(65 ,2,'-----------------------------------------------------------------------------',0,1,'L');
+
+    //make a dummy empty cell as a vertical spacer
+		$pdf->Cell(65 ,2,'',0,1);//end of line
+
+    $pdf->Cell(65 ,3,'STRUK PEMINJAMAN BUKU',0,1, 'C');
+
+    //make a dummy empty cell as a vertical spacer
+		$pdf->Cell(65 ,3,'',0,1);//end of line
+
+    $pdf->Cell(32.5,3,$data_anggota->no_induk,0,0,'L');
+    $pdf->Cell(32.5,3,date('d/m/Y'),0,1,'R');
+    $pdf->Cell(32.5,3,$data_anggota->anggota_name,0,0,'L');
+    $pdf->Cell(32.5,3,'Petugas : '.$this->session->username,0,1, 'R');
+
+    //make a dummy empty cell as a vertical spacer
+		$pdf->Cell(65 ,1,'',0,1);//end of line
+    
+    // $pdf->SetLineWidth(0);
+    // $pdf->Line(5,31,70,31);
+    $pdf->Cell(65 ,2,'-----------------------------------------------------------------------------',0,1,'L');
+
+    $pdf->Cell(34,3,'Buku',0,0, 'L');
+    $pdf->Cell(15,3,'Tgl Pinjam',0,0, 'R');
+    $pdf->Cell(16,3,'Tgl Kembali',0,1, 'R');
+
+    // $pdf->SetLineWidth(0);
+    // $pdf->Line(5,36,70,36);
+    $pdf->Cell(65 ,2,'-----------------------------------------------------------------------------',0,1,'L');
+
+    //make a dummy empty cell as a vertical spacer
+		$pdf->Cell(65 ,1,'',0,1);//end of line
+
+    foreach($data_peminjaman as $data) {
+      $pdf->Cell(35,3,$data->arsip_name,0,0, 'L');
+      $pdf->Cell(15,3,datetime_indo4($data->tgl_peminjaman),0,0, 'R');
+      $pdf->Cell(15,3,datetime_indo4($data->tgl_kembali),0,1, 'R');
+    }
+    // $pdf->Cell(35,3,'Perjanjian Kontrak EduArsip',0,0, 'L');
+    // $pdf->Cell(15,3,'20/05/2022',0,0, 'R');
+    // $pdf->Cell(15,3,'21/05/2022',0,1, 'R');
+    // $pdf->Cell(35,3,'Soal Ujian Akhir Semester',0,0, 'L');
+    // $pdf->Cell(15,3,'18/05/2022',0,0, 'R');
+    // $pdf->Cell(15,3,'21/05/2022',0,1, 'R');
+    // $pdf->Cell(35,3,'Test Book Satu',0,0, 'L');
+    // $pdf->Cell(15,3,'28/05/2022',0,0, 'R');
+    // $pdf->Cell(15,3,'30/05/2022',0,1, 'R');
+
+    //make a dummy empty cell as a vertical spacer
+		$pdf->Cell(65 ,1,'',0,1);//end of line
+
+    // $pdf->SetLineWidth(0);
+    // $pdf->Line(5,52,70,52);
+    $pdf->Cell(65 ,2,'-----------------------------------------------------------------------------',0,1,'L');
+
+    //make a dummy empty cell as a vertical spacer
+		$pdf->Cell(65 ,1,'',0,1);//end of line
+
+    $pdf->Cell(24,3,'',0,0, 'R');
+    $pdf->Cell(26,3,'Total Buku',0,0, 'L');
+    $pdf->Cell(15,3,$total_rows_by_anggota,0,1, 'R');
+    $pdf->Cell(24,3,'',0,0, 'R');
+    $pdf->Cell(26,3,'Lama Keterlambatan',0,0, 'L');
+    $pdf->Cell(15,3,'0 hari',0,1, 'R');
+    $pdf->Cell(24,3,'',0,0, 'R');
+    $pdf->Cell(26,3,'Denda',0,0, 'L');
+    $pdf->Cell(15,3,'0',0,1, 'R');
+   
+
+    //make a dummy empty cell as a vertical spacer
+		$pdf->Cell(65,9,'',0,1);//end of line
+
+    // $pdf->SetLineWidth(0);
+    // $pdf->Line(5,72,28,72);
+
+    $pdf->Cell(65,3,'---------------------------- PERATURAN ----------------------------',0,1, 'C');
+
+    // $pdf->SetLineWidth(0);
+    // $pdf->Line(47,72,70,72);
+
+    //make a dummy empty cell as a vertical spacer
+		$pdf->Cell(65,1,'',0,1);//end of line
+
+    $pdf->Cell(65,3,'* Jumlah buku yang dipinjam max 4 pcs',0,1, 'L');
+    $pdf->Cell(65,3,'* 1 judul buku max pinjam 1 pcs',0,1, 'L');
+    $pdf->Cell(65,3,'* Lama peminjaman max selama 7 hari',0,1, 'L');
+    $pdf->Cell(65,3,'* Denda Rp 2.500,- / buku * lama keterlambatan(hari)',0,1, 'L');
+
+    //make a dummy empty cell as a vertical spacer
+		$pdf->Cell(65,5,'',0,1);//end of line
+
+    $pdf->Cell(65,3,'--Terimakasih atas kunjungan anda--',0,1, 'C');
+    $pdf->Cell(65,3,'--Selamat Membaca--',0,1, 'C');
 
     $pdf->Output();
 	}
