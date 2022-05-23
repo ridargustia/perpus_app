@@ -1592,6 +1592,7 @@ class Peminjaman extends CI_Controller
 		require FCPATH . '/vendor/setasign/fpdf/fpdf.php';
 
 		$pdf = new FPDF('P','mm',array(75,121));
+    $pdf->SetTitle('Struk Peminjaman Buku - '.$data_anggota->no_induk);
     $pdf->SetTopMargin(5);
     $pdf->SetLeftMargin(5);
     $pdf->AddPage();
@@ -1642,15 +1643,6 @@ class Peminjaman extends CI_Controller
       $pdf->Cell(15,3,datetime_indo4($data->tgl_peminjaman),0,0, 'R');
       $pdf->Cell(15,3,datetime_indo4($data->tgl_kembali),0,1, 'R');
     }
-    // $pdf->Cell(35,3,'Perjanjian Kontrak EduArsip',0,0, 'L');
-    // $pdf->Cell(15,3,'20/05/2022',0,0, 'R');
-    // $pdf->Cell(15,3,'21/05/2022',0,1, 'R');
-    // $pdf->Cell(35,3,'Soal Ujian Akhir Semester',0,0, 'L');
-    // $pdf->Cell(15,3,'18/05/2022',0,0, 'R');
-    // $pdf->Cell(15,3,'21/05/2022',0,1, 'R');
-    // $pdf->Cell(35,3,'Test Book Satu',0,0, 'L');
-    // $pdf->Cell(15,3,'28/05/2022',0,0, 'R');
-    // $pdf->Cell(15,3,'30/05/2022',0,1, 'R');
 
     //make a dummy empty cell as a vertical spacer
 		$pdf->Cell(65 ,1,'',0,1);//end of line
@@ -1698,6 +1690,6 @@ class Peminjaman extends CI_Controller
     $pdf->Cell(65,3,'--Terimakasih atas kunjungan anda--',0,1, 'C');
     $pdf->Cell(65,3,'--Selamat Membaca--',0,1, 'C');
 
-    $pdf->Output();
+    $pdf->Output('I', 'Struk Peminjaman Buku - '.$data_anggota->no_induk.'.pdf');
 	}
 }
