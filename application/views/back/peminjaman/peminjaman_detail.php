@@ -46,19 +46,23 @@
                       <tbody>
                         <tr>
                           <td>No Label</td>
-                          <td class="text-right"><b><?php echo $data->no_arsip ?></b></td>
+                          <td style="width:10px">:</td>
+                          <td class="text-left"><?php echo $data->no_arsip ?></td>
                         </tr>
                         <tr>
                           <td>Judul Buku</td>
-                          <td class="text-right"><b><?php echo $data->arsip_name ?></b></td>
+                          <td>:</td>
+                          <td class="text-left"><?php echo $data->arsip_name ?></td>
                         </tr>
                         <tr>
-                          <td style="width:130px">Tgl Peminjaman</td>
-                          <td class="text-right"><b><?php echo datetime_indo3($data->tgl_peminjaman) ?></b></td>
+                          <td style="width:120px">Tgl Peminjaman</td>
+                          <td>:</td>
+                          <td class="text-left"><?php echo datetime_indo3($data->tgl_peminjaman) ?></td>
                         </tr>
                         <tr>
                           <td>Tgl Pengembalian</td>
-                          <td class="text-right"><b><?php echo datetime_indo3($data->tgl_kembali) ?></b></td>
+                          <td>:</td>
+                          <td class="text-left"><?php echo datetime_indo3($data->tgl_kembali) ?></td>
                         </tr>
                       </tbody>
                     </table>
@@ -83,15 +87,18 @@
                 <tbody>
                   <tr>
                     <td style="width:130px">No Induk</td>
-                    <td class="text-right"><b><?php echo $get_user->no_induk ?></b></td>
+                    <td style="width:10px">:</td>
+                    <td class="text-left"><b><?php echo $get_user->no_induk ?></b></td>
                   </tr>
                   <tr>
                     <td>Nama Anggota</td>
-                    <td class="text-right"><b><?php echo $get_user->anggota_name ?></b></td>
+                    <td>:</td>
+                    <td class="text-left"><b><?php echo $get_user->anggota_name ?></b></td>
                   </tr>
                   <tr>
                     <td>Gender</td>
-                    <td class="text-right"><b>
+                    <td>:</td>
+                    <td class="text-left"><b>
                     <?php 
                       if($get_user->gender == 1) {
                         $gender = 'Laki-laki';
@@ -104,16 +111,19 @@
                   </tr>
                   <tr>
                     <td>Angkatan</td>
-                    <td class="text-right"><b><?php echo $get_user->angkatan ?></b></td>
+                    <td>:</td>
+                    <td class="text-left"><b><?php echo $get_user->angkatan ?></b></td>
                   </tr>
                   <tr>
                     <td>Address</td>
-                    <td class="text-right"><b><?php echo $get_user->address ?></b></td>
+                    <td>:</td>
+                    <td class="text-left"><b><?php echo $get_user->address ?></b></td>
                   </tr>
                   <?php if(is_grandadmin()) { ?>
                     <tr>
                       <td>Perguruan Tinggi</td>
-                      <td class="text-right"><b><?php echo $get_user->instansi_name ?></b></td>
+                      <td>:</td>
+                      <td class="text-left"><b><?php echo $get_user->instansi_name ?></b></td>
                     </tr>
                   <?php } ?>
                 </tbody>
