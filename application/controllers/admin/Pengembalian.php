@@ -518,7 +518,7 @@ class Pengembalian extends CI_Controller
   function tampil_buku_dipinjam($id)
   {
     $this->data['buku_dipinjam'] = $this->Peminjaman_model->get_all_by_anggota($id);
-
+    
     $this->load->view('back/peminjaman/V_peminjaman_list', $this->data);
   }
 
