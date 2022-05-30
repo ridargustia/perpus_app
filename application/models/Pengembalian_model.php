@@ -1,7 +1,8 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Pengembalian_model extends CI_Model{
+class Pengembalian_model extends CI_Model
+{
 
   public $table = 'pengembalian';
   public $id    = 'id_pengembalian';
@@ -334,10 +335,8 @@ class Pengembalian_model extends CI_Model{
     $this->db->order_by('pengembalian_name');
     $data = $this->db->get($this->table);
 
-    if($data->num_rows() > 0)
-    {
-      foreach($data->result_array() as $row)
-      {
+    if ($data->num_rows() > 0) {
+      foreach ($data->result_array() as $row) {
         $result[''] = '- Silahkan Pilih Pengembalian';
         $result[$row['id_pengembalian']] = $row['pengembalian_name'];
       }
@@ -406,13 +405,13 @@ class Pengembalian_model extends CI_Model{
     $this->db->insert($this->table, $data);
   }
 
-  function update($id,$data)
+  function update($id, $data)
   {
     $this->db->where($this->id, $id);
     $this->db->update($this->table, $data);
   }
 
-  function soft_delete($id,$data)
+  function soft_delete($id, $data)
   {
     $this->db->where($this->id, $id);
     $this->db->update($this->table, $data);
@@ -424,4 +423,19 @@ class Pengembalian_model extends CI_Model{
     $this->db->delete($this->table);
   }
 
+  function get_pengembalian_by_anggota($id_anggota)
+  {
+    $this->db->select('
+      pengembalian.id_pengembalian, pengembalian.peminjaman_id, pengembalian.arsip_id, pengembalian.anggota_id, pengembalian.instansi_id, pengembalian.created_at, pengembalian.created_by, anggota.id_anggota, anggota.no_induk, anggota.anggota_name, anggota.instansi_id, anggota.gender, anggota.angkatan, anggota.address, arsip.id_arsip, arsip.arsip_name, arsip.no_arsip, arsip.cover_buku, arsip.cover_buku_thumb, instansi.instansi_name
+    ');
+
+    $this->db->join('anggota', 'pengembalian.anggota_id = anggota.id_anggota');
+    $this->db->join('arsip', 'pengembalian.arsip_id = arsip.id_arsip');
+    $this->db->join('instansi', 'anggota.instansi_id = instansi.id_instansi');
+
+    $this->db->where('pengembalian.anggota_id', $id_anggota);
+    $this->db->where('pengembalian.is_delete_pengembalian', '0');
+
+    return $this->db->get($this->table)->result();
+  }
 }

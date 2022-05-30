@@ -19,7 +19,9 @@
 
     <!-- Main content -->
     <section class="content">
-      <?php if($this->session->flashdata('message')){echo $this->session->flashdata('message');} ?>
+      <?php if ($this->session->flashdata('message')) {
+        echo $this->session->flashdata('message');
+      } ?>
 
       <div class="box box-primary">
         <div class="box-header"><a href="<?php echo $add_book_action ?>" class="btn btn-primary"><i class="fa fa-plus"></i> <?php echo $btn_add ?></a> </div>
@@ -32,15 +34,16 @@
                   <th style="text-align: center">No</th>
                   <th style="text-align: center">No Induk Peminjam</th>
                   <th style="text-align: center">Nama Peminjam</th>
-                  <?php if(is_grandadmin()) { ?>
-                  <th style="text-align: center">Perguruan Tinggi</th>
+                  <?php if (is_grandadmin()) { ?>
+                    <th style="text-align: center">Perguruan Tinggi</th>
                   <?php } ?>
                   <th style="text-align: center">Invoice</th>
                   <th style="text-align: center">Aksi</th>
                 </tr>
               </thead>
               <tbody>
-                <?php $no = 1; foreach($get_all as $data){
+                <?php $no = 1;
+                foreach ($get_all as $data) {
                   // action
                   // if($data->is_kembali == '0')
                   // {
@@ -49,19 +52,20 @@
                   // else {
                   //   $kembalikan = '';
                   // }
-                  $delete = '<a href="'.base_url('admin/peminjaman/delete_peminjaman_by_anggota/'.$data->id_anggota).'" onClick="return confirm(\'Apakah anda yakin ingin menghapus data?\');" class="btn btn-sm btn-danger" title="Hapus Data"><i class="fa fa-trash"></i></a>';
-                  $invoice = '<a href="'.base_url('admin/peminjaman/print_invoice/'.$data->id_anggota).'" target="_blank" class="btn btn-sm btn-success" title="Cetak Invoice"><i class="fa fa-print"></i></a>';
-                  $detail = '<a href="'.base_url('admin/peminjaman/detail/'.$data->id_anggota).'" class="btn btn-sm btn-primary" title="Lihat Detail Peminjaman"><i class="fa fa-eye"></i></a>';
+                  $delete = '<a href="' . base_url('admin/peminjaman/delete_peminjaman_by_anggota/' . $data->id_anggota) . '" onClick="return confirm(\'Apakah anda yakin ingin menghapus data?\');" class="btn btn-sm btn-danger" title="Hapus Data"><i class="fa fa-trash"></i></a>';
+                  $invoice = '<a href="' . base_url('admin/peminjaman/print_invoice/' . $data->id_anggota) . '" target="_blank" class="btn btn-sm btn-success" title="Cetak Invoice"><i class="fa fa-print"></i></a>';
+                  $detail = '<a href="' . base_url('admin/peminjaman/detail/' . $data->id_anggota) . '" class="btn btn-sm btn-primary" title="Lihat Detail Peminjaman"><i class="fa fa-eye"></i></a>';
                 ?>
                   <tr>
                     <td style="text-align: center"><?php echo $no++ ?></td>
                     <td style="text-align: center"><?php echo $data->no_induk ?></td>
                     <td style="text-align: center"><?php echo $data->anggota_name ?></td>
-                    <?php if(is_grandadmin()) { ?>
-                    <td style="text-align: center"><?php echo $data->instansi_name ?></td>
+                    <?php if (is_grandadmin()) { ?>
+                      <td style="text-align: center"><?php echo $data->instansi_name ?></td>
                     <?php } ?>
                     <td style="text-align: center"><?php echo $invoice ?></td>
-                    <td style="text-align: center"><?php echo $detail.' '; echo $delete; ?></td>
+                    <td style="text-align: center"><?php echo $detail . ' ';
+                                                    echo $delete; ?></td>
                   </tr>
                 <?php } ?>
               </tbody>
@@ -70,8 +74,8 @@
                   <th style="text-align: center">No</th>
                   <th style="text-align: center">No Induk Peminjam</th>
                   <th style="text-align: center">Nama Peminjam</th>
-                  <?php if(is_grandadmin()) { ?>
-                  <th style="text-align: center">Perguruan Tinggi</th>
+                  <?php if (is_grandadmin()) { ?>
+                    <th style="text-align: center">Perguruan Tinggi</th>
                   <?php } ?>
                   <th style="text-align: center">Invoice</th>
                   <th style="text-align: center">Aksi</th>
@@ -95,13 +99,14 @@
   <script src="<?php echo base_url('assets/plugins/') ?>datatables-bs/js/dataTables.bootstrap.min.js"></script>
 
   <script>
-  $(document).ready( function () {
-    $('#dataTable').DataTable();
-  } );
+    $(document).ready(function() {
+      $('#dataTable').DataTable();
+    });
   </script>
 
 </div>
 <!-- ./wrapper -->
 
 </body>
+
 </html>

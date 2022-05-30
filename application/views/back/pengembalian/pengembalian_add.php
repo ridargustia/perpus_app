@@ -110,8 +110,7 @@
         </div>
         <div class="box-footer">
           <a href="#" onClick="document.location.reload(true)" class="btn btn-info"><i class="fa fa-refresh"></i> Ulangi Scan</a>
-          <a href="<?php echo base_url() ?>admin/pengembalian" class="btn btn-success"><i class="fa fa-check"></i> Selesai Tanpa Cetak Struk</a>
-          <a href="<?php echo base_url() ?>admin/pengembalian" class="btn btn-success"><i class="fa fa-print"></i> Selesai Dan Cetak Struk</a>
+          <a href="<?php echo base_url() ?>admin/pengembalian" class="btn btn-success"><i class="fa fa-check"></i> Selesai</a>
         </div>
       </div>
       <?php echo form_close() ?>

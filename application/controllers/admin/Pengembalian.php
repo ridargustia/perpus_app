@@ -38,13 +38,42 @@ class Pengembalian extends CI_Controller
   function index()
   {
     is_read();
+    $data_array = array();
+    $result = array();
 
     $this->data['page_title'] = 'Data ' . $this->data['module'];
 
+    // if (is_grandadmin()) {
+    //   $this->data['get_all'] = $this->Pengembalian_model->get_all();
+    // } elseif (is_masteradmin()) {
+    //   $this->data['get_all'] = $this->Pengembalian_model->get_all_by_instansi();
+    // }
+
     if (is_grandadmin()) {
-      $this->data['get_all'] = $this->Pengembalian_model->get_all();
+      $get_all = $this->Pengembalian_model->get_all();
     } elseif (is_masteradmin()) {
-      $this->data['get_all'] = $this->Pengembalian_model->get_all_by_instansi();
+      $get_all = $this->Pengembalian_model->get_all_by_instansi();
+    }
+
+    foreach ($get_all as $data) {
+      array_push($data_array, $data->anggota_id);
+    }
+
+    $anggota_id = array_unique($data_array);
+
+    for ($i = 0; $i < count($data_array); $i++) {
+      if ($anggota_id[$i] != NULL) {
+        array_push($result, $anggota_id[$i]);
+      }
+    }
+
+    $this->data['get_all'] = array();
+    for ($i = 0; $i < count($result); $i++) {
+      $data_anggota = $this->Anggota_model->get_by_id_for_pengembalian_list($result[$i]);
+
+      if ($data_anggota) {
+        array_push($this->data['get_all'], $data_anggota);
+      }
     }
 
     $this->load->view('back/pengembalian/pengembalian_list', $this->data);
@@ -306,7 +335,7 @@ class Pengembalian extends CI_Controller
       } elseif (is_masteradmin()) {
         $this->data['get_all_combobox_anggota']     = $this->Anggota_model->get_all_combobox_by_instansi($this->session->instansi_id);
       }
-  
+
       $this->data['instansi_id'] = [
         'name'          => 'instansi_id',
         'id'            => 'instansi_id',
@@ -349,9 +378,9 @@ class Pengembalian extends CI_Controller
     $this->form_validation->set_message('required', '{field} wajib diisi');
 
     $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
-    
+
     $data_peminjaman = $this->Peminjaman_model->get_peminjaman_for_update_pengembalian($this->input->post('peminjaman_id'));
-    
+
     if ($this->form_validation->run() === FALSE) {
       $this->update($this->input->post('id_pengembalian'));
     } else {
@@ -439,6 +468,31 @@ class Pengembalian extends CI_Controller
     }
   }
 
+  function delete_pengembalian_by_anggota($id_anggota)
+  {
+    $delete = $this->Pengembalian_model->get_pengembalian_by_anggota($id_anggota);
+
+    if ($delete) {
+      foreach ($delete as $data) {
+        $data_pengembalian = array(
+          'is_delete_pengembalian'   => '1',
+          'deleted_by'  => $this->session->username,
+          'deleted_at'  => date('Y-m-d H:i:a'),
+        );
+
+        $this->Pengembalian_model->soft_delete($data->id_pengembalian, $data_pengembalian);
+      }
+
+      write_log();
+
+      $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil dihapus</div>');
+      redirect('admin/pengembalian');
+    } else {
+      $this->session->set_flashdata('message', '<div class="alert alert-danger">Data tidak ditemukan</div>');
+      redirect('admin/pengembalian');
+    }
+  }
+
   function delete_permanent($id)
   {
     is_delete();
@@ -468,7 +522,7 @@ class Pengembalian extends CI_Controller
       $this->data['get_all_deleted'] = $this->Pengembalian_model->get_all_deleted();
     } elseif (is_masteradmin()) {
       $this->data['get_all_deleted'] = $this->Pengembalian_model->get_all_deleted_by_instansi();
-    } 
+    }
 
     $this->load->view('back/pengembalian/pengembalian_deleted_list', $this->data);
   }
@@ -503,13 +557,13 @@ class Pengembalian extends CI_Controller
     $data = $this->db->get_where('anggota', array('id_anggota' => $id_anggota));
 
     if ($data->num_rows() != 0) {
-        $output['success'] = 1;
+      $output['success'] = 1;
 
-        $output['id_anggota']    = $data->row()->id_anggota;
-        $output['no_induk']      = $data->row()->no_induk;
-        $output['anggota_name']  = $data->row()->anggota_name;
+      $output['id_anggota']    = $data->row()->id_anggota;
+      $output['no_induk']      = $data->row()->no_induk;
+      $output['anggota_name']  = $data->row()->anggota_name;
     } else {
-        $output['success'] = 0;
+      $output['success'] = 0;
     }
 
     echo json_encode($output);
@@ -518,7 +572,7 @@ class Pengembalian extends CI_Controller
   function tampil_buku_dipinjam($id)
   {
     $this->data['buku_dipinjam'] = $this->Peminjaman_model->get_all_by_anggota($id);
-    
+
     $this->load->view('back/peminjaman/V_peminjaman_list', $this->data);
   }
 
@@ -554,28 +608,28 @@ class Pengembalian extends CI_Controller
 
   function verifikasi_buku($id_peminjaman)
   {
-      $this->data['page_title'] = 'Tambah Data ' . $this->data['module'];
-      $this->data['action']     = 'admin/pengembalian/verifikasi_action';
+    $this->data['page_title'] = 'Tambah Data ' . $this->data['module'];
+    $this->data['action']     = 'admin/pengembalian/verifikasi_action';
 
-      $this->data['data_peminjaman'] = $this->Peminjaman_model->get_by_id($id_peminjaman);
+    $this->data['data_peminjaman'] = $this->Peminjaman_model->get_by_id($id_peminjaman);
 
-      $this->data['arsip_id'] = [
-        'name'  => 'arsip_id',
-        'id'    => 'arsip_id',
-        'type'  => 'hidden'
-      ];
-      $this->data['peminjaman_id'] = [
-        'name'  => 'peminjaman_id',
-        'id'    => 'peminjaman_id',
-        'type'  => 'hidden'
-      ];
-      $this->data['anggota_id'] = [
-        'name'  => 'anggota_id',
-        'id'    => 'anggota_id',
-        'type'  => 'hidden'
-      ];
+    $this->data['arsip_id'] = [
+      'name'  => 'arsip_id',
+      'id'    => 'arsip_id',
+      'type'  => 'hidden'
+    ];
+    $this->data['peminjaman_id'] = [
+      'name'  => 'peminjaman_id',
+      'id'    => 'peminjaman_id',
+      'type'  => 'hidden'
+    ];
+    $this->data['anggota_id'] = [
+      'name'  => 'anggota_id',
+      'id'    => 'anggota_id',
+      'type'  => 'hidden'
+    ];
 
-      $this->load->view('back/pengembalian/scan_verifikasi_buku', $this->data);
+    $this->load->view('back/pengembalian/scan_verifikasi_buku', $this->data);
   }
 
   function verifikasi_action()
@@ -599,25 +653,25 @@ class Pengembalian extends CI_Controller
           'instansi_id'         => $data_peminjaman->instansi_id,
           'created_by'          => $this->session->username,
         );
-  
+
         $this->Pengembalian_model->insert($data);
-  
+
         write_log();
-  
+
         // menambah qty buku
         $data_buku = $this->Arsip_model->get_by_id($this->input->post('arsip_id'));
-  
+
         $stok_result = $data_buku->qty + 1;
-  
+
         $this->db->where('id_arsip', $this->input->post('arsip_id'));
         $this->db->update('arsip', array('qty' => $stok_result));
-  
+
         write_log();
-  
+
         // mengganti status is_kembali peminjaman buku
         $this->db->where('id_peminjaman', $this->input->post('peminjaman_id'));
         $this->db->update('peminjaman', array('is_kembali' => '1'));
-  
+
         write_log();
 
         //NOTIFIKASI SUKSES
@@ -637,45 +691,45 @@ class Pengembalian extends CI_Controller
 
   function update_verifikasi_buku($id_pengembalian, $id_peminjaman)
   {
-      $this->data['page_title'] = 'Update Data ' . $this->data['module'];
-      $this->data['action']     = 'admin/pengembalian/update_verifikasi_action';
+    $this->data['page_title'] = 'Update Data ' . $this->data['module'];
+    $this->data['action']     = 'admin/pengembalian/update_verifikasi_action';
 
-      $this->data['data_peminjaman'] = $this->Peminjaman_model->get_by_id($id_peminjaman);
+    $this->data['data_peminjaman'] = $this->Peminjaman_model->get_by_id($id_peminjaman);
 
-      $this->data['data_pengembalian'] = $this->Pengembalian_model->get_by_id($id_pengembalian);
+    $this->data['data_pengembalian'] = $this->Pengembalian_model->get_by_id($id_pengembalian);
 
-      $this->data['arsip_id'] = [
-        'name'  => 'arsip_id',
-        'id'    => 'arsip_id',
-        'type'  => 'hidden'
-      ];
-      $this->data['peminjaman_id'] = [
-        'name'  => 'peminjaman_id',
-        'id'    => 'peminjaman_id',
-        'type'  => 'hidden'
-      ];
-      $this->data['anggota_id'] = [
-        'name'  => 'anggota_id',
-        'id'    => 'anggota_id',
-        'type'  => 'hidden'
-      ];
-      $this->data['pengembalian_id'] = [
-        'name'  => 'pengembalian_id',
-        'id'    => 'pengembalian_id',
-        'type'  => 'hidden'
-      ];
-      $this->data['current_arsip_id'] = [
-        'name'  => 'current_arsip_id',
-        'id'    => 'current_arsip_id',
-        'type'  => 'hidden'
-      ];
-      $this->data['current_peminjaman_id'] = [
-        'name'  => 'current_peminjaman_id',
-        'id'    => 'current_peminjaman_id',
-        'type'  => 'hidden'
-      ];
+    $this->data['arsip_id'] = [
+      'name'  => 'arsip_id',
+      'id'    => 'arsip_id',
+      'type'  => 'hidden'
+    ];
+    $this->data['peminjaman_id'] = [
+      'name'  => 'peminjaman_id',
+      'id'    => 'peminjaman_id',
+      'type'  => 'hidden'
+    ];
+    $this->data['anggota_id'] = [
+      'name'  => 'anggota_id',
+      'id'    => 'anggota_id',
+      'type'  => 'hidden'
+    ];
+    $this->data['pengembalian_id'] = [
+      'name'  => 'pengembalian_id',
+      'id'    => 'pengembalian_id',
+      'type'  => 'hidden'
+    ];
+    $this->data['current_arsip_id'] = [
+      'name'  => 'current_arsip_id',
+      'id'    => 'current_arsip_id',
+      'type'  => 'hidden'
+    ];
+    $this->data['current_peminjaman_id'] = [
+      'name'  => 'current_peminjaman_id',
+      'id'    => 'current_peminjaman_id',
+      'type'  => 'hidden'
+    ];
 
-      $this->load->view('back/pengembalian/update_scan_verifikasi_buku', $this->data);
+    $this->load->view('back/pengembalian/update_scan_verifikasi_buku', $this->data);
   }
 
   function update_verifikasi_action()
@@ -696,21 +750,21 @@ class Pengembalian extends CI_Controller
           'instansi_id'         => $data_peminjaman->instansi_id,
           'modified_by'          => $this->session->username,
         );
-  
+
         $this->Pengembalian_model->update($this->input->post('pengembalian_id'), $data);
-  
+
         write_log();
-  
+
         // menambah qty buku untuk buku baru
         $data_buku = $this->Arsip_model->get_by_id($data_peminjaman->arsip_id);
-  
+
         $stok_result = $data_buku->qty + 1;
-  
+
         $this->db->where('id_arsip', $data_peminjaman->arsip_id);
         $this->db->update('arsip', array('qty' => $stok_result));
-  
+
         write_log();
-  
+
         //mengganti status is_kembali peminjaman buku baru
         $this->db->where('id_peminjaman', $this->input->post('peminjaman_id'));
         $this->db->update('peminjaman', array('is_kembali' => '1'));
@@ -718,7 +772,7 @@ class Pengembalian extends CI_Controller
         //mengganti status is_kembali peminjaman buku lama
         $this->db->where('id_peminjaman', $this->input->post('current_peminjaman_id'));
         $this->db->update('peminjaman', array('is_kembali' => '0'));
-  
+
         write_log();
 
         // ubah buku lama dengan mengurangi qty buku
@@ -733,12 +787,12 @@ class Pengembalian extends CI_Controller
 
         //NOTIFIKASI SUKSES
         $this->session->set_flashdata('message', '<div class="alert alert-success">Authentication Success</div>');
-        redirect('admin/pengembalian/update/'.$this->input->post('pengembalian_id'));
+        redirect('admin/pengembalian/update/' . $this->input->post('pengembalian_id'));
       } else {
         //NOTIFIKASI FAILED
         $this->session->set_flashdata('message', '<div class="alert alert-danger">Authentication Failed</div>');
         $this->session->set_flashdata('anggota_id', $anggota_id);
-        redirect('admin/pengembalian/update_anggota/'.$this->input->post('pengembalian_id'));
+        redirect('admin/pengembalian/update_anggota/' . $this->input->post('pengembalian_id'));
       }
     } elseif ($id_qrcode[1] == 'anggota') {
       //NOTIFIKASI FAILED
