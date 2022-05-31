@@ -426,7 +426,7 @@ class Pengembalian_model extends CI_Model
   function get_pengembalian_by_anggota($id_anggota)
   {
     $this->db->select('
-      pengembalian.id_pengembalian, pengembalian.peminjaman_id, pengembalian.arsip_id, pengembalian.anggota_id, pengembalian.instansi_id, pengembalian.created_at, pengembalian.created_by, anggota.id_anggota, anggota.no_induk, anggota.anggota_name, anggota.instansi_id, anggota.gender, anggota.angkatan, anggota.address, arsip.id_arsip, arsip.arsip_name, arsip.no_arsip, arsip.cover_buku, arsip.cover_buku_thumb, instansi.instansi_name
+      pengembalian.id_pengembalian, pengembalian.peminjaman_id, pengembalian.tgl_kembali, pengembalian.arsip_id, pengembalian.anggota_id, pengembalian.instansi_id, pengembalian.created_at, pengembalian.created_by, anggota.id_anggota, anggota.no_induk, anggota.anggota_name, anggota.instansi_id, anggota.gender, anggota.angkatan, anggota.address, arsip.id_arsip, arsip.arsip_name, arsip.no_arsip, arsip.penulis_buku, arsip.penerbit, arsip.kota_penerbit, arsip.tahun_terbit, arsip.cover_buku, arsip.cover_buku_thumb, instansi.instansi_name
     ');
 
     $this->db->join('anggota', 'pengembalian.anggota_id = anggota.id_anggota');

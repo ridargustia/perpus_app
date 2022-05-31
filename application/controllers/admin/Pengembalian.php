@@ -79,6 +79,19 @@ class Pengembalian extends CI_Controller
     $this->load->view('back/pengembalian/pengembalian_list', $this->data);
   }
 
+  function detail($id_anggota)
+  {
+    $this->data['page_title'] = 'Detail ' . $this->data['module'];
+
+    $this->data['get_pengembalian'] = $this->Pengembalian_model->get_pengembalian_by_anggota($id_anggota);
+
+    $this->data['get_user'] = $this->Anggota_model->get_by_id_for_detail_pengembalian($id_anggota);
+
+    // var_dump($this->data['get_user']); die();
+
+    $this->load->view('back/pengembalian/pengembalian_detail', $this->data);
+  }
+
   function create()
   {
     is_create();

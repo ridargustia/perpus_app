@@ -34,7 +34,10 @@
                   <th style="text-align: center">No</th>
                   <th style="text-align: center">No Induk Peminjam</th>
                   <th style="text-align: center">Nama Peminjam</th>
-                  <?php if (is_grandadmin()) { ?>
+                  <?php
+                  //? Jika GrandAdmin
+                  if (is_grandadmin()) {
+                  ?>
                     <th style="text-align: center">Perguruan Tinggi</th>
                   <?php } ?>
                   <th style="text-align: center">Invoice</th>
@@ -44,14 +47,7 @@
               <tbody>
                 <?php $no = 1;
                 foreach ($get_all as $data) {
-                  // action
-                  // if($data->is_kembali == '0')
-                  // {
-                  //   $kembalikan = '<a href="'.base_url('admin/peminjaman/set_kembali/'.$data->id_peminjaman).'" class="btn btn-info" title="Kembalikan Buku"><i class="fa fa-rotate-left"></i></a>';
-                  // }
-                  // else {
-                  //   $kembalikan = '';
-                  // }
+                  //TODO Buat tombol action
                   $delete = '<a href="' . base_url('admin/peminjaman/delete_peminjaman_by_anggota/' . $data->id_anggota) . '" onClick="return confirm(\'Apakah anda yakin ingin menghapus data?\');" class="btn btn-sm btn-danger" title="Hapus Data"><i class="fa fa-trash"></i></a>';
                   $invoice = '<a href="' . base_url('admin/peminjaman/print_invoice/' . $data->id_anggota) . '" target="_blank" class="btn btn-sm btn-success" title="Cetak Invoice"><i class="fa fa-print"></i></a>';
                   $detail = '<a href="' . base_url('admin/peminjaman/detail/' . $data->id_anggota) . '" class="btn btn-sm btn-primary" title="Lihat Detail Peminjaman"><i class="fa fa-eye"></i></a>';
@@ -60,7 +56,10 @@
                     <td style="text-align: center"><?php echo $no++ ?></td>
                     <td style="text-align: center"><?php echo $data->no_induk ?></td>
                     <td style="text-align: center"><?php echo $data->anggota_name ?></td>
-                    <?php if (is_grandadmin()) { ?>
+                    <?php
+                    //? Jika GrandAdmin
+                    if (is_grandadmin()) {
+                    ?>
                       <td style="text-align: center"><?php echo $data->instansi_name ?></td>
                     <?php } ?>
                     <td style="text-align: center"><?php echo $invoice ?></td>
@@ -74,7 +73,10 @@
                   <th style="text-align: center">No</th>
                   <th style="text-align: center">No Induk Peminjam</th>
                   <th style="text-align: center">Nama Peminjam</th>
-                  <?php if (is_grandadmin()) { ?>
+                  <?php
+                  //? Jika GrandAdmin
+                  if (is_grandadmin()) {
+                  ?>
                     <th style="text-align: center">Perguruan Tinggi</th>
                   <?php } ?>
                   <th style="text-align: center">Invoice</th>
