@@ -516,24 +516,31 @@ class Pengembalian extends CI_Controller
 
   function delete_pengembalian_by_anggota_and_tgl_kembali($id_anggota, $tgl_kembali)
   {
+    //TODO Get data pengembalian berdasarkan id anggota dan tgl kembali
     $delete = $this->Pengembalian_model->get_pengembalian_by_anggota_and_tgl_kembali($id_anggota, $tgl_kembali);
 
+    //? Apakah data pengembalian dengan suatu id anggota dan tgl kembali ditemukan?
     if ($delete) {
+      //TODO Karena data berbentuk array (lebih dari satu) maka dilakukan perulangan foreach
       foreach ($delete as $data) {
+        //TODO Ubah semua data yang ditunjuk dengan value data sebagai berikut
         $data_pengembalian = array(
           'is_delete_pengembalian'   => '1',
           'deleted_by'  => $this->session->username,
           'deleted_at'  => date('Y-m-d H:i:a'),
         );
 
+        //TODO Lakukan softdelete pada data pengembalian dengan id pengembalian yg ditunjuk (Update)
         $this->Pengembalian_model->soft_delete($data->id_pengembalian, $data_pengembalian);
       }
 
       write_log();
 
+      //TODO Notifikasi data berhasil dihapus dan redirect ke halaman index
       $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil dihapus</div>');
       redirect('admin/pengembalian');
     } else {
+      //TODO Notifikasi data tidak ditemukan dan redirect ke halaman index
       $this->session->set_flashdata('message', '<div class="alert alert-danger">Data tidak ditemukan</div>');
       redirect('admin/pengembalian');
     }
@@ -652,13 +659,16 @@ class Pengembalian extends CI_Controller
     echo json_encode($output);
   }
 
-  function verifikasi_buku($id_peminjaman)
+  function verifikasi_buku($id_peminjaman, $denda)
   {
     $this->data['page_title'] = 'Tambah Data ' . $this->data['module'];
     $this->data['action']     = 'admin/pengembalian/verifikasi_action';
+    $this->data['nominal_denda'] = $denda;
 
+    //TODO Get data peminjaman by id
     $this->data['data_peminjaman'] = $this->Peminjaman_model->get_by_id($id_peminjaman);
 
+    //TODO Rancang struktur form input
     $this->data['arsip_id'] = [
       'name'  => 'arsip_id',
       'id'    => 'arsip_id',
@@ -674,64 +684,81 @@ class Pengembalian extends CI_Controller
       'id'    => 'anggota_id',
       'type'  => 'hidden'
     ];
+    $this->data['denda'] = [
+      'name'  => 'denda',
+      'id'    => 'denda',
+      'type'  => 'hidden'
+    ];
 
+    //TODO Load view dengan mengirim data
     $this->load->view('back/pengembalian/scan_verifikasi_buku', $this->data);
   }
 
   function verifikasi_action()
   {
+    //TODO Ambil inputan id qrcode
     $string_kode = $this->input->post('id_qrcode');
+    //TODO Pisahkan string dengan pembatas '/' menjadi array
     $id_qrcode = explode("/", $string_kode);
 
+    //TODO Ambil semua inputan dan simpan ke variabel
     $arsip_id = $this->input->post('arsip_id');
     $id_peminjaman = $this->input->post('peminjaman_id');
     $anggota_id = $this->input->post('anggota_id');
 
+    //? Apakah value qr code memiliki kata kunci 'buku'?
     if ($id_qrcode[1] == 'book') {
+      //? Apakah value id qr code sama dengan id arsip yang akan dikembalikan?
       if ($id_qrcode[0] == $arsip_id) {
+        //TODO Get data peminjaman by id
         $data_peminjaman = $this->Peminjaman_model->get_by_id($id_peminjaman);
 
+        //TODO Simpan ke dalam variabel array
         $data = array(
           'tgl_kembali'         => date('Y-m-d'),
           'peminjaman_id'       => $this->input->post('peminjaman_id'),
           'arsip_id'            => $this->input->post('arsip_id'),
+          'denda'               => $this->input->post('denda'),
           'anggota_id'          => $data_peminjaman->anggota_id,
           'instansi_id'         => $data_peminjaman->instansi_id,
           'created_by'          => $this->session->username,
         );
 
+        //TODO Lakukan query model insert pada variabel $data
         $this->Pengembalian_model->insert($data);
 
         write_log();
 
-        // menambah qty buku
+        //TODO Buku yg dikembalikan akan tambah qty buku-nya
         $data_buku = $this->Arsip_model->get_by_id($this->input->post('arsip_id'));
 
+        //TODO Proses penjumlahan
         $stok_result = $data_buku->qty + 1;
 
+        //TODO Jalankan query update buku berdasarkan id buku yg dikembalikan
         $this->db->where('id_arsip', $this->input->post('arsip_id'));
         $this->db->update('arsip', array('qty' => $stok_result));
 
         write_log();
 
-        // mengganti status is_kembali peminjaman buku
+        //TODO mengganti status is_kembali peminjaman buku
         $this->db->where('id_peminjaman', $this->input->post('peminjaman_id'));
         $this->db->update('peminjaman', array('is_kembali' => '1'));
 
         write_log();
 
-        //NOTIFIKASI SUKSES
+        //TODO TAMPILKAN NOTIFIKASI SUKSES
         $this->session->set_flashdata('message', '<div class="alert alert-success">Authentication Success</div>');
         $this->session->set_flashdata('anggota_id', $anggota_id);
         redirect('admin/pengembalian/create');
       } else {
-        //NOTIFIKASI FAILED
+        //TODO TAMPILKAN NOTIFIKASI FAILED
         $this->session->set_flashdata('message', '<div class="alert alert-danger">Authentication Failed</div>');
         $this->session->set_flashdata('anggota_id', $anggota_id);
         redirect('admin/pengembalian/create');
       }
     } elseif ($id_qrcode[1] == 'anggota') {
-      //NOTIFIKASI FAILED
+      //TODO NOTIFIKASI FAILED (Belum dibuat)
     }
   }
 
@@ -843,5 +870,119 @@ class Pengembalian extends CI_Controller
     } elseif ($id_qrcode[1] == 'anggota') {
       //NOTIFIKASI FAILED
     }
+  }
+
+  function print_invoice($id_anggota, $tgl_kembali)
+  {
+    //TODO Get data-data yang dibutuhkan untuk ditampilkan ke struk pengembalian
+    $data_pengembalian = $this->Pengembalian_model->get_pengembalian_by_anggota_and_tgl_kembali($id_anggota, $tgl_kembali);
+    $data_anggota = $this->Anggota_model->get_by_id_for_print_invoice($id_anggota);
+    $total_rows_by_anggota_and_tgl_kembali = $this->Pengembalian_model->total_rows_by_anggota_and_tgl_kembali($id_anggota, $tgl_kembali);
+
+    //TODO Import Library FPDF
+    require FCPATH . '/vendor/autoload.php';
+    require FCPATH . '/vendor/setasign/fpdf/fpdf.php';
+
+    //TODO Rancang template struk pengembalian dengan ekstensi PDF
+    $pdf = new FPDF('P', 'mm', array(75, 121));
+    $pdf->SetTitle('Struk Pengembalian Buku - ' . $data_anggota->no_induk);
+    $pdf->SetTopMargin(5);
+    $pdf->SetLeftMargin(5);
+    $pdf->AddPage();
+
+    $pdf->SetFont('Arial', 'B', 8);
+    $pdf->Cell(65, 3, 'PERPUSTAKAAN', 0, 1, 'C');
+    $pdf->Cell(65, 3, strtoupper($data_anggota->instansi_name), 0, 1, 'C');
+
+    $pdf->SetFont('Arial', '', 7);
+    // $pdf->Cell(65, 3, 'JL. Selalu Bahagia', 0, 1, 'C');
+    // $pdf->SetLineWidth(0);
+    // $pdf->Line(5,15,70,15);
+    $pdf->Cell(65, 2, '-----------------------------------------------------------------------------', 0, 1, 'L');
+
+    //make a dummy empty cell as a vertical spacer
+    $pdf->Cell(65, 2, '', 0, 1); //end of line
+
+    $pdf->Cell(65, 3, 'STRUK PENGEMBALIAN BUKU', 0, 1, 'C');
+
+    //make a dummy empty cell as a vertical spacer
+    $pdf->Cell(65, 3, '', 0, 1); //end of line
+
+    $pdf->Cell(32.5, 3, $data_anggota->no_induk, 0, 0, 'L');
+    $pdf->Cell(32.5, 3, date('d/m/Y'), 0, 1, 'R');
+    $pdf->Cell(32.5, 3, $data_anggota->anggota_name, 0, 0, 'L');
+    $pdf->Cell(32.5, 3, 'Petugas : ' . $this->session->username, 0, 1, 'R');
+
+    //make a dummy empty cell as a vertical spacer
+    $pdf->Cell(65, 1, '', 0, 1); //end of line
+
+    // $pdf->SetLineWidth(0);
+    // $pdf->Line(5,31,70,31);
+    $pdf->Cell(65, 2, '-----------------------------------------------------------------------------', 0, 1, 'L');
+
+    $pdf->Cell(34, 3, 'Buku', 0, 0, 'L');
+    $pdf->Cell(15, 3, 'Tgl Pinjam', 0, 0, 'R');
+    $pdf->Cell(16, 3, 'Tgl Kembali', 0, 1, 'R');
+
+    // $pdf->SetLineWidth(0);
+    // $pdf->Line(5,36,70,36);
+    $pdf->Cell(65, 2, '-----------------------------------------------------------------------------', 0, 1, 'L');
+
+    //make a dummy empty cell as a vertical spacer
+    $pdf->Cell(65, 1, '', 0, 1); //end of line
+
+    foreach ($data_pengembalian as $data) {
+      $pdf->Cell(35, 3, $data->arsip_name, 0, 0, 'L');
+      $pdf->Cell(15, 3, datetime_indo4($data->tgl_peminjaman), 0, 0, 'R');
+      $pdf->Cell(15, 3, datetime_indo4($data->tgl_kembali), 0, 1, 'R');
+
+      //TODO Hitung denda keseluruhan
+      $total_denda = $total_denda + $data->denda;
+    }
+
+    //make a dummy empty cell as a vertical spacer
+    $pdf->Cell(65, 1, '', 0, 1); //end of line
+
+    // $pdf->SetLineWidth(0);
+    // $pdf->Line(5,52,70,52);
+    $pdf->Cell(65, 2, '-----------------------------------------------------------------------------', 0, 1, 'L');
+
+    //make a dummy empty cell as a vertical spacer
+    $pdf->Cell(65, 1, '', 0, 1); //end of line
+
+    $pdf->Cell(24, 3, '', 0, 0, 'R');
+    $pdf->Cell(26, 3, 'Total Buku', 0, 0, 'L');
+    $pdf->Cell(15, 3, $total_rows_by_anggota_and_tgl_kembali . ' pcs', 0, 1, 'R');
+    $pdf->Cell(24, 3, '', 0, 0, 'R');
+    $pdf->Cell(26, 3, 'Denda', 0, 0, 'L');
+    $pdf->Cell(15, 3, 'Rp ' . $total_denda . ',-', 0, 1, 'R');
+
+
+    //make a dummy empty cell as a vertical spacer
+    $pdf->Cell(65, 9, '', 0, 1); //end of line
+
+    // $pdf->SetLineWidth(0);
+    // $pdf->Line(5,72,28,72);
+
+    $pdf->Cell(65, 3, '---------------------------- PERATURAN ----------------------------', 0, 1, 'C');
+
+    // $pdf->SetLineWidth(0);
+    // $pdf->Line(47,72,70,72);
+
+    //make a dummy empty cell as a vertical spacer
+    $pdf->Cell(65, 1, '', 0, 1); //end of line
+
+    $pdf->Cell(65, 3, '* Jumlah buku yang dipinjam max 4 pcs', 0, 1, 'L');
+    $pdf->Cell(65, 3, '* 1 judul buku max pinjam 1 pcs', 0, 1, 'L');
+    $pdf->Cell(65, 3, '* Lama peminjaman max selama 7 hari', 0, 1, 'L');
+    $pdf->Cell(65, 3, '* Denda Rp 2.500,- / buku * lama keterlambatan(hari)', 0, 1, 'L');
+
+    //make a dummy empty cell as a vertical spacer
+    $pdf->Cell(65, 5, '', 0, 1); //end of line
+
+    $pdf->Cell(65, 3, '--Terimakasih atas kunjungan anda--', 0, 1, 'C');
+    $pdf->Cell(65, 3, '--Selamat Membaca--', 0, 1, 'C');
+
+    $pdf->Output('I', 'Struk Pengembalian Buku - ' . $data_anggota->no_induk . '.pdf');
   }
 }

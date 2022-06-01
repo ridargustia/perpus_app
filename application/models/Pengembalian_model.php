@@ -400,6 +400,15 @@ class Pengembalian_model extends CI_Model
     return $this->db->get($this->table)->num_rows();
   }
 
+  function total_rows_by_anggota_and_tgl_kembali($id_anggota, $tgl_kembali)
+  {
+    $this->db->where('anggota_id', $id_anggota);
+    $this->db->where('tgl_kembali', $tgl_kembali);
+    $this->db->where('is_delete_pengembalian', '0');
+
+    return $this->db->get($this->table)->num_rows();
+  }
+
   function insert($data)
   {
     $this->db->insert($this->table, $data);
@@ -442,11 +451,12 @@ class Pengembalian_model extends CI_Model
   function get_pengembalian_by_anggota_and_tgl_kembali($id_anggota, $tgl_kembali)
   {
     $this->db->select('
-      pengembalian.id_pengembalian, pengembalian.peminjaman_id, pengembalian.tgl_kembali, pengembalian.arsip_id, pengembalian.anggota_id, pengembalian.instansi_id, pengembalian.created_at, pengembalian.created_by, anggota.id_anggota, anggota.no_induk, anggota.anggota_name, anggota.instansi_id, anggota.gender, anggota.angkatan, anggota.address, arsip.id_arsip, arsip.arsip_name, arsip.no_arsip, arsip.penulis_buku, arsip.penerbit, arsip.kota_penerbit, arsip.tahun_terbit, arsip.cover_buku, arsip.cover_buku_thumb, instansi.instansi_name
+      pengembalian.id_pengembalian, pengembalian.peminjaman_id, pengembalian.tgl_kembali, pengembalian.arsip_id, pengembalian.anggota_id, pengembalian.instansi_id, pengembalian.denda, pengembalian.created_at, pengembalian.created_by, anggota.id_anggota, anggota.no_induk, anggota.anggota_name, anggota.instansi_id, anggota.gender, anggota.angkatan, anggota.address, arsip.id_arsip, arsip.arsip_name, arsip.no_arsip, arsip.penulis_buku, arsip.penerbit, arsip.kota_penerbit, arsip.tahun_terbit, arsip.cover_buku, arsip.cover_buku_thumb, instansi.instansi_name, peminjaman.tgl_peminjaman
     ');
 
     $this->db->join('anggota', 'pengembalian.anggota_id = anggota.id_anggota');
     $this->db->join('arsip', 'pengembalian.arsip_id = arsip.id_arsip');
+    $this->db->join('peminjaman', 'pengembalian.peminjaman_id = peminjaman.id_peminjaman');
     $this->db->join('instansi', 'anggota.instansi_id = instansi.id_instansi');
 
     $this->db->where('pengembalian.anggota_id', $id_anggota);
