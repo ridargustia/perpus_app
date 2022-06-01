@@ -128,7 +128,7 @@ class Anggota_model extends CI_Model
     function get_by_id_for_pengembalian_list($id_anggota)
     {
         $this->db->select('
-            anggota.id_anggota, anggota.no_induk, anggota.anggota_name, instansi.instansi_name, pengembalian.is_delete_pengembalian
+            anggota.id_anggota, anggota.no_induk, anggota.anggota_name, instansi.instansi_name, pengembalian.tgl_kembali, pengembalian.is_delete_pengembalian
         ');
 
         $this->db->join('anggota', 'pengembalian.anggota_id = anggota.id_anggota', 'left');
@@ -136,6 +136,22 @@ class Anggota_model extends CI_Model
 
         $this->db->where('pengembalian.anggota_id', $id_anggota);
         // $this->db->where('pengembalian.tgl_kembali', $id_anggota);
+        $this->db->where('is_delete_pengembalian', '0');
+
+        return $this->db->get('pengembalian')->result();
+    }
+
+    function get_by_id_and_tgl_kembali_for_pengembalian_list($id_anggota, $tgl_kembali)
+    {
+        $this->db->select('
+            anggota.id_anggota, anggota.no_induk, anggota.anggota_name, instansi.instansi_name, pengembalian.tgl_kembali, pengembalian.is_delete_pengembalian
+        ');
+
+        $this->db->join('anggota', 'pengembalian.anggota_id = anggota.id_anggota', 'left');
+        $this->db->join('instansi', 'anggota.instansi_id = instansi.id_instansi', 'left');
+
+        $this->db->where('pengembalian.anggota_id', $id_anggota);
+        $this->db->where('pengembalian.tgl_kembali', $tgl_kembali);
         $this->db->where('is_delete_pengembalian', '0');
 
         return $this->db->get('pengembalian')->row();

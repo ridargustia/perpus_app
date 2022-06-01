@@ -38,44 +38,75 @@ class Pengembalian extends CI_Controller
   function index()
   {
     is_read();
+
+    //TODO Deklarasi array
     $data_array = array();
     $result = array();
 
+    //TODO Buat variabel title
     $this->data['page_title'] = 'Data ' . $this->data['module'];
 
-    // if (is_grandadmin()) {
-    //   $this->data['get_all'] = $this->Pengembalian_model->get_all();
-    // } elseif (is_masteradmin()) {
-    //   $this->data['get_all'] = $this->Pengembalian_model->get_all_by_instansi();
-    // }
-
+    //TODO Get data pengembalian berdasarkan usertype
     if (is_grandadmin()) {
+      //? Jika user grandadmin maka get all pengembalian
       $get_all = $this->Pengembalian_model->get_all();
     } elseif (is_masteradmin()) {
+      //? Jika user masteradmin maka get all pengembalian berdasarkan instansi
       $get_all = $this->Pengembalian_model->get_all_by_instansi();
     }
 
+    //TODO Input ke variabel array
     foreach ($get_all as $data) {
       array_push($data_array, $data->anggota_id);
     }
 
+    //TODO Sortir id anggota bersifat unik
     $anggota_id = array_unique($data_array);
 
     for ($i = 0; $i < count($data_array); $i++) {
+      //TODO Menghilangkan value array yang NULL
+      //? Jika value tidak null maka push ke array result
       if ($anggota_id[$i] != NULL) {
         array_push($result, $anggota_id[$i]);
       }
     }
 
-    $this->data['get_all'] = array();
+    $array_anggota = array();
     for ($i = 0; $i < count($result); $i++) {
+      //TODO Get data pengembalian berdasarkan id anggota dalam bentuk array
       $data_anggota = $this->Anggota_model->get_by_id_for_pengembalian_list($result[$i]);
 
+      //TODO Pembuatan array of object
+      //? Jika data tidak kosong maka eksekusi
       if ($data_anggota) {
-        array_push($this->data['get_all'], $data_anggota);
+        array_push($array_anggota, $data_anggota);
       }
     }
 
+    //TODO Deklarasi Array
+    $this->data['get_all'] = array();
+    //TODO Memisahkan array per anggota
+    for ($i = 0; $i < count($array_anggota); $i++) {
+      //TODO Deklarasi array untuk pengecekan tgl_kembali agar bersifat unik
+      $array[$i] = array();
+      for ($j = 0; $j < count($array_anggota[$i]); $j++) {
+        //TODO Seleksi array data tgl kembali secara unik
+        //? Jika variabel array[i] tidak memiliki value yang dicek maka lakukan push
+        if (!in_array($array_anggota[$i][$j]->tgl_kembali, $array[$i], true)) {
+          array_push($array[$i], $array_anggota[$i][$j]->tgl_kembali);
+          //TODO Get data pengembalian berdasarkan id anggota dan tgl kembali
+          $get_pengembalian =  $this->Anggota_model->get_by_id_and_tgl_kembali_for_pengembalian_list($array_anggota[$i][$j]->id_anggota, $array_anggota[$i][$j]->tgl_kembali);
+
+          //TODO Pembuatan array of object
+          //? Jika data tidak kosong maka eksekusi
+          if ($get_pengembalian) {
+            array_push($this->data['get_all'], $get_pengembalian);
+          }
+        }
+      }
+    }
+
+    //TODO Load view dengan mengirim data
     $this->load->view('back/pengembalian/pengembalian_list', $this->data);
   }
 

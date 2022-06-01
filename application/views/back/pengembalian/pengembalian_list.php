@@ -11,7 +11,7 @@
       <h1><?php echo $page_title ?>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="<?php echo base_url('dashboard') ?>"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="<?php echo base_url('admin/dashboard') ?>"><i class="fa fa-dashboard"></i> Home</a></li>
         <li><?php echo $module ?></li>
         <li class="active"><?php echo $page_title ?></li>
       </ol>
@@ -32,9 +32,9 @@
               <thead>
                 <tr>
                   <th style="text-align: center">No</th>
+                  <th style="text-align: center">Tgl Pengembalian</th>
                   <th style="text-align: center">No Induk Peminjam</th>
                   <th style="text-align: center">Nama Peminjam</th>
-
                   <?php
                   //? Jika GrandAdmin
                   if (is_grandadmin()) {
@@ -55,6 +55,7 @@
                 ?>
                   <tr>
                     <td style="text-align: center"><?php echo $no++ ?></td>
+                    <td style="text-align: center"><?php echo $data->tgl_kembali ?></td>
                     <td style="text-align: center"><?php echo $data->no_induk ?></td>
                     <td style="text-align: center"><?php echo $data->anggota_name ?></td>
                     <?php
@@ -72,6 +73,7 @@
               <tfoot>
                 <tr>
                   <th style="text-align: center">No</th>
+                  <th style="text-align: center">Tgl Pengembalian</th>
                   <th style="text-align: center">No Induk Peminjam</th>
                   <th style="text-align: center">Nama Peminjam</th>
                   <?php
