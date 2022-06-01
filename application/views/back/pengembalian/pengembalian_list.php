@@ -50,7 +50,7 @@
                 foreach ($get_all as $data) {
                   //TODO Buat tombol action
                   $detail = '<a href="' . base_url('admin/pengembalian/detail/' . $data->id_anggota . '/' . $data->tgl_kembali) . '" class="btn btn-sm btn-primary" title="Lihat Detail Pengembalian"><i class="fa fa-eye"></i></a>';
-                  $delete = '<a href="' . base_url('admin/pengembalian/delete_pengembalian_by_anggota/' . $data->id_anggota) . '" onClick="return confirm(\'Apakah anda yakin ingin menghapus data?\');" class="btn btn-sm btn-danger" title="Hapus Data"><i class="fa fa-trash"></i></a>';
+                  $delete = '<a href="' . base_url('admin/pengembalian/delete_pengembalian_by_anggota_and_tgl_kembali/' . $data->id_anggota . '/' . $data->tgl_kembali) . '" onClick="return confirm(\'Apakah anda yakin ingin menghapus data?\');" class="btn btn-sm btn-danger" title="Hapus Data"><i class="fa fa-trash"></i></a>';
                   $invoice = '<a href="' . base_url('admin/peminjaman/print_invoice/' . $data->id_anggota) . '" target="_blank" class="btn btn-sm btn-success" title="Cetak Invoice"><i class="fa fa-print"></i></a>';
                 ?>
                   <tr>

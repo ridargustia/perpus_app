@@ -514,9 +514,9 @@ class Pengembalian extends CI_Controller
     }
   }
 
-  function delete_pengembalian_by_anggota($id_anggota)
+  function delete_pengembalian_by_anggota_and_tgl_kembali($id_anggota, $tgl_kembali)
   {
-    $delete = $this->Pengembalian_model->get_pengembalian_by_anggota($id_anggota);
+    $delete = $this->Pengembalian_model->get_pengembalian_by_anggota_and_tgl_kembali($id_anggota, $tgl_kembali);
 
     if ($delete) {
       foreach ($delete as $data) {
