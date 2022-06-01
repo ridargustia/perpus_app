@@ -49,13 +49,13 @@
                 <?php $no = 1;
                 foreach ($get_all as $data) {
                   //TODO Buat tombol action
+                  $detail = '<a href="' . base_url('admin/pengembalian/detail/' . $data->id_anggota . '/' . $data->tgl_kembali) . '" class="btn btn-sm btn-primary" title="Lihat Detail Pengembalian"><i class="fa fa-eye"></i></a>';
                   $delete = '<a href="' . base_url('admin/pengembalian/delete_pengembalian_by_anggota/' . $data->id_anggota) . '" onClick="return confirm(\'Apakah anda yakin ingin menghapus data?\');" class="btn btn-sm btn-danger" title="Hapus Data"><i class="fa fa-trash"></i></a>';
-                  $detail = '<a href="' . base_url('admin/pengembalian/detail/' . $data->id_anggota) . '" class="btn btn-sm btn-primary" title="Lihat Detail Pengembalian"><i class="fa fa-eye"></i></a>';
                   $invoice = '<a href="' . base_url('admin/peminjaman/print_invoice/' . $data->id_anggota) . '" target="_blank" class="btn btn-sm btn-success" title="Cetak Invoice"><i class="fa fa-print"></i></a>';
                 ?>
                   <tr>
                     <td style="text-align: center"><?php echo $no++ ?></td>
-                    <td style="text-align: center"><?php echo $data->tgl_kembali ?></td>
+                    <td style="text-align: center"><?php echo datetime_indo4($data->tgl_kembali) ?></td>
                     <td style="text-align: center"><?php echo $data->no_induk ?></td>
                     <td style="text-align: center"><?php echo $data->anggota_name ?></td>
                     <?php

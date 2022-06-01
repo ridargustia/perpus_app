@@ -143,7 +143,10 @@
                                         <td>:</td>
                                         <td class="text-left"><b><?php echo $get_user->address ?></b></td>
                                     </tr>
-                                    <?php if (is_grandadmin()) { ?>
+                                    <?php
+                                    //? Jika usertype grandadmin maka tampilkan data instansi
+                                    if (is_grandadmin()) {
+                                    ?>
                                         <tr>
                                             <td>Perguruan Tinggi</td>
                                             <td>:</td>

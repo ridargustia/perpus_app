@@ -21,12 +21,14 @@
     <section class="content">
       <div class="row">
         <div class="col-md-8">
-          <?php if($this->session->flashdata('message')){echo $this->session->flashdata('message');} ?>
-          <?php 
-            foreach($get_peminjaman as $data) { 
-              $kembalikan = '<a href="'.base_url('admin/peminjaman/set_kembali/'.$data->id_peminjaman).'" class="btn btn-sm btn-info" title="Kembalikan Buku"><i class="fa fa-rotate-left"></i> Kembalikan</a>';
-              $edit = '<a href="'.base_url('admin/peminjaman/update/'.$data->id_peminjaman).'" class="btn btn-sm btn-warning" title="Ganti Buku"><i class="fa fa-pencil"></i> Ganti Buku</a>';
-              $delete = '<a href="'.base_url('admin/peminjaman/delete/'.$data->id_peminjaman).'" onClick="return confirm(\'Apakah anda yakin ingin menghapus data?\');" class="btn btn-sm btn-danger" title="Hapus Data"><i class="fa fa-trash"></i> Hapus</a>';
+          <?php if ($this->session->flashdata('message')) {
+            echo $this->session->flashdata('message');
+          } ?>
+          <?php
+          foreach ($get_peminjaman as $data) {
+            // $kembalikan = '<a href="'.base_url('admin/peminjaman/set_kembali/'.$data->id_peminjaman).'" class="btn btn-sm btn-info" title="Kembalikan Buku"><i class="fa fa-rotate-left"></i> Kembalikan</a>';
+            $edit = '<a href="' . base_url('admin/peminjaman/update/' . $data->id_peminjaman) . '" class="btn btn-sm btn-warning" title="Ganti Buku"><i class="fa fa-pencil"></i> Ganti Buku</a>';
+            $delete = '<a href="' . base_url('admin/peminjaman/delete/' . $data->id_peminjaman) . '" onClick="return confirm(\'Apakah anda yakin ingin menghapus data?\');" class="btn btn-sm btn-danger" title="Hapus Data"><i class="fa fa-trash"></i> Hapus</a>';
           ?>
             <div class="box box-primary">
               <div class="box-body">
@@ -34,12 +36,11 @@
                   <div class="col-md-4">
                     <?php if ($data->cover_buku != NULL) { ?>
                       <a href="#" onclick="previewCover(<?php echo $data->id_arsip ?>)" title="Preview Cover">
-                        <img src="<?php echo base_url('assets/images/cover_buku/'.$data->cover_buku) ?>" width="100%" height="275px" style="object-fit:contain">
+                        <img src="<?php echo base_url('assets/images/cover_buku/' . $data->cover_buku) ?>" width="100%" height="275px" style="object-fit:contain">
                       </a>
                     <?php } else { ?>
                       <img src="<?php echo base_url('assets/images/noimage.jpg') ?>" width="100%">
                     <?php } ?>
-                    <!-- <img src="<?php //echo base_url('assets/images/noimage.jpg') ?>" width="100%"> -->
                   </div>
                   <div class="col-md-8">
                     <table class="table">
@@ -71,7 +72,9 @@
               </div>
               <div class="box-footer">
                 <div style="text-align: right">
-                  <?php echo $kembalikan.' '; echo $edit.' '; echo $delete; ?>
+                  <?php echo $kembalikan . ' ';
+                  echo $edit . ' ';
+                  echo $delete; ?>
                 </div>
               </div>
             </div>
@@ -99,15 +102,15 @@
                     <td>Gender</td>
                     <td>:</td>
                     <td class="text-left"><b>
-                    <?php 
-                      if($get_user->gender == 1) {
-                        $gender = 'Laki-laki';
-                      } elseif($get_user->gender == 2) {
-                        $gender = 'Perempuan';
-                      }
-                      echo $gender 
-                    ?>
-                    </b></td>
+                        <?php
+                        if ($get_user->gender == 1) {
+                          $gender = 'Laki-laki';
+                        } elseif ($get_user->gender == 2) {
+                          $gender = 'Perempuan';
+                        }
+                        echo $gender
+                        ?>
+                      </b></td>
                   </tr>
                   <tr>
                     <td>Angkatan</td>
@@ -119,7 +122,7 @@
                     <td>:</td>
                     <td class="text-left"><b><?php echo $get_user->address ?></b></td>
                   </tr>
-                  <?php if(is_grandadmin()) { ?>
+                  <?php if (is_grandadmin()) { ?>
                     <tr>
                       <td>Perguruan Tinggi</td>
                       <td>:</td>
@@ -132,12 +135,12 @@
           </div>
         </div>
       </div>
-      
+
       <!-- /.box -->
       <div class="modal fade" id="ModalPreview" role="dialog" style="min-width: 100%;margin-left:0px">
-          <div class="modal-dialog" style="min-width: 100%;">
-              <div id="dataPreview"></div>
-          </div><!-- /.modal-dialog -->
+        <div class="modal-dialog" style="min-width: 100%;">
+          <div id="dataPreview"></div>
+        </div><!-- /.modal-dialog -->
       </div>
     </section>
     <!-- /.content -->
@@ -148,32 +151,33 @@
 
   <script>
     function previewCover(id) {
-        $("#id").val(id);
-        $('#ModalPreview').modal("show");
-        loadPreview(id);
-      }
+      $("#id").val(id);
+      $('#ModalPreview').modal("show");
+      loadPreview(id);
+    }
 
-      function loadPreview(id_arsip) {
-        // var url = "buku/ajax_label/" + id + "/";
-        $.ajax({
-            url: "<?php echo base_url(); ?>book/ajax_preview_cover/" + id_arsip + "",
-            type: "GET",
-            async: true,
-            data: {
-                
-            },
-            success: function (data) {
-                $('#dataPreview').html(data);
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert('Error adding / update data');
-            }
-        });
-      }
+    function loadPreview(id_arsip) {
+      // var url = "buku/ajax_label/" + id + "/";
+      $.ajax({
+        url: "<?php echo base_url(); ?>book/ajax_preview_cover/" + id_arsip + "",
+        type: "GET",
+        async: true,
+        data: {
+
+        },
+        success: function(data) {
+          $('#dataPreview').html(data);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          alert('Error adding / update data');
+        }
+      });
+    }
   </script>
 
 </div>
 <!-- ./wrapper -->
 
 </body>
+
 </html>
