@@ -240,12 +240,16 @@ class Pengembalian extends CI_Controller
   {
     is_update();
 
+    //TODO Get data pengembalian by id
     $this->data['pengembalian']     = $this->Pengembalian_model->get_by_id($id);
 
+    //? Apakah data pengembalian ditemukan?
     if ($this->data['pengembalian']) {
+      //TODO Isi variabel title dan action
       $this->data['page_title'] = 'Update Data ' . $this->data['module'];
       $this->data['action']     = 'admin/pengembalian/update_action';
 
+      //TODO Rancang struktur form input
       $this->data['current_arsip_name'] = [
         'name'          => 'current_arsip_name',
         'id'            => 'current_arsip_name',
@@ -359,8 +363,10 @@ class Pengembalian extends CI_Controller
         'readonly'      => '',
       ];
 
+      //TODO Load view dengan mengirim data
       $this->load->view('back/pengembalian/pengembalian_edit', $this->data);
     } else {
+      //TODO Notifikasi data tidak ditemukan dan redirect ke halaman index pengembalian
       $this->session->set_flashdata('message', '<div class="alert alert-danger">Data tidak ditemukan</div>');
       redirect('admin/pengembalian');
     }
@@ -370,18 +376,23 @@ class Pengembalian extends CI_Controller
   {
     is_update();
 
+    //TODO Get data pengembalian by id
     $this->data['pengembalian']     = $this->Pengembalian_model->get_by_id($id);
 
+    //? Apakah data pengembalian ditemukan?
     if ($this->data['pengembalian']) {
+      //TODO Isi variabel title dan action
       $this->data['page_title'] = 'Update Data ' . $this->data['module'];
       $this->data['action']     = 'admin/pengembalian/update_action';
 
+      //TODO Get data berdasarkan usertype
       if (is_grandadmin()) {
         $this->data['get_all_combobox_instansi']            = $this->Instansi_model->get_all_combobox();
       } elseif (is_masteradmin()) {
         $this->data['get_all_combobox_anggota']     = $this->Anggota_model->get_all_combobox_by_instansi($this->session->instansi_id);
       }
 
+      //TODO Rancang struktur form input
       $this->data['instansi_id'] = [
         'name'          => 'instansi_id',
         'id'            => 'instansi_id',
@@ -408,8 +419,10 @@ class Pengembalian extends CI_Controller
         'readonly'      => '',
       ];
 
+      //TODO Load view dengan mengirimkan data
       $this->load->view('back/pengembalian/pengembalian_edit_anggota', $this->data);
     } else {
+      //TODO Tampilkan notifikasi data pengembalian tidak ditemukan dan redirect ke halaman index pengembalian
       $this->session->set_flashdata('message', '<div class="alert alert-danger">Data tidak ditemukan</div>');
       redirect('admin/pengembalian');
     }
@@ -762,15 +775,20 @@ class Pengembalian extends CI_Controller
     }
   }
 
-  function update_verifikasi_buku($id_pengembalian, $id_peminjaman)
+  function update_verifikasi_buku($id_pengembalian, $id_peminjaman, $denda)
   {
+    //TODO Isi variabel title dan action
     $this->data['page_title'] = 'Update Data ' . $this->data['module'];
     $this->data['action']     = 'admin/pengembalian/update_verifikasi_action';
+    $this->data['nominal_denda'] = $denda;
 
+    //TODO Get data peminjaman by id
     $this->data['data_peminjaman'] = $this->Peminjaman_model->get_by_id($id_peminjaman);
 
+    //TODO Get data pengembalian by id
     $this->data['data_pengembalian'] = $this->Pengembalian_model->get_by_id($id_pengembalian);
 
+    //TODO Rancang struktur form input
     $this->data['arsip_id'] = [
       'name'  => 'arsip_id',
       'id'    => 'arsip_id',
@@ -801,74 +819,93 @@ class Pengembalian extends CI_Controller
       'id'    => 'current_peminjaman_id',
       'type'  => 'hidden'
     ];
+    $this->data['denda'] = [
+      'name'  => 'denda',
+      'id'    => 'denda',
+      'type'  => 'hidden'
+    ];
 
+    //TODO Load view dengan mengirim data
     $this->load->view('back/pengembalian/update_scan_verifikasi_buku', $this->data);
   }
 
   function update_verifikasi_action()
   {
+    //TODO Get data peminjaman by id
     $data_peminjaman = $this->Peminjaman_model->get_by_id($this->input->post('peminjaman_id'));
 
+    //TODO Memisahkan string value qr code dengan pembatas '/'
     $string_kode = $this->input->post('id_qrcode');
     $id_qrcode = explode("/", $string_kode);
 
+    //TODO Simpan inputan id anggota ke variabel
     $anggota_id = $this->input->post('anggota_id');
 
+    //? Apakah value qr code memiliki kata kunci 'book'?
     if ($id_qrcode[1] == 'book') {
+      //? Apakah value id qr code sama dengan id arsip yang akan dikembalikan?
       if ($id_qrcode[0] == $data_peminjaman->arsip_id) {
+        //TODO Data baru disimpan ke variabel array
         $data = array(
           'peminjaman_id'       => $this->input->post('peminjaman_id'),
+          'denda'               => $this->input->post('denda'),
           'arsip_id'            => $data_peminjaman->arsip_id,
           'anggota_id'          => $data_peminjaman->anggota_id,
           'instansi_id'         => $data_peminjaman->instansi_id,
-          'modified_by'          => $this->session->username,
+          'modified_by'         => $this->session->username,
         );
 
+        //TODO Update data pengembalian berdasarkan id pengembalian
         $this->Pengembalian_model->update($this->input->post('pengembalian_id'), $data);
 
         write_log();
 
-        // menambah qty buku untuk buku baru
+        //TODO Menambah qty buku untuk buku baru
         $data_buku = $this->Arsip_model->get_by_id($data_peminjaman->arsip_id);
 
+        //TODO Operasi penjumlahan qty buku baru
         $stok_result = $data_buku->qty + 1;
 
+        //TODO Jalankan query update buku baru
         $this->db->where('id_arsip', $data_peminjaman->arsip_id);
         $this->db->update('arsip', array('qty' => $stok_result));
 
         write_log();
 
-        //mengganti status is_kembali peminjaman buku baru
+        //TODO Mengganti status is_kembali data peminjaman buku baru menjadi 'true'
         $this->db->where('id_peminjaman', $this->input->post('peminjaman_id'));
         $this->db->update('peminjaman', array('is_kembali' => '1'));
 
-        //mengganti status is_kembali peminjaman buku lama
+        //TODO Mengganti status is_kembali data peminjaman buku lama menjadi 'false'
         $this->db->where('id_peminjaman', $this->input->post('current_peminjaman_id'));
         $this->db->update('peminjaman', array('is_kembali' => '0'));
 
         write_log();
 
-        // ubah buku lama dengan mengurangi qty buku
+        //TODO Ubah buku lama dengan mengurangi qty buku
         $data_buku_lama = $this->Arsip_model->get_by_id($this->input->post('current_arsip_id'));
 
+        //TODO Operasi pengurangan qty buku lama
         $stok_result_buku_lama = $data_buku_lama->qty - 1;
 
+        //TODO Jalankan query update buku lama
         $this->db->where('id_arsip', $this->input->post('current_arsip_id'));
         $this->db->update('arsip', array('qty' => $stok_result_buku_lama));
 
         write_log();
 
-        //NOTIFIKASI SUKSES
+        //TODO NOTIFIKASI SUKSES
         $this->session->set_flashdata('message', '<div class="alert alert-success">Authentication Success</div>');
         redirect('admin/pengembalian/update/' . $this->input->post('pengembalian_id'));
       } else {
-        //NOTIFIKASI FAILED
+        //TODO NOTIFIKASI FAILED
+        //TODO Mengirimkan flashdata id anggota untuk reload data peminjaman sebelumnya dan redirect ke halaman update anggota
         $this->session->set_flashdata('message', '<div class="alert alert-danger">Authentication Failed</div>');
         $this->session->set_flashdata('anggota_id', $anggota_id);
         redirect('admin/pengembalian/update_anggota/' . $this->input->post('pengembalian_id'));
       }
     } elseif ($id_qrcode[1] == 'anggota') {
-      //NOTIFIKASI FAILED
+      //TODO NOTIFIKASI FAILED (BELUM DIBUAT)
     }
   }
 

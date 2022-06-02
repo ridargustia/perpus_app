@@ -1,9 +1,9 @@
 <?php $this->load->view('back/template/meta'); ?>
 <style>
   .btn-md {
-      padding: 1rem 2.4rem;
-      font-size: .94rem;
-      display: none;
+    padding: 1rem 2.4rem;
+    font-size: .94rem;
+    display: none;
   }
 </style>
 <div class="wrapper">
@@ -30,8 +30,8 @@
         echo $this->session->flashdata('message');
       } ?>
       <?php
-         $attributes = array('id' => 'button'); 
-         echo form_open($action, $attributes);
+      $attributes = array('id' => 'button');
+      echo form_open($action, $attributes);
       ?>
       <?php echo validation_errors() ?>
       <!-- /.box -->
@@ -46,11 +46,11 @@
           <div class="row">
             <div class="col-lg-12">
               <div id="sourceSelectPanel" style="display:none">
-                  <label for="sourceSelect">Change video source: </label>
-                  <select id="sourceSelect" style="max-width:400px"></select>
+                <label for="sourceSelect">Change video source: </label>
+                <select id="sourceSelect" style="max-width:400px"></select>
               </div>
               <div>
-                  <video id="video" width="350" height="250" style="border: 0px solid gray"></video>
+                <video id="video" width="350" height="250" style="border: 0px solid gray"></video>
               </div>
               <textarea hidden="" name="id_qrcode" id="result" readonly></textarea>
               <span>
@@ -64,6 +64,7 @@
         <?php echo form_input($pengembalian_id, $data_pengembalian->id_pengembalian) ?>
         <?php echo form_input($peminjaman_id, $data_peminjaman->id_peminjaman) ?>
         <?php echo form_input($anggota_id, $data_peminjaman->anggota_id) ?>
+        <?php echo form_input($denda, $nominal_denda) ?>
         <!-- /.box-body -->
       </div>
       <?php echo form_close() ?>
@@ -81,50 +82,49 @@
   <link rel="stylesheet" href="<?php echo base_url() ?>assets/plugins/select2/dist/css/select2.min.css">
   <script type="text/javascript" src="<?php echo base_url() ?>assets/plugins/select2/dist/js/select2.full.min.js"></script>
 
-  <script type="text/javascript" src="<?php echo base_url()?>assets/plugins/zxing/zxing.min.js"></script>
+  <script type="text/javascript" src="<?php echo base_url() ?>assets/plugins/zxing/zxing.min.js"></script>
 
   <script type="text/javascript">
-    window.addEventListener('load', function () {
-        let selectedDeviceId;
-        let audio = new Audio("<?php echo base_url() ?>assets/audio/beep.mp3");
-        const codeReader = new ZXing.BrowserQRCodeReader()
-        console.log('ZXing code reader initialized')
-        codeReader.getVideoInputDevices()
+    window.addEventListener('load', function() {
+      let selectedDeviceId;
+      let audio = new Audio("<?php echo base_url() ?>assets/audio/beep.mp3");
+      const codeReader = new ZXing.BrowserQRCodeReader()
+      console.log('ZXing code reader initialized')
+      codeReader.getVideoInputDevices()
         .then((videoInputDevices) => {
-            const sourceSelect = document.getElementById('sourceSelect')
-            selectedDeviceId = videoInputDevices[0].deviceId
-            if (videoInputDevices.length >= 1) {
-                videoInputDevices.forEach((element) => {
-                    const sourceOption = document.createElement('option')
-                    sourceOption.text = element.label
-                    sourceOption.value = element.deviceId
-                    sourceSelect.appendChild(sourceOption)
-                })
-                sourceSelect.onchange = () => {
-                    selectedDeviceId = sourceSelect.value;
-                };
-                const sourceSelectPanel = document.getElementById('sourceSelectPanel')
-                sourceSelectPanel.style.display = 'block'
+          const sourceSelect = document.getElementById('sourceSelect')
+          selectedDeviceId = videoInputDevices[0].deviceId
+          if (videoInputDevices.length >= 1) {
+            videoInputDevices.forEach((element) => {
+              const sourceOption = document.createElement('option')
+              sourceOption.text = element.label
+              sourceOption.value = element.deviceId
+              sourceSelect.appendChild(sourceOption)
+            })
+            sourceSelect.onchange = () => {
+              selectedDeviceId = sourceSelect.value;
+            };
+            const sourceSelectPanel = document.getElementById('sourceSelectPanel')
+            sourceSelectPanel.style.display = 'block'
+          }
+          codeReader.decodeFromInputVideoDevice(selectedDeviceId, 'video').then((result) => {
+            // console.log(result)
+            document.getElementById('result').textContent = result.text
+            if (result != null) {
+              audio.play();
             }
-            codeReader.decodeFromInputVideoDevice(selectedDeviceId, 'video').then((result) => {
-                // console.log(result)
-                document.getElementById('result').textContent = result.text
-                if(result != null){
-                    audio.play();
-                }
-                $('#button').submit();
-                
-            }).catch((err) => {
-                console.error(err)
-                document.getElementById('result').textContent = err
-            });
-            console.log(`Started continous decode from camera with id ${selectedDeviceId}`)
+            $('#button').submit();
+
+          }).catch((err) => {
+            console.error(err)
+            document.getElementById('result').textContent = err
+          });
+          console.log(`Started continous decode from camera with id ${selectedDeviceId}`)
         })
         .catch((err) => {
-            console.error(err)
+          console.error(err)
         })
     });
-
   </script>
 
 </div>
