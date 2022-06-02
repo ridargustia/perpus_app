@@ -506,24 +506,30 @@ class Pengembalian extends CI_Controller
   {
     is_delete();
 
+    //TODO Get data pengembalian by id
     $delete = $this->Pengembalian_model->get_by_id($id);
 
+    //? Apakah data ditemukan?
     if ($delete) {
+      //TODO Simpan data baru ke dalam variabel array
       $data = array(
         'is_delete_pengembalian'   => '1',
         'deleted_by'  => $this->session->username,
         'deleted_at'  => date('Y-m-d H:i:a'),
       );
 
+      //TODO Lakukan update pengembalian berdasarkan id pengembalian
       $this->Pengembalian_model->soft_delete($id, $data);
 
       write_log();
 
+      //TODO Tampilkan notifikasi sukses dan redirect ke halaman index pengembalian
       $this->session->set_flashdata('message', '<div class="alert alert-success">Data berhasil dihapus</div>');
-      redirect('admin/pengembalian');
+      redirect('admin/pengembalian/detail/' . $delete->anggota_id . '/' . $delete->tgl_kembali);
     } else {
+      //TODO Tampilkan notifikasi data tidak ditemukan dan redirect ke halaman index pengembalian
       $this->session->set_flashdata('message', '<div class="alert alert-danger">Data tidak ditemukan</div>');
-      redirect('admin/pengembalian');
+      redirect('admin/pengembalian/detail/' . $delete->anggota_id . '/' . $delete->tgl_kembali);
     }
   }
 
