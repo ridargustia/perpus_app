@@ -30,7 +30,7 @@
         echo $this->session->flashdata('message');
       } ?>
       <?php echo validation_errors() ?>
-      <?php 
+      <?php
         echo form_open($action);
       ?>
       <div class="box box-primary">
@@ -185,10 +185,10 @@
                     success: function(response) {
                       var myObj = JSON.parse(response);
 
-                      <?php 
+                      <?php
                         $this->db->order_by('instansi_name');
                         $data = $this->db->get('instansi');
-                    
+
                         if($data->num_rows() > 0)
                         {
                           foreach($data->result_array() as $row)
@@ -201,7 +201,7 @@
                       ?>
 
                       $('#instansi_id').html(<?php echo $result ?>);
-                      
+
                       <?php if (is_grandadmin()) { ?>
                         $.ajax({
                           url: "<?php echo base_url(); ?>admin/anggota/form_empty",
@@ -213,7 +213,7 @@
                       <?php } elseif (is_masteradmin()) { ?>
                         tampilNoInduk();
                       <?php } ?>
-                      
+
                       $('#anggota_id').val(myObj.no_induk);
                       $('#anggota_name').val(myObj.anggota_name);
 
@@ -239,7 +239,7 @@
         url: "<?php echo base_url('admin/pengembalian/get_anggota/') ?>" + no_induk,
         success: function(response) {
           var myObj = JSON.parse(response);
-          
+
           $('#anggota_id').val(myObj.no_induk);
           $('#anggota_name').val(myObj.anggota_name);
 
@@ -254,7 +254,7 @@
       <?php } elseif (is_masteradmin()) { ?>
         instansi_id = <?php echo $this->session->instansi_id ?>;
       <?php } ?>
-      
+
       $.ajax({
         url: "<?php echo base_url(); ?>admin/anggota/pilih_anggota/" + instansi_id + "",
         success: function(response) {
