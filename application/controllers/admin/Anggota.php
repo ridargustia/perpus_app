@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
@@ -36,7 +36,7 @@ class Anggota extends CI_Controller
     }
 
     //MENAMPILKAN DATA ANGGOTA PADA INTERFACE (GET DATA)
-    function index() 
+    function index()
     {
         is_read();
 
@@ -218,7 +218,7 @@ class Anggota extends CI_Controller
                 'required'      => '',
                 'rows'          => '5',
             ];
-    
+
             $this->load->view('back/anggota/anggota_edit', $this->data);
         } else {
             //DATA TIDAK DITEMUKAN
@@ -236,7 +236,7 @@ class Anggota extends CI_Controller
         $this->form_validation->set_rules('address', 'Alamat', 'trim|required');
 
         $this->form_validation->set_message('required', '{field} wajib diisi');
-        
+
         $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
 
         if (is_grandadmin()) {
@@ -321,7 +321,7 @@ class Anggota extends CI_Controller
             $this->data['get_all_deleted'] = $this->Anggota_model->get_all_deleted();
         } elseif (is_masteradmin()) {
             $this->data['get_all_deleted'] = $this->Anggota_model->get_all_deleted_by_instansi();
-        } 
+        }
 
         $this->load->view('back/anggota/anggota_deleted_list', $this->data);
     }
@@ -399,7 +399,7 @@ class Anggota extends CI_Controller
     function render_qrcode($id)
     {
         $id_qrcode = $id . '/anggota';
-        
+
         QRcode::png(
         $id_qrcode,
         $outfile = false,
